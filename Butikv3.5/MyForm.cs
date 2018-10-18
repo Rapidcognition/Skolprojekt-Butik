@@ -51,9 +51,9 @@ namespace Butikv3._5
                 RowCount = 2,
                 ColumnCount = 2,
             };
-            mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+            mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Controls.Add(mainPanel);
 
@@ -101,7 +101,7 @@ namespace Butikv3._5
                 BackColor = Color.Bisque,
                 RowCount = 2,
             };
-            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
             bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
             mainPanel.Controls.Add(bottomLeftSidePanel);
