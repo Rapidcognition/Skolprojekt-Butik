@@ -10,8 +10,18 @@ namespace Butikv3
 {
     class FormForCart : Form
     {
-        public FormForCart()
+        // TODO: Make this less spaghetti
+        MyForm origForm = new MyForm();
+
+        public FormForCart(MyForm _origForm)
         {
+            // TODO: Make this less spaghetti
+            origForm = _origForm;
+
+            FormClosed += FormForCart_FormClosed;
+            // -----
+
+
             TableLayoutPanel paymentPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -57,6 +67,13 @@ namespace Butikv3
             };
             paymentPanel.Controls.Add(itemDescriptionPanel);
             this.MinimumSize = new System.Drawing.Size(500, 500);
+        }
+
+
+        // TODO: Make this less spaghetti
+        private void FormForCart_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            origForm.Close();
         }
     }
     class MyForm : Form
@@ -131,7 +148,7 @@ namespace Butikv3
 
         private void Cart_Click(object sender, EventArgs e)
         {
-            FormForCart ffc = new FormForCart();
+            FormForCart ffc = new FormForCart(this);
             ffc.Show();
             this.Hide();
         }
