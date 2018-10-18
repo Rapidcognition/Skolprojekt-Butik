@@ -21,8 +21,6 @@ namespace Butikv3
             FormClosed += FormForCart_FormClosed;
             // -----
 
-          
-
 
             TableLayoutPanel paymentPanel = new TableLayoutPanel
             {
