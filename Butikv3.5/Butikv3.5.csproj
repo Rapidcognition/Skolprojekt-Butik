@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainView\CartForm.cs">
+    <Compile Include="MainView\CartPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MyForm.cs">
@@ -55,7 +55,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MainView\StoreForm.cs">
+    <Compile Include="MainView\StorePanel.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>

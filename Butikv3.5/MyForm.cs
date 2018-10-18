@@ -36,6 +36,8 @@ namespace Butikv3._5
 
         List<Product> list = new List<Product>();
         List<string> listItem = new List<string>();
+
+
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
@@ -56,12 +58,10 @@ namespace Butikv3._5
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Controls.Add(mainPanel);
-
-            //----
+            
             mainPanel.Controls.Add(store, 1, 1);
             mainPanel.Controls.Add(cart, 1, 1);
             cart.Hide();
-            //--
 
             topLeftSidePanel = new TableLayoutPanel
             {
@@ -93,6 +93,29 @@ namespace Butikv3._5
             topRightSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             topRightSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             mainPanel.Controls.Add(topRightSidePanel);
+            Label shopTitle = new Label
+            {
+                Text = "[ SHOP TITLE ]",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            topRightSidePanel.Controls.Add(shopTitle);
+
+            Button storeButton = new Button
+            {
+                Text = "Store",
+                Dock = DockStyle.Fill,
+            };
+            topRightSidePanel.Controls.Add(storeButton);
+            storeButton.Click += ChangeStoreView_Click;
+
+            Button cartButton = new Button
+            {
+                Text = "Cart",
+                Dock = DockStyle.Fill,
+            };
+            topRightSidePanel.Controls.Add(cartButton);
+            cartButton.Click += ChangeStoreView_Click;
 
             bottomLeftSidePanel = new TableLayoutPanel
             {
@@ -110,29 +133,7 @@ namespace Butikv3._5
             bottomLeftSidePanel.Controls.Add(homeButton);
             bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
 
-            //-------------------------
-            Label shopTitle = new Label
-            {
-                Text = "[ SHOP TITLE ]",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-            topRightSidePanel.Controls.Add(shopTitle);
-            Button storeButton = new Button
-            {
-                Text = "Store",
-                Dock = DockStyle.Fill,
-            };
-            topRightSidePanel.Controls.Add(storeButton);
-            storeButton.Click += ChangeStoreView_Click;
-
-            Button cartButton = new Button
-            {
-                Text = "Cart",
-                Dock = DockStyle.Fill,
-            };
-            topRightSidePanel.Controls.Add(cartButton);
-            cartButton.Click += ChangeStoreView_Click;
+            
             //------------------------
             
             bottomLeftSideInnerPanel = new FlowLayoutPanel

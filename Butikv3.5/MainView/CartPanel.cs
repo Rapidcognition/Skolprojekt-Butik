@@ -10,7 +10,6 @@ namespace Butikv3._5
 {
     class CartPanel : TableLayoutPanel
     {
-
         public CartPanel()
         {
             this.Name = "Cart";
