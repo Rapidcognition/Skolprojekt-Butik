@@ -17,6 +17,7 @@ namespace Butikv3._5
         public string description;
         public PictureBox pictureBox;
     }
+
     class MyForm : Form
     {
         #region Main form variables
@@ -55,11 +56,12 @@ namespace Butikv3._5
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Controls.Add(mainPanel);
+
+            //----
             mainPanel.Controls.Add(store, 1, 1);
             mainPanel.Controls.Add(cart, 1, 1);
             cart.Hide();
-
-            Controls.Add(mainPanel);
+            //--
 
             topLeftSidePanel = new TableLayoutPanel
             {
@@ -80,16 +82,6 @@ namespace Butikv3._5
             };
             topLeftSidePanel.Controls.Add(searchBox);
 
-            mainPanel.Controls.Add(topLeftSidePanel);
-
-            Button searchLabel = new Button { Text = "Filter items.", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
-            searchBox = new TextBox
-            {
-                Dock = DockStyle.Fill,
-            };
-            topLeftSidePanel.Controls.Add(searchLabel);
-            topLeftSidePanel.Controls.Add(searchBox);
-
             topRightSidePanel = new TableLayoutPanel
             {
                 Margin = new Padding(0, 0, 0, 0),
@@ -101,10 +93,24 @@ namespace Butikv3._5
             topRightSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             topRightSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             mainPanel.Controls.Add(topRightSidePanel);
-            
-            bottomLeftSidePanel = new TableLayoutPanel
-            mainPanel.Controls.Add(topRightSidePanel);
 
+            bottomLeftSidePanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0),
+                BackColor = Color.Bisque,
+                RowCount = 2,
+            };
+            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
+            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
+            mainPanel.Controls.Add(bottomLeftSidePanel);
+
+            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.Crimson, };
+            bottomLeftSidePanel.Controls.Add(homeButton);
+            bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
+
+            //-------------------------
             Label shopTitle = new Label
             {
                 Text = "[ SHOP TITLE ]",
@@ -124,34 +130,35 @@ namespace Butikv3._5
             {
                 Text = "Cart",
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0,0,0,0),
-                BackColor = Color.Bisque,
-                RowCount = 2,
             };
-            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
-            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
-            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
-
-            mainPanel.Controls.Add(bottomLeftSidePanel);
-
-            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.Crimson, };
-            bottomLeftSidePanel.Controls.Add(homeButton);
-            bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
-
+            topRightSidePanel.Controls.Add(cartButton);
+            cartButton.Click += ChangeStoreView_Click;
+            //------------------------
+            
             bottomLeftSideInnerPanel = new FlowLayoutPanel
             {
                 Margin = new Padding(0, 0, 0, 0),
                 BackColor = Color.Orange,
                 Dock = DockStyle.Fill
             };
-
-
-            topRightSidePanel.Controls.Add(cartButton);
-            cartButton.Click += ChangeStoreView_Click;
-
-
+            
             #endregion
         }
+
+        private void ChangeStoreView_Click(object sender, EventArgs e)
+        {
+            if ((sender as Button).Text == "Store")
+            {
+                cart.Hide();
+                store.Show();
+            }
+            else if ((sender as Button).Text == "Cart")
+            {
+                store.Hide();
+                cart.Show();
+            }
+        }
+
         private void QueryFromCSVToList()
         {
             string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "").ToArray();
@@ -170,10 +177,9 @@ namespace Butikv3._5
                 itemButton.Click += ItemButton_Click;
                 bottomLeftSideInnerPanel.Controls.Add(itemButton);
                 // Implementera vart inlästa knappar ska hamna i controls och gör clickevent.
-
-        }
-
+            
             } // Slut på dynamiska genre-inläsningen
+
             for (int i = 0; i < path.Length; i++)
             {
                 Product tmp = new Product
@@ -196,24 +202,11 @@ namespace Butikv3._5
                 list.Add(tmp);
             }
         }
-
-
+        
         // Funktion för att filtera produkter baserat på vilken knapp som klickas ned.
         private void ItemButton_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
-        private void ChangeStoreView_Click(object sender, EventArgs e)
-        {
-            if ((sender as Button).Text == "Store")
-            {
-                cart.Hide();
-                store.Show();
-            }
-            else if ((sender as Button).Text == "Cart")
-            {
-                store.Hide();
-                cart.Show();
-            }
         }
     }
 }
