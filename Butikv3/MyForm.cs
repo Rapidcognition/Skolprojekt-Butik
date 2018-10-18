@@ -21,6 +21,8 @@ namespace Butikv3
             FormClosed += FormForCart_FormClosed;
             // -----
 
+          
+
 
             TableLayoutPanel paymentPanel = new TableLayoutPanel
             {
@@ -66,7 +68,6 @@ namespace Butikv3
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
             };
             paymentPanel.Controls.Add(itemDescriptionPanel);
-            this.MinimumSize = new System.Drawing.Size(500, 500);
         }
 
 
@@ -149,7 +150,10 @@ namespace Butikv3
         private void Cart_Click(object sender, EventArgs e)
         {
             FormForCart ffc = new FormForCart(this);
+            
             ffc.Show();
+            ffc.Location = this.Location;
+            ffc.Size = this.Size;
             this.Hide();
         }
     }
