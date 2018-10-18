@@ -94,23 +94,6 @@ namespace Butikv3._5
             topRightSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             mainPanel.Controls.Add(topRightSidePanel);
 
-            bottomLeftSidePanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 0),
-                BackColor = Color.Bisque,
-                RowCount = 2,
-            };
-            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
-            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
-            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
-            mainPanel.Controls.Add(bottomLeftSidePanel);
-
-            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.Crimson, };
-            bottomLeftSidePanel.Controls.Add(homeButton);
-            bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
-
-            //-------------------------
             Label shopTitle = new Label
             {
                 Text = "[ SHOP TITLE ]",
@@ -151,8 +134,22 @@ namespace Butikv3._5
             bottomLeftSidePanel.Controls.Add(homeButton);
             bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
 
-            
-            //------------------------
+
+            bottomLeftSidePanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0),
+                BackColor = Color.Bisque,
+                RowCount = 2,
+            };
+            bottomLeftSidePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
+            bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
+            mainPanel.Controls.Add(bottomLeftSidePanel);
+
+            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.Crimson, };
+            bottomLeftSidePanel.Controls.Add(homeButton);
+            bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
             
             bottomLeftSideInnerPanel = new FlowLayoutPanel
             {
