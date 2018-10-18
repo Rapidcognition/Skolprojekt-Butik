@@ -14,13 +14,52 @@ namespace Butikv3._5
         {
             this.Name = "Cart";
             this.Dock = DockStyle.Fill;
+            this.ColumnCount = 3;
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            this.Margin = new Padding(0);
+            //---
+            this.BackColor = Color.White;
+            //---
+            AddToCart();
+        }
 
+        public void AddToCart()
+        {
+            TableLayoutPanel panel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                Size = new Size(ClientSize.Width, 50),
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(0),
+                ColumnCount = 3,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+
+            PictureBox picture = new PictureBox
+            {
+                Image = Image.FromFile("Placeholder0.png"),
+                Dock = DockStyle.Left,
+                Size = new Size(32,32),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                
+            };
             Label foo = new Label
             {
-                Text = "Cart Form.",
-                TextAlign = ContentAlignment.MiddleCenter
+                Text = "Rice",
+                AutoSize = true,
+                Anchor = AnchorStyles.Top,
+                
             };
-            Controls.Add(foo);
+
+            panel.Controls.Add(picture);
+            panel.Controls.Add(foo);
+            this.Controls.Add(panel);
         }
     }
 }
