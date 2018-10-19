@@ -11,7 +11,7 @@ namespace Butikv3._5
 {
     class Product
     {
-        public int ID;
+        public int id;
         public string name;
         public string item;
         public string description;
@@ -19,7 +19,7 @@ namespace Butikv3._5
 
         public Product()
         {
-            ID = 0000;
+            id = 0000;
             name = "Unknown Product";
             item = "Unknown Item";
             description = "Unknown";
@@ -27,7 +27,7 @@ namespace Butikv3._5
         }
         public Product(int ID, string name, string item, string description, PictureBox picture)
         {
-            this.ID = ID;
+            this.id = ID;
             this.name = name;
             this.item = item;
             this.description = description;
@@ -35,7 +35,7 @@ namespace Butikv3._5
         }
         public Product(Product p)
         {
-            ID = p.ID;
+            id = p.id;
             name = p.name;
             item = p.item;
             description = p.description;
@@ -214,7 +214,7 @@ namespace Butikv3._5
             {
                 Product tmp = new Product
                 {
-                    ID = int.Parse(path[i][0]),
+                    id = int.Parse(path[i][0]),
                     name = path[i][1],
                     item = path[i][2],
                     description = path[i][3],

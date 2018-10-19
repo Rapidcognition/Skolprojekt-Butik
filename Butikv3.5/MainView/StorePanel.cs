@@ -18,6 +18,8 @@ namespace Butikv3._5
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
             this.ColumnCount = 2;
+            this.RowCount = 1;
+            this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.AutoScroll = true;
@@ -39,13 +41,16 @@ namespace Butikv3._5
                     ColumnCount = 3,
                     CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 };
-                temp.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, };
+                temp.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
+
+                this.RowCount++;
+                this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
                 this.Controls.Add(temp);
-                temp.Controls.Add(b);
+                temp.Controls.Add(b, 1, 0);
             }
         }
     }
