@@ -50,7 +50,6 @@ namespace Butikv3._5
         TableLayoutPanel topLeftSidePanel;
         TableLayoutPanel topRightSidePanel;
         TableLayoutPanel bottomLeftSidePanel;
-        TableLayoutPanel bottomLeftSideInnerPanel;
         TextBox searchBox;
         Button itemButton;
         Button homeButton;
@@ -163,16 +162,10 @@ namespace Butikv3._5
             homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
             bottomLeftSidePanel.Controls.Add(homeButton);
 
-            bottomLeftSideInnerPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-            };
-            bottomLeftSideInnerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
-            bottomLeftSideInnerPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
+            #endregion
 
             QueryFromCSVToList();
-            #endregion
+            QueryFromListToStorePanel();
         }
 
         private void ChangeStoreView_Click(object sender, EventArgs e)
@@ -204,13 +197,14 @@ namespace Butikv3._5
                 {
                     Text = item,
                     Height = 50,
-                    Width = 107,
                     FlatStyle = FlatStyle.Popup,
                     BackColor = Color.Coral,
+                    Dock = DockStyle.Fill,
                 };
                 itemButton.Click += ItemButton_Click;
                 itemButton.Tag = item;
-                bottomLeftSideInnerPanel.Controls.Add(itemButton);
+                bottomLeftSidePanel.RowCount++;
+                bottomLeftSidePanel.Controls.Add(itemButton);
                 
                 // Implementera vart inlästa knappar ska hamna i controls och gör clickevent.
             
