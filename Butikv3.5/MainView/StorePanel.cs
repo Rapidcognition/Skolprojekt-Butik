@@ -10,7 +10,6 @@ namespace Butikv3._5
 {
     class StorePanel : TableLayoutPanel
     {
-        FlowLayoutPanel storePanel;
         TableLayoutPanel temp;
 
         List<Product> storeList = new List<Product>();
@@ -18,49 +17,34 @@ namespace Butikv3._5
         {
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
+            this.ColumnCount = 2;
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.AutoScroll = true;
 
-            storePanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke,
-                FlowDirection = FlowDirection.LeftToRight,
-            };
-            Controls.Add(storePanel);
-
-            Label foo = new Label
-            {
-                Text = "Store Form.",
-                TextAlign = ContentAlignment.MiddleCenter,
-                BackColor = Color.Orange,
-                Height = 50,
-                Width = 300,
-            };
-            storePanel.Controls.Add(foo);
-            ListToStorePanel();
         }
 
-        public void AddItemToStorePanel(Product p)
+        public void AddItemToStorePanel(List<Product> l)
         {
-            Product temp = new Product(p);
-            storeList.Add(temp);
-        }
-        public void ListToStorePanel()
-        {
+            foreach (var item in l)
+            {
+                this.storeList.Add(item);
+            }
             foreach (var item in storeList)
             {
                 temp = new TableLayoutPanel
                 {
-                    BackColor = Color.Orange,
-                    Height = 50,
-                    Width = 300,
+                    BackColor = Color.LightCyan,
+                    Dock = DockStyle.Top,
                     ColumnCount = 3,
+                    CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 };
                 temp.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
-                Button b = new Button { Text = item.name };
-                storePanel.Controls.Add(temp);
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, };
+                this.Controls.Add(temp);
                 temp.Controls.Add(b);
             }
         }

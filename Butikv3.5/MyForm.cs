@@ -165,7 +165,6 @@ namespace Butikv3._5
             #endregion
 
             QueryFromCSVToList();
-            QueryFromListToStorePanel();
         }
 
         private void ChangeStoreView_Click(object sender, EventArgs e)
@@ -231,6 +230,7 @@ namespace Butikv3._5
                 };
                 list.Add(tmp);
             }
+            store.AddItemToStorePanel(list);
         }
         
         // Funktion för att filtera produkter baserat på vilken knapp som klickas ned.
@@ -239,19 +239,5 @@ namespace Butikv3._5
             MessageBox.Show("Hej!");
         }
 
-        private void QueryFromListToMainPanel()
-        {
-
-        }
-
-        private void QueryFromListToStorePanel()
-        {
-            StorePanel sp = new StorePanel();
-            foreach (var item in list)
-            {
-                sp.AddItemToStorePanel(item);
-                listItem.Add(item.item);
-            }
-        }
     }
 }
