@@ -50,7 +50,7 @@ namespace Butikv3._5
         TableLayoutPanel topLeftSidePanel;
         TableLayoutPanel topRightSidePanel;
         TableLayoutPanel bottomLeftSidePanel;
-        FlowLayoutPanel bottomLeftSideInnerPanel;
+        TableLayoutPanel bottomLeftSideInnerPanel;
         TextBox searchBox;
         Button itemButton;
         Button homeButton;
@@ -62,7 +62,6 @@ namespace Butikv3._5
         List<Product> list = new List<Product>();
         List<string> listItem = new List<string>();
 
-
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
@@ -73,7 +72,7 @@ namespace Butikv3._5
             {
                 Margin = new Padding(0, 0, 0, 0),
                 Dock = DockStyle.Fill,
-                BackColor = Color.Blue,
+                BackColor = Color.WhiteSmoke,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 RowCount = 2,
                 ColumnCount = 2,
@@ -164,10 +163,12 @@ namespace Butikv3._5
             homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
             bottomLeftSidePanel.Controls.Add(homeButton);
 
-            bottomLeftSideInnerPanel = new FlowLayoutPanel
+            bottomLeftSideInnerPanel = new TableLayoutPanel
             {
-                BackColor = Color.Brown,
+                Dock = DockStyle.Fill,
             };
+            bottomLeftSideInnerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
+            bottomLeftSideInnerPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
 
             QueryFromCSVToList();
@@ -204,6 +205,8 @@ namespace Butikv3._5
                     Text = item,
                     Height = 50,
                     Width = 107,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Coral,
                 };
                 itemButton.Click += ItemButton_Click;
                 itemButton.Tag = item;

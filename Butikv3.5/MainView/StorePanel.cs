@@ -21,7 +21,7 @@ namespace Butikv3._5
             storePanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.Blue,
+                BackColor = Color.WhiteSmoke,
                 FlowDirection = FlowDirection.LeftToRight,
             };
             Controls.Add(storePanel);
