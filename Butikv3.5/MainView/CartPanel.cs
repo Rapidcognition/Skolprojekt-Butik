@@ -8,56 +8,53 @@ using System.Drawing;
 
 namespace Butikv3._5
 {
+    class CartItem : TableLayoutPanel
+    {
+        public Product product;
+
+        public CartItem(Product toCartItem)
+        {
+            this.product = toCartItem;
+
+            this.Dock = DockStyle.Top;
+            this.ColumnCount = 3;
+            this.Size = new Size(200, 50);
+            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            this.Margin = new Padding(0);
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+
+
+            PictureBox picture = new PictureBox
+            {
+                ImageLocation = toCartItem.pictureBox.ImageLocation,
+                Dock = DockStyle.Left,
+                Size = new Size(42, 32),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.Fixed3D,
+            };
+            this.Controls.Add(picture);
+
+            Label itemLabel = new Label
+            {
+                Text = toCartItem.name,
+                AutoSize = true,
+                Anchor = AnchorStyles.Top,
+            };
+            this.Controls.Add(itemLabel);
+
+            NumericUpDown itemCount = new NumericUpDown
+            {
+                Dock = DockStyle.Right,
+            };
+            this.Controls.Add(itemCount);
+
+        }
+    };
+
     class CartPanel : TableLayoutPanel
     {
-        private class CartItem : TableLayoutPanel
-        {
-            private Product product;
-
-            public CartItem(Product toCartItem)
-            {
-                this.product = toCartItem;
-
-                this.Dock = DockStyle.Top;
-                this.ColumnCount = 3;
-                this.Size = new Size(200, 50);
-                this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                this.Margin = new Padding(0);
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                
-
-                PictureBox picture = new PictureBox
-                {
-                    ImageLocation = toCartItem.pictureBox.ImageLocation,
-                    Dock = DockStyle.Left,
-                    Size = new Size(32, 32),
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                };
-                this.Controls.Add(picture);
-
-                Label itemLabel = new Label
-                {
-                    Text = toCartItem.name,
-                    AutoSize = true,
-                    Anchor = AnchorStyles.Top,
-                };
-                this.Controls.Add(itemLabel);
-
-                NumericUpDown itemCount = new NumericUpDown
-                {
-                    Dock = DockStyle.Right,
-                };
-                this.Controls.Add(itemCount);
-            }
-
-            public Product GetProduct()
-            {
-                return product;
-            }
-        };
-
         private TableLayoutPanel leftPanel;
         private TableLayoutPanel middlePanel;
         private TableLayoutPanel rightPanel;
@@ -103,7 +100,7 @@ namespace Butikv3._5
         public void AddToCart(Product toCart)
         {
             CartItem temp = new CartItem(toCart);
-
+            (temp.Controls[2] as NumericUpDown).Value = 1;
 
             if(cartItems.Count == 0)
             {
@@ -114,7 +111,7 @@ namespace Butikv3._5
             {
                 foreach (CartItem item in cartItems)
                 {
-                    if (item.GetProduct().name == temp.GetProduct().name)
+                    if (item.product.name == temp.product.name)
                     {
                         (item.Controls[2] as NumericUpDown).Value++;
                     }
