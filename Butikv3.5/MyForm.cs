@@ -16,6 +16,31 @@ namespace Butikv3._5
         public string item;
         public string description;
         public PictureBox pictureBox;
+
+        public Product()
+        {
+            ID = 0000;
+            name = "Unknown Product";
+            item = "Unknown Item";
+            description = "Unknown";
+            pictureBox = new PictureBox();
+        }
+        public Product(int ID, string name, string item, string description, PictureBox picture)
+        {
+            this.ID = ID;
+            this.name = name;
+            this.item = item;
+            this.description = description;
+            this.pictureBox = picture;
+        }
+        public Product(Product p)
+        {
+            ID = p.ID;
+            name = p.name;
+            item = p.item;
+            description = p.description;
+            pictureBox = p.pictureBox;
+        }
     }
 
     class MyForm : Form

@@ -23,10 +23,24 @@ namespace Butikv3._5
             //---
             this.BackColor = Color.White;
             //---
-            AddToCart();
+
+            Button tempAddButton = new Button
+            {
+                Text = "Add rice",
+            };
+            tempAddButton.Click += TempAddButton_Click;
+            this.Controls.Add(tempAddButton, 1, 0);
         }
 
-        public void AddToCart()
+        private void TempAddButton_Click(object sender, EventArgs e)
+        {
+            Product toAdd = new Product();
+            toAdd.name = "Rice";
+            toAdd.pictureBox.ImageLocation = "Placeholder0.png";
+            AddToCart(toAdd);
+        }
+
+        public void AddToCart(Product toCart)
         {
             TableLayoutPanel panel = new TableLayoutPanel
             {
@@ -43,22 +57,22 @@ namespace Butikv3._5
 
             PictureBox picture = new PictureBox
             {
-                Image = Image.FromFile("Placeholder0.png"),
+                ImageLocation = toCart.pictureBox.ImageLocation,
                 Dock = DockStyle.Left,
                 Size = new Size(32,32),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 
             };
-            Label foo = new Label
+            Label itemLabel = new Label
             {
-                Text = "Rice",
+                Text = toCart.name,
                 AutoSize = true,
                 Anchor = AnchorStyles.Top,
                 
             };
 
             panel.Controls.Add(picture);
-            panel.Controls.Add(foo);
+            panel.Controls.Add(itemLabel);
             this.Controls.Add(panel);
         }
     }
