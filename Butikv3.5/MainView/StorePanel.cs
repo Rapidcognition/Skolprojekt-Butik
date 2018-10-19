@@ -12,6 +12,7 @@ namespace Butikv3._5
     {
         FlowLayoutPanel storePanel;
 
+        List<Product> storeList = new List<Product>();
         public StorePanel()
         {
             this.Name = "Store";
@@ -40,6 +41,12 @@ namespace Butikv3._5
                 Width = 300,
             };
             storePanel.Controls.Add(foo);
+        }
+
+        public void AddItemToStorePanel(Product p)
+        {
+            Product temp = new Product(p);
+            storeList.Add(temp);
         }
     }
 }

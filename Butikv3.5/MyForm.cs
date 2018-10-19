@@ -99,8 +99,10 @@ namespace Butikv3._5
             topLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
             mainPanel.Controls.Add(topLeftSidePanel);
 
-            Button searchLabel = new Button { Text = "Filter items.", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.WhiteSmoke, FlatStyle = FlatStyle.Popup, };
+            Button searchLabel = new Button { Text = "Filter items.", Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.WhiteSmoke, FlatStyle = FlatStyle.Popup, };
             topLeftSidePanel.Controls.Add(searchLabel);
+
             searchBox = new TextBox
             {
                 Dock = DockStyle.Fill,
@@ -233,6 +235,15 @@ namespace Butikv3._5
         private void QueryFromListToMainPanel()
         {
 
+        }
+
+        private void QueryFromListToStorePanel()
+        {
+            StorePanel sp = new StorePanel();
+            foreach (var item in list)
+            {
+                sp.AddItemToStorePanel(item);
+            }
         }
     }
 }
