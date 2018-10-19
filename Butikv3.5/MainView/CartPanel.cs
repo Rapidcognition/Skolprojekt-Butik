@@ -49,7 +49,6 @@ namespace Butikv3._5
                 Dock = DockStyle.Right,
             };
             this.Controls.Add(itemCount);
-
         }
     };
 
@@ -101,6 +100,10 @@ namespace Butikv3._5
         {
             CartItem temp = new CartItem(toCart);
             (temp.Controls[2] as NumericUpDown).Value = 1;
+            Button b = new Button { Text = "Hej", };
+            leftPanel.Controls.Add(b, 0, 0);
+            b.Tag = temp;
+            b.Click += B_Click;
 
             if(cartItems.Count == 0)
             {
@@ -122,6 +125,13 @@ namespace Butikv3._5
                     }
                 }
             }
+        }
+
+        private void B_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+
+            leftPanel.Controls.Remove((TableLayoutPanel)b.Tag);
         }
     }
 }
