@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="TextFile1.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placeholder0.png">

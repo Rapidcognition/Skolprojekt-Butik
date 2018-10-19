@@ -99,7 +99,7 @@ namespace Butikv3._5
             topLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
             mainPanel.Controls.Add(topLeftSidePanel);
 
-            Label searchLabel = new Label { Text = "Filter items.", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
+            Button searchLabel = new Button { Text = "Filter items.", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.WhiteSmoke, FlatStyle = FlatStyle.Popup, };
             topLeftSidePanel.Controls.Add(searchLabel);
             searchBox = new TextBox
             {
@@ -131,6 +131,8 @@ namespace Butikv3._5
             {
                 Text = "Store",
                 Dock = DockStyle.Fill,
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.LightBlue,
             };
             topRightSidePanel.Controls.Add(storeButton);
             storeButton.Click += ChangeStoreView_Click;
@@ -139,6 +141,8 @@ namespace Butikv3._5
             {
                 Text = "Cart",
                 Dock = DockStyle.Fill,
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.LightBlue,
             };
             topRightSidePanel.Controls.Add(cartButton);
             cartButton.Click += ChangeStoreView_Click;
@@ -155,7 +159,7 @@ namespace Butikv3._5
             bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
             mainPanel.Controls.Add(bottomLeftSidePanel);
 
-            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.Crimson, };
+            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
             bottomLeftSidePanel.Controls.Add(homeButton);
             bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
 
@@ -224,6 +228,11 @@ namespace Butikv3._5
         private void ItemButton_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void QueryFromListToMainPanel()
+        {
+
         }
     }
 }
