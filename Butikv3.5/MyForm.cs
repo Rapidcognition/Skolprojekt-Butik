@@ -163,8 +163,14 @@ namespace Butikv3._5
 
             homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
             bottomLeftSidePanel.Controls.Add(homeButton);
+
+            bottomLeftSideInnerPanel = new FlowLayoutPanel
+            {
+                BackColor = Color.Brown,
+            };
             bottomLeftSidePanel.Controls.Add(bottomLeftSideInnerPanel);
 
+            QueryFromCSVToList();
             #endregion
         }
 
@@ -195,10 +201,14 @@ namespace Butikv3._5
             {
                 itemButton = new Button
                 {
-                    Text = item
+                    Text = item,
+                    Height = 50,
+                    Width = 107,
                 };
                 itemButton.Click += ItemButton_Click;
+                itemButton.Tag = item;
                 bottomLeftSideInnerPanel.Controls.Add(itemButton);
+                
                 // Implementera vart inlästa knappar ska hamna i controls och gör clickevent.
             
             } // Slut på dynamiska genre-inläsningen
@@ -229,7 +239,7 @@ namespace Butikv3._5
         // Funktion för att filtera produkter baserat på vilken knapp som klickas ned.
         private void ItemButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Hej!");
         }
 
         private void QueryFromListToMainPanel()
@@ -243,6 +253,7 @@ namespace Butikv3._5
             foreach (var item in list)
             {
                 sp.AddItemToStorePanel(item);
+                listItem.Add(item.item);
             }
         }
     }
