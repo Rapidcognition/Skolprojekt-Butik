@@ -64,6 +64,7 @@ namespace Butikv3._5
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
+            this.Font = new Font("Sans serif", 13);
 
             #region Main form panels
 
