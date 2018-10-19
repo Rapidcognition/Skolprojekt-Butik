@@ -18,8 +18,6 @@ namespace Butikv3._5
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
             this.ColumnCount = 2;
-            this.RowCount = 1;
-            this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.AutoScroll = true;
