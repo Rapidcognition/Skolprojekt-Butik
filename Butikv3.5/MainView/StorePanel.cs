@@ -71,7 +71,7 @@ namespace Butikv3._5
 
                 temp = new TableLayoutPanel
                 {
-                    BackColor = Color.WhiteSmoke,
+                    BackColor = Color.White,
                     Dock = DockStyle.Top,
                     ColumnCount = 3,
                     CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
