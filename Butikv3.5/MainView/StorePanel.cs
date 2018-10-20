@@ -21,7 +21,6 @@ namespace Butikv3._5
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.AutoScroll = true;
-
         }
 
         public void AddItemToStorePanel(List<Product> l)
