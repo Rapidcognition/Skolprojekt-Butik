@@ -10,35 +10,53 @@ namespace Butikv3._5
 {
     class StorePanel : TableLayoutPanel
     {
-        TableLayoutPanel temp;
         TableLayoutPanel descriptionPanel;
+        PictureBox descriptionPicture;
+        Label nameLabel;
+        Label descriptionLabel;
+
         TableLayoutPanel itemPanel;
         PictureBox storePic;
 
+        TableLayoutPanel temp;
         List<Product> storeList = new List<Product>();
         public StorePanel()
         {
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
             this.ColumnCount = 2;
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+
             itemPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
             };
-            itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             this.Controls.Add(itemPanel);
+
             descriptionPanel = new TableLayoutPanel
             {
-                RowCount = 2,
+                RowCount = 3,
                 Dock = DockStyle.Fill,
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
-                BackColor = Color.Orange
             };
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+
             this.Controls.Add(descriptionPanel);
-            this.AutoScroll = true;
+
+            descriptionPicture = new PictureBox { Dock = DockStyle.Fill, SizeMode = PictureBoxSizeMode.StretchImage,
+                BorderStyle = BorderStyle.Fixed3D, };
+            descriptionPanel.Controls.Add(descriptionPicture);
+
+            nameLabel = new Label { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter,
+                FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
+            descriptionPanel.Controls.Add(nameLabel);
+
+            descriptionLabel = new Label { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter,
+                FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
+            descriptionPanel.Controls.Add(descriptionLabel);
         }
 
         public void AddItemToStorePanel(List<Product> l)
@@ -50,11 +68,10 @@ namespace Butikv3._5
             foreach (var item in storeList)
             {
                 itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-                itemPanel.RowCount++;
 
                 temp = new TableLayoutPanel
                 {
-                    BackColor = Color.LightCyan,
+                    BackColor = Color.WhiteSmoke,
                     Dock = DockStyle.Top,
                     ColumnCount = 3,
                     CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
@@ -73,15 +90,28 @@ namespace Butikv3._5
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Margin = new Padding(),
                 };
+                storePic = item.pictureBox;
                 temp.Controls.Add(storePic);
 
                 Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
                 temp.Controls.Add(b);
 
-                Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
+                Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleLeft, };
                 temp.Controls.Add(p);
 
+                storePic.MouseClick += StorePic_Click;
+                storePic.Name = item.name;
+                storePic.Tag = item.description;
             }
+        }
+
+        private void StorePic_Click(object sender, EventArgs e)
+        {
+            PictureBox p = (PictureBox)sender;
+            descriptionPicture.Image = p.Image;
+            nameLabel.Text = p.Name;
+            descriptionLabel.Text = p.Tag.ToString();
         }
     }
 }

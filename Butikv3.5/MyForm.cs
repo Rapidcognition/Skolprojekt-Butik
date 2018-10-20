@@ -15,7 +15,7 @@ namespace Butikv3._5
         public string name;
         public string item;
         public string description;
-        public PictureBox pictureBox;
+        public PictureBox pictureBox { get; set; }
 
         public Product()
         {
@@ -223,8 +223,6 @@ namespace Butikv3._5
                     name = path[i][1],
                     item = path[i][2],
                     description = path[i][3],
-
-                    // Fix pictureBox imageLocation.
                     pictureBox = new PictureBox
                     {
                         Height = 150,
