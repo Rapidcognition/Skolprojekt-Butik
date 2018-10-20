@@ -11,6 +11,7 @@ namespace Butikv3._5
     class StorePanel : TableLayoutPanel
     {
         TableLayoutPanel temp;
+        PictureBox storePic;
 
         List<Product> storeList = new List<Product>();
         public StorePanel()
@@ -31,6 +32,9 @@ namespace Butikv3._5
             }
             foreach (var item in storeList)
             {
+                this.RowCount++;
+                this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+
                 temp = new TableLayoutPanel
                 {
                     BackColor = Color.LightCyan,
@@ -40,14 +44,24 @@ namespace Butikv3._5
                 };
                 temp.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
                 temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
-
-                this.RowCount++;
-                this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
                 this.Controls.Add(temp);
-                temp.Controls.Add(b, 1, 0);
+
+                storePic = new PictureBox
+                {
+                    ImageLocation = item.pictureBox.ImageLocation,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Dock = DockStyle.Fill,
+                    Margin = new Padding(),
+                };
+                temp.Controls.Add(storePic);
+
+                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
+                temp.Controls.Add(b);
+
+                Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
+                temp.Controls.Add(p);
             }
         }
     }
