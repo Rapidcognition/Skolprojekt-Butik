@@ -11,6 +11,8 @@ namespace Butikv3._5
     class StorePanel : TableLayoutPanel
     {
         TableLayoutPanel temp;
+        TableLayoutPanel descriptionPanel;
+        TableLayoutPanel itemPanel;
         PictureBox storePic;
 
         List<Product> storeList = new List<Product>();
@@ -21,6 +23,21 @@ namespace Butikv3._5
             this.ColumnCount = 2;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            itemPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+            };
+            itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            this.Controls.Add(itemPanel);
+            descriptionPanel = new TableLayoutPanel
+            {
+                RowCount = 2,
+                Dock = DockStyle.Fill,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                BackColor = Color.Orange
+            };
+            this.Controls.Add(descriptionPanel);
             this.AutoScroll = true;
         }
 
@@ -32,8 +49,8 @@ namespace Butikv3._5
             }
             foreach (var item in storeList)
             {
-                this.RowCount++;
-                this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+                itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+                itemPanel.RowCount++;
 
                 temp = new TableLayoutPanel
                 {
@@ -46,7 +63,8 @@ namespace Butikv3._5
                 temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
                 temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-                this.Controls.Add(temp);
+
+                itemPanel.Controls.Add(temp);
 
                 storePic = new PictureBox
                 {
@@ -62,6 +80,7 @@ namespace Butikv3._5
 
                 Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
                 temp.Controls.Add(p);
+
             }
         }
     }

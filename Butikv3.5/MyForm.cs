@@ -93,9 +93,9 @@ namespace Butikv3._5
             topLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
             mainPanel.Controls.Add(topLeftSidePanel);
 
-            Button searchLabel = new Button { Text = "Filter items.", Dock = DockStyle.Fill,
+            Button searchButton = new Button { Text = "Filter items.", Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.WhiteSmoke, FlatStyle = FlatStyle.Popup, };
-            topLeftSidePanel.Controls.Add(searchLabel);
+            topLeftSidePanel.Controls.Add(searchButton);
 
             searchBox = new TextBox
             {
@@ -243,6 +243,5 @@ namespace Butikv3._5
         {
             MessageBox.Show("Hej!");
         }
-
     }
 }
