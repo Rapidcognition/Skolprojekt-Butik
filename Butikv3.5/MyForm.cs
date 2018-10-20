@@ -25,21 +25,16 @@ namespace Butikv3._5
             description = "Unknown";
             pictureBox = new PictureBox();
         }
-        public Product(int p, string name, string item, string description, PictureBox picture)
+        public Product(int p, string name, string item, string description, string picturePath)
         {
             this.price = p;
             this.name = name;
             this.item = item;
             this.description = description;
-            this.pictureBox = picture;
-        }
-        public Product(Product p)
-        {
-            price = p.price;
-            name = p.name;
-            item = p.item;
-            description = p.description;
-            pictureBox = p.pictureBox;
+            this.pictureBox = new PictureBox
+            {
+                ImageLocation = picturePath,
+            };
         }
     }
 
