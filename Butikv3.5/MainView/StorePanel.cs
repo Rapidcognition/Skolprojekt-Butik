@@ -51,13 +51,13 @@ namespace Butikv3._5
                 storePic = new PictureBox
                 {
                     ImageLocation = item.pictureBox.ImageLocation,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Dock = DockStyle.Fill,
+                    Anchor = AnchorStyles.Left,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
                     Margin = new Padding(),
                 };
                 temp.Controls.Add(storePic);
 
-                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
+                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
                 temp.Controls.Add(b);
 
                 Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };

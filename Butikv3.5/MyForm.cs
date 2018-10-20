@@ -227,7 +227,6 @@ namespace Butikv3._5
                     // Fix pictureBox imageLocation.
                     pictureBox = new PictureBox
                     {
-                        Dock = DockStyle.Fill,
                         Height = 150,
                         Width = 150,
                         SizeMode = PictureBoxSizeMode.StretchImage,
