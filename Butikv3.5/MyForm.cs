@@ -11,7 +11,7 @@ namespace Butikv3._5
 {
     class Product
     {
-        public int id;
+        public int price;
         public string name;
         public string item;
         public string description;
@@ -19,15 +19,15 @@ namespace Butikv3._5
 
         public Product()
         {
-            id = 0000;
+            price = 5;
             name = "Unknown Product";
             item = "Unknown Item";
             description = "Unknown";
             pictureBox = new PictureBox();
         }
-        public Product(int ID, string name, string item, string description, PictureBox picture)
+        public Product(int p, string name, string item, string description, PictureBox picture)
         {
-            this.id = ID;
+            this.price = p;
             this.name = name;
             this.item = item;
             this.description = description;
@@ -35,7 +35,7 @@ namespace Butikv3._5
         }
         public Product(Product p)
         {
-            id = p.id;
+            price = p.price;
             name = p.name;
             item = p.item;
             description = p.description;
@@ -184,9 +184,12 @@ namespace Butikv3._5
 
         private void QueryFromCSVToList()
         {
-            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "").ToArray();
+            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
+                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "").
+                ToArray();
 
-            foreach (var item in path) //Läs in olika genre i lista
+            // Läs in olika genre i lista
+            foreach (var item in path)
             {
                 if (!listItem.Contains(item[2]))
                     listItem.Add(item[2]);
@@ -214,7 +217,7 @@ namespace Butikv3._5
             {
                 Product tmp = new Product
                 {
-                    id = int.Parse(path[i][0]),
+                    price = int.Parse(path[i][0]),
                     name = path[i][1],
                     item = path[i][2],
                     description = path[i][3],
@@ -226,7 +229,7 @@ namespace Butikv3._5
                         Height = 150,
                         Width = 150,
                         SizeMode = PictureBoxSizeMode.StretchImage,
-                        ImageLocation = @"Movies\" + i + ".jpg"
+                        ImageLocation = @"pictures\" + i + ".jpg",
                     }
                 };
                 list.Add(tmp);

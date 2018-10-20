@@ -11,6 +11,7 @@ namespace Butikv3._5
     class StorePanel : TableLayoutPanel
     {
         TableLayoutPanel temp;
+        PictureBox storePic;
 
         List<Product> storeList = new List<Product>();
         public StorePanel()
@@ -41,14 +42,21 @@ namespace Butikv3._5
                 };
                 temp.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
                 temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
-                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
+                temp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                storePic = new PictureBox
+                {
+                    ImageLocation = item.pictureBox.ImageLocation,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                };
                 Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, };
-
+                Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
                 this.RowCount++;
                 this.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
                 this.Controls.Add(temp);
-                temp.Controls.Add(b, 1, 0);
+                temp.Controls.Add(storePic);
+                temp.Controls.Add(b);
+                temp.Controls.Add(p);
             }
         }
     }
