@@ -156,11 +156,18 @@ namespace Butikv3._5
             mainPanel.Controls.Add(bottomLeftSidePanel);
 
             homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
+            homeButton.Click += HomeButton_Click;
             bottomLeftSidePanel.Controls.Add(homeButton);
 
             #endregion
 
             QueryFromCSVToList();
+        }
+
+        private void HomeButton_Click(object sender, EventArgs e)
+        {
+            cart.Hide();
+            store.Show();
         }
 
         private void ChangeStoreView_Click(object sender, EventArgs e)
