@@ -17,6 +17,7 @@ namespace Butikv3._6
         public string description;
         public PictureBox pictureBox { get; set; }
     }
+
     class MyForm : Form
     {
         #region Main form variables
@@ -53,10 +54,6 @@ namespace Butikv3._6
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Controls.Add(mainPanel);
-
-            mainPanel.Controls.Add(store, 1, 1);
-            mainPanel.Controls.Add(cart, 1, 1);
-            cart.Hide();
 
             topLeftSidePanel = new TableLayoutPanel
             {
@@ -113,7 +110,7 @@ namespace Butikv3._6
                 BackColor = Color.LightBlue,
             };
             topRightSidePanel.Controls.Add(storeButton);
-            storeButton.Click += ChangeStoreView_Click;
+
 
             Button cartButton = new Button
             {
@@ -123,7 +120,6 @@ namespace Butikv3._6
                 BackColor = Color.LightBlue,
             };
             topRightSidePanel.Controls.Add(cartButton);
-            cartButton.Click += ChangeStoreView_Click;
 
             bottomLeftSidePanel = new TableLayoutPanel
             {
@@ -136,11 +132,7 @@ namespace Butikv3._6
             bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
             bottomLeftSidePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, 100));
             mainPanel.Controls.Add(bottomLeftSidePanel);
-
-            homeButton = new Button { Text = "Home", Dock = DockStyle.Fill, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Popup, };
-            homeButton.Click += HomeButton_Click;
-            bottomLeftSidePanel.Controls.Add(homeButton);
-
+            
             #endregion
 
             QueryFromCSVToList();
@@ -194,7 +186,7 @@ namespace Butikv3._6
                 };
                 list.Add(tmp);
             }
-            store.AddItemToStorePanel(list);
+            //store.AddItemToStorePanel(list);
         }
 
         private void ItemButton_Click(object sender, EventArgs e)
