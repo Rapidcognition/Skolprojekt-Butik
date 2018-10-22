@@ -14,6 +14,7 @@ namespace Butikv3._5
         PictureBox descriptionPicture;
         Label nameLabel;
         Label descriptionLabel;
+        Button purchaseItem;
 
         TableLayoutPanel itemPanel;
         PictureBox storePic;
@@ -25,7 +26,7 @@ namespace Butikv3._5
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
             this.ColumnCount = 2;
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 300));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
 
             itemPanel = new TableLayoutPanel
@@ -37,12 +38,13 @@ namespace Butikv3._5
 
             descriptionPanel = new TableLayoutPanel
             {
-                RowCount = 3,
+                RowCount = 4,
                 Dock = DockStyle.Fill,
             };
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
 
             this.Controls.Add(descriptionPanel);
 
@@ -57,6 +59,10 @@ namespace Butikv3._5
             descriptionLabel = new Label { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter,
                 FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
             descriptionPanel.Controls.Add(descriptionLabel);
+
+            purchaseItem = new Button { Text = "Add to cart", FlatStyle = FlatStyle.Popup, TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill, };
+            descriptionPanel.Controls.Add(purchaseItem);
         }
 
         public void AddItemToStorePanel(List<Product> l)
