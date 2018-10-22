@@ -14,13 +14,12 @@ namespace Butikv3._5
         PictureBox descriptionPicture;
         Label nameLabel;
         Label descriptionLabel;
-        Button purchaseItem;
+        Button addToCart;
 
         TableLayoutPanel itemPanel;
         PictureBox storePic;
 
         TableLayoutPanel temp;
-        List<Product> storeList = new List<Product>();
         public StorePanel()
         {
             this.Name = "Store";
@@ -60,18 +59,14 @@ namespace Butikv3._5
                 FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
             descriptionPanel.Controls.Add(descriptionLabel);
 
-            purchaseItem = new Button { Text = "Add to cart", FlatStyle = FlatStyle.Popup, TextAlign = ContentAlignment.MiddleCenter,
+            addToCart = new Button { Text = "Add to cart", FlatStyle = FlatStyle.Popup, TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill, };
-            descriptionPanel.Controls.Add(purchaseItem);
+            descriptionPanel.Controls.Add(addToCart);
         }
 
         public void AddItemToStorePanel(List<Product> l)
         {
             foreach (var item in l)
-            {
-                this.storeList.Add(item);
-            }
-            foreach (var item in storeList)
             {
                 itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
 
@@ -107,8 +102,9 @@ namespace Butikv3._5
                 temp.Controls.Add(p);
 
                 storePic.MouseClick += StorePic_Click;
-                storePic.Name = item.name;
-                storePic.Tag = item.description;
+
+                //item objekt 
+                storePic.Tag = item;
             }
         }
 
@@ -118,6 +114,8 @@ namespace Butikv3._5
             descriptionPicture.Image = p.Image;
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
+
+
         }
     }
 }
