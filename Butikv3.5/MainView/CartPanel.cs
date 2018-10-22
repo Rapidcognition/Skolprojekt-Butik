@@ -34,7 +34,7 @@ namespace Butikv3._5
                 timer = new Timer { Interval = 100 };
                 timer.Tick += Timer_Tick;
 
-                PictureBox picture = new PictureBox()
+                PictureBox picture = new PictureBox
                 {
                     Size = new Size(60, 40),
                     Dock = DockStyle.Top,
@@ -108,8 +108,8 @@ namespace Butikv3._5
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
-                AutoScroll = true,
             };
+            
             this.Controls.Add(leftPanel);
 
             // temporary add button
