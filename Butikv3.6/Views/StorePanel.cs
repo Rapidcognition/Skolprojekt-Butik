@@ -5,18 +5,86 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 namespace Butikv3._6
 {
     class StorePanel
     {
+        private class Product : TableLayoutPanel
+        {
+            public int price;
+            public string name;
+            public string type;
+            public string summary;
+            public string imageLocation;
+
+            public Product(int _price, string _name, string _type, string _summary, string _imageLocation)
+            {
+                price = _price;
+                name = _name;
+                type = _type;
+                summary = _summary;
+                imageLocation = _imageLocation;
+
+                this.ColumnCount = 3;
+                this.RowCount = 1;
+                this.Anchor = AnchorStyles.Top;
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+                PictureBox pictureBox = new PictureBox
+                {
+                    BorderStyle = BorderStyle.Fixed3D,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Fill,
+                    Image = Image.FromFile(imageLocation),
+                };
+                this.Controls.Add(pictureBox);
+                pictureBox.Click += Product_Click;
+
+                Label nameLabel = new Label
+                {
+                    Text = name,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                };
+                this.Controls.Add(nameLabel);
+                nameLabel.Click += Product_Click;
+
+                Label priceLabel = new Label
+                {
+                    Text = price + "kr",
+                    TextAlign = ContentAlignment.MiddleLeft,
+                };
+                this.Controls.Add(priceLabel);
+                priceLabel.Click += Product_Click;
+
+                this.Click += Product_Click;
+            }
+
+            private void Product_Click(object sender, EventArgs e)
+            {
+                MessageBox.Show(this.name);
+            }
+
+            public Product GetProduct()
+            {
+                return this;
+            }
+        }
+
         TableLayoutPanel storePanel;
         FlowLayoutPanel itemPanel;
         Label nameLabel;
-        Label summaryLabel;
+        Label priceLabel;
+
+        List<Product> productList = new List<Product>();
 
         public StorePanel()
         {
+            QueryFromCSVToList();
             storePanel = new TableLayoutPanel
             {
                 ColumnCount = 2,
@@ -70,6 +138,8 @@ namespace Butikv3._6
                 AutoScroll = true,
             };
             rightPanel.Controls.Add(itemPanel);
+            PopulateStore(productList);
+
             TableLayoutPanel descriptionPanel = new TableLayoutPanel
             {
                 RowCount = 4,
@@ -96,13 +166,13 @@ namespace Butikv3._6
             };
             descriptionPanel.Controls.Add(nameLabel);
 
-            summaryLabel = new Label
+            priceLabel = new Label
             {
                 Text = "Items summary",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-            descriptionPanel.Controls.Add(summaryLabel);
+            descriptionPanel.Controls.Add(priceLabel);
 
             Button addToCartButton = new Button
             {
@@ -111,55 +181,43 @@ namespace Butikv3._6
                 FlatStyle = FlatStyle.Popup,
                 BackColor = Color.Coral,
             };
+            addToCartButton.Click += AddToCartButton_Click;
             descriptionPanel.Controls.Add(addToCartButton);
 
         }
 
-        public void PopulateStore(List<Product> temp)
+        private void AddToCartButton_Click(object sender, EventArgs e)
         {
-            foreach (var item in temp)
+            //cart.ToCart(Product);
+        }
+
+        private void PopulateStore(List<Product> productList)
+        {
+            foreach(Product p in productList)
             {
-                TableLayoutPanel tmp = new TableLayoutPanel
-                {
-                    ColumnCount = 3,
-                    RowCount = 1,
-                    Anchor = AnchorStyles.Top
-                };
-                tmp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-                tmp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                tmp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                tmp.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                itemPanel.Controls.Add(tmp);
-
-                PictureBox thumbnail = new PictureBox
-                {
-                    BorderStyle = BorderStyle.Fixed3D,
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Fill,
-                };
-                thumbnail = item.pictureBox;
-                tmp.Controls.Add(thumbnail);
-
-                nameLabel = new Label
-                {
-                    Text = item.name,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                };
-                tmp.Controls.Add(nameLabel);
-
-                summaryLabel = new Label
-                {
-                    Text = item.price.ToString() + "kr",
-                    TextAlign = ContentAlignment.MiddleLeft,
-                };
-                tmp.Controls.Add(summaryLabel);
-
+                itemPanel.Controls.Add(p.GetProduct());
             }
         }
-        public void PopulateStore(List<Product> temp, string filterBy)
+        private void PopulateStore()
         {
 
         }
+
+        private void QueryFromCSVToList()
+        {
+            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
+                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "").
+                ToArray();
+            
+
+            for(int i = 0; i < path.Length; i++)
+            {
+                Product tmp = new Product(int.Parse(path[i][0]), path[i][1], path[i][2], path[i][3], path[i][4]);
+                
+                productList.Add(tmp);
+            }
+        }
+        
         public TableLayoutPanel GetPanel()
         {
             return storePanel;
