@@ -114,7 +114,6 @@ namespace Butikv3._5
             descriptionPicture.Image = p.Image;
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
-
             
         }
     }
