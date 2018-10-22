@@ -16,12 +16,12 @@ namespace Butikv3._6
         public string item;
         public string description;
         public PictureBox pictureBox { get; set; }
+
+
     }
 
     class MyForm : Form
     {
-        
-
         StorePanel store = new StorePanel();
         List<Product> list = new List<Product>();
         List<string> listItem = new List<string>();
@@ -74,62 +74,44 @@ namespace Butikv3._6
             topPanel.Controls.Add(cartButton);
 
             mainPanel.Controls.Add(store.GetPanel());
+            QueryFromCSVToList();
+            store.PopulateStore(list);
         }
-        //private void QueryFromCSVToList()
-        //{
-        //    string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
-        //        Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "").
-        //        ToArray();
+        private void QueryFromCSVToList()
+        {
+            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
+                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "").
+                ToArray();
 
-        //    // Läs in olika genre i lista
-        //    foreach (var item in path)
-        //    {
-        //        if (!listItem.Contains(item[2]))
-        //            listItem.Add(item[2]);
-        //    }
-        //    foreach (var item in listItem)
-        //    {
-        //        itemButton = new Button
-        //        {
-        //            Text = item,
-        //            Height = 50,
-        //            FlatStyle = FlatStyle.Popup,
-        //            BackColor = Color.Coral,
-        //            Dock = DockStyle.Fill,
-        //        };
-        //        itemButton.Click += ItemButton_Click;
-        //        itemButton.Tag = item;
-        //        bottomLeftSidePanel.RowCount++;
-        //        bottomLeftSidePanel.Controls.Add(itemButton);
+            foreach (var item in path)
+            {
+                if (!listItem.Contains(item[2]))
+                    listItem.Add(item[2]);
+            }
 
-        //        // Implementera vart inlästa knappar ska hamna i controls och gör clickevent.
+            for (int i = 0; i < path.Length; i++)
+            {
+                Product tmp = new Product
+                {
+                    price = int.Parse(path[i][0]),
+                    name = path[i][1],
+                    item = path[i][2],
+                    description = path[i][3],
+                    pictureBox = new PictureBox
+                    {
+                        Height = 150,
+                        Width = 150,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        ImageLocation = @"pictures\" + i + ".jpg",
+                    }
+                };
+                list.Add(tmp);
+            }
+        }
 
-        //    } // Slut på dynamiska genre-inläsningen
-
-        //    for (int i = 0; i < path.Length; i++)
-        //    {
-        //        Product tmp = new Product
-        //        {
-        //            price = int.Parse(path[i][0]),
-        //            name = path[i][1],
-        //            item = path[i][2],
-        //            description = path[i][3],
-        //            pictureBox = new PictureBox
-        //            {
-        //                Height = 150,
-        //                Width = 150,
-        //                SizeMode = PictureBoxSizeMode.StretchImage,
-        //                ImageLocation = @"pictures\" + i + ".jpg",
-        //            }
-        //        };
-        //        list.Add(tmp);
-        //    }
-        //    //store.AddItemToStorePanel(list);
-        //}
-
-        //private void ItemButton_Click(object sender, EventArgs e)
-        //{
-        //    MessageBox.Show("Hej!");
-        //}
+        private void ItemButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Hej!");
+        }
     }
 }
