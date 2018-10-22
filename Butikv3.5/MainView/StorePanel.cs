@@ -115,7 +115,7 @@ namespace Butikv3._5
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
 
-
+            
         }
     }
 }
