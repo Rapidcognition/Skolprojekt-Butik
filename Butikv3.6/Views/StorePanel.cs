@@ -66,7 +66,7 @@ namespace Butikv3._6
 
             private void Product_Click(object sender, EventArgs e)
             {
-                MessageBox.Show(this.name);
+                
             }
 
             public Product GetProduct()
@@ -183,12 +183,11 @@ namespace Butikv3._6
             };
             addToCartButton.Click += AddToCartButton_Click;
             descriptionPanel.Controls.Add(addToCartButton);
-
         }
 
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
-            //cart.ToCart(Product);
+            
         }
 
         private void PopulateStore(List<Product> productList)
@@ -197,10 +196,6 @@ namespace Butikv3._6
             {
                 itemPanel.Controls.Add(p.GetProduct());
             }
-        }
-        private void PopulateStore()
-        {
-
         }
 
         private void QueryFromCSVToList()
@@ -215,6 +210,7 @@ namespace Butikv3._6
                 Product tmp = new Product(int.Parse(path[i][0]), path[i][1], path[i][2], path[i][3], path[i][4]);
                 
                 productList.Add(tmp);
+
             }
         }
         
