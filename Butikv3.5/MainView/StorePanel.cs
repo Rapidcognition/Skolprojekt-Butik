@@ -94,12 +94,12 @@ namespace Butikv3._5
                 storePic = item.pictureBox;
                 temp.Controls.Add(storePic);
 
-                Label b = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
-                temp.Controls.Add(b);
+                nameLabel = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
+                temp.Controls.Add(nameLabel);
 
-                Label p = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill,
+                Label priceLabel = new Label { Text = item.price.ToString() + "kr", Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleLeft, };
-                temp.Controls.Add(p);
+                temp.Controls.Add(priceLabel);
 
                 storePic.MouseClick += StorePic_Click;
 
@@ -114,6 +114,7 @@ namespace Butikv3._5
             descriptionPicture.Image = p.Image;
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
+
 
 
         }
