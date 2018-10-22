@@ -20,6 +20,7 @@ namespace Butikv3._5
         PictureBox storePic;
 
         TableLayoutPanel temp;
+        List<Product> storeList = new List<Product>();
         public StorePanel()
         {
             this.Name = "Store";
@@ -68,6 +69,10 @@ namespace Butikv3._5
         {
             foreach (var item in l)
             {
+                storeList.Add(item);
+            }
+            foreach (var item in storeList)
+            {
                 itemPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
 
                 temp = new TableLayoutPanel
@@ -114,6 +119,7 @@ namespace Butikv3._5
             descriptionPicture.Image = p.Image;
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
+
 
 
 
