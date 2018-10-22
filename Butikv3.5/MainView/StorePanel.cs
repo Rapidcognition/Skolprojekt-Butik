@@ -56,7 +56,7 @@ namespace Butikv3._5
                 FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
             descriptionPanel.Controls.Add(nameLabel);
 
-            descriptionLabel = new Label { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter,
+            descriptionLabel = new Label { Dock = DockStyle.Fill, TextAlign = ContentAlignment.TopLeft,
                 FlatStyle = FlatStyle.Popup, BackColor = Color.WhiteSmoke };
             descriptionPanel.Controls.Add(descriptionLabel);
 
