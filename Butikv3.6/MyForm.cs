@@ -13,6 +13,7 @@ namespace Butikv3._6
     {
         StorePanel store = new StorePanel();
         CartPanel cart = new CartPanel();
+        Label shopTitle;
 
         public MyForm()
         {
@@ -23,6 +24,7 @@ namespace Butikv3._6
                 RowCount = 2,
                 Dock = DockStyle.Fill,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                Padding = new Padding(0),
             };
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -35,21 +37,23 @@ namespace Butikv3._6
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 Margin = new Padding(0),
             };
-            topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
+            topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
             topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-            topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
+            topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
             mainPanel.Controls.Add(topPanel);
 
             Button storeButton = new Button
             {
                 Name = "Store",
-                Text = "Store",
-                Dock = DockStyle.Fill
+                BackgroundImage = Image.FromFile("Icons/store.png"),
+                BackgroundImageLayout = ImageLayout.Zoom,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0)
             };
             storeButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(storeButton);
 
-            Label shopTitle = new Label
+            shopTitle = new Label
             {
                 Text = "[Placeholder]",
                 TextAlign = ContentAlignment.MiddleLeft,
@@ -59,13 +63,15 @@ namespace Butikv3._6
             Button cartButton = new Button
             {
                 Name = "Cart",
-                Text = "Cart",
+                BackgroundImage = Image.FromFile("Icons/cart.png"),
+                BackgroundImageLayout = ImageLayout.Zoom,
                 Dock = DockStyle.Fill,
+                Margin = new Padding(0)
             };
             cartButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(cartButton);
 
-            mainPanel.Controls.Add(store.GetPanel(), 0,1);
+            mainPanel.Controls.Add(store, 0,1);
             mainPanel.Controls.Add(cart, 0, 1);
             cart.Hide();
         }
@@ -75,12 +81,14 @@ namespace Butikv3._6
             if((sender as Button).Name == "Store")
             {
                 cart.Hide();
-                //store.Show();
+                store.Show();
+                ActiveControl = null;
             }
             else if((sender as Button).Name == "Cart")
             {
-                //store.Hide();
+                store.Hide();
                 cart.Show();
+                ActiveControl = null;
             }
         }
 

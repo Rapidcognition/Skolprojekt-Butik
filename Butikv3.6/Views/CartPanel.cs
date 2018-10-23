@@ -100,8 +100,6 @@ namespace Butikv3._6
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-
-
         }
 
 

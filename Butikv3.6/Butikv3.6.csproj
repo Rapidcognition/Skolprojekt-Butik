@@ -64,6 +64,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icons\store.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\cart.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="pictures\0.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

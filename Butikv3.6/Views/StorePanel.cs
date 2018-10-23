@@ -27,12 +27,13 @@ namespace Butikv3._6
             return this;
         }
     }
-    class StorePanel
+
+    class StorePanel : TableLayoutPanel
     {
         public string SelectedProduct { get; set; }
 
         TableLayoutPanel leftPanel;
-        TableLayoutPanel storePanel;
+        //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
 
         // Controls connected to description panel
@@ -46,22 +47,19 @@ namespace Butikv3._6
         Label priceLabel;
         PictureBox pictureBox;
         Button addToCartButton;
-        // The four forms listed above is in itemPanel when it's added to storePanel,
+        // The four controls listed above is in itemPanel when it's added to storePanel,
         // in function PopulateStore.
         FlowLayoutPanel itemPanel;
         List<Product> productList = new List<Product>();
 
         public StorePanel()
         {
-            storePanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Azure,
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset,
-            };
-            storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
-            storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
+            this.ColumnCount = 2;
+            this.Dock = DockStyle.Fill;
+            this.BackColor = Color.Azure;
+            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
 
             leftPanel = new TableLayoutPanel
             {
@@ -72,7 +70,7 @@ namespace Butikv3._6
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
-            storePanel.Controls.Add(leftPanel);
+            this.Controls.Add(leftPanel);
 
             Button searchButton = new Button
             {
@@ -97,7 +95,7 @@ namespace Butikv3._6
             };
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
-            storePanel.Controls.Add(rightPanel);
+            this.Controls.Add(rightPanel);
 
             itemPanel = new FlowLayoutPanel
             {
@@ -273,11 +271,6 @@ namespace Butikv3._6
                 };
                 productList.Add(tmp);
             }
-        }
-        
-        public TableLayoutPanel GetPanel()
-        {
-            return storePanel;
         }
     }
 }
