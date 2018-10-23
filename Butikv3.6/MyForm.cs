@@ -12,6 +12,7 @@ namespace Butikv3._6
     class MyForm : Form
     {
         StorePanel store = new StorePanel();
+        CartPanel cart = new CartPanel();
 
         public MyForm()
         {
@@ -39,12 +40,14 @@ namespace Butikv3._6
             topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
             mainPanel.Controls.Add(topPanel);
 
-            Button shopButton = new Button
+            Button storeButton = new Button
             {
-                Text = "Shop",
+                Name = "Store",
+                Text = "Store",
                 Dock = DockStyle.Fill
             };
-            topPanel.Controls.Add(shopButton);
+            storeButton.Click += ViewChangedButton_Click;
+            topPanel.Controls.Add(storeButton);
 
             Label shopTitle = new Label
             {
@@ -55,14 +58,31 @@ namespace Butikv3._6
 
             Button cartButton = new Button
             {
+                Name = "Cart",
                 Text = "Cart",
                 Dock = DockStyle.Fill,
             };
+            cartButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(cartButton);
 
-            mainPanel.Controls.Add(store.GetPanel());
+            mainPanel.Controls.Add(store.GetPanel(), 0,1);
+            mainPanel.Controls.Add(cart, 0, 1);
+            cart.Hide();
         }
-        
+
+        private void ViewChangedButton_Click(object sender, EventArgs e)
+        {
+            if((sender as Button).Name == "Store")
+            {
+                cart.Hide();
+                //store.Show();
+            }
+            else if((sender as Button).Name == "Cart")
+            {
+                //store.Hide();
+                cart.Show();
+            }
+        }
 
         private void ItemButton_Click(object sender, EventArgs e)
         {
