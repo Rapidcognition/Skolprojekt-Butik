@@ -108,13 +108,12 @@ namespace Butikv3._6
 
             descriptionPanel = new TableLayoutPanel
             {
-                RowCount = 4,
+                RowCount = 3,
                 Dock = DockStyle.Fill,
             };
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
             rightPanel.Controls.Add(descriptionPanel);
 
             descriptionPicture = new PictureBox
@@ -137,22 +136,12 @@ namespace Butikv3._6
             {
                 Text = "Items summary",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
+                TextAlign = ContentAlignment.TopLeft,
             };
             descriptionPanel.Controls.Add(descriptionSummaryLabel);
 
-            addToCartButton = new Button
-            {
-                Text = "Add to cart",
-                Dock = DockStyle.Fill,
-                FlatStyle = FlatStyle.Popup,
-                BackColor = Color.Coral,
-            };
-            addToCartButton.Click += AddToCartButton_Click;
-            descriptionPanel.Controls.Add(addToCartButton);
 
             QueryFromCSVToList();
-
             PopulateStore(productList);
         }
 
