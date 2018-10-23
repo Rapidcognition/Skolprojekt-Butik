@@ -190,7 +190,7 @@ namespace Butikv3._6
                 };
                 productPanel.Controls.Add(nameLabel);
 
-                Label priceLabel = new Label
+                priceLabel = new Label
                 {
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
