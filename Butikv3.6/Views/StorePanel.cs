@@ -36,6 +36,8 @@ namespace Butikv3._6
         CartPanel cartPanelRef;
 
         TableLayoutPanel leftPanel;
+        TableLayoutPanel searchControlerPanel;
+        Button searchButton;
         Button typeButton;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
@@ -68,30 +70,45 @@ namespace Butikv3._6
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
 
+            #region Inner leftside table 'leftPanel' of 'this.Controls' that contains filter-func
             leftPanel = new TableLayoutPanel
             {
-                RowCount = 3,
+                RowCount = 1,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Aquamarine,
             };
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             this.Controls.Add(leftPanel);
 
-            Button searchButton = new Button
+            searchControlerPanel = new TableLayoutPanel
             {
-                Text = "Filter",
+                ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                BackColor = Color.Orange,
+                Height = 15,
+                Width = 55,
             };
-            leftPanel.Controls.Add(searchButton);
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30));
+            leftPanel.Controls.Add(searchControlerPanel);
 
             TextBox searchBox = new TextBox
             {
                 Dock = DockStyle.Fill,
+                Margin = new Padding(-20,0,-10,0),
             };
-            leftPanel.Controls.Add(searchBox);
+            searchControlerPanel.Controls.Add(searchBox);
+            searchButton = new Button
+            {
+                Text = "Filter",
+                Dock = DockStyle.Fill,
+                BackColor = Color.Orange,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            searchButton.Click += SearchButton_Click;
+            searchControlerPanel.Controls.Add(searchButton);
+
+
+            #endregion
 
             TableLayoutPanel rightPanel = new TableLayoutPanel
             {
@@ -111,7 +128,8 @@ namespace Butikv3._6
                 AutoScroll = true,
             };
             rightPanel.Controls.Add(itemPanel);
-            PopulateStore(productList);
+
+            #region Panel with controls, nested inside rightPanel
 
             descriptionPanel = new TableLayoutPanel
             {
@@ -146,9 +164,16 @@ namespace Butikv3._6
                 TextAlign = ContentAlignment.TopLeft,
             };
             descriptionPanel.Controls.Add(descriptionSummaryLabel);
+            #endregion
 
             QueryFromCSVToList();
             PopulateTypePanel(typeList);
+            PopulateStore(productList);
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            itemPanel.Controls.Clear();
             PopulateStore(productList);
         }
 
@@ -172,8 +197,80 @@ namespace Butikv3._6
 
         private void TypeButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Filter");
+            Button b = (Button)sender;
+            itemPanel.Controls.Clear();
+            PopulateStoreByType(productList, b.Tag.ToString());
+        }
 
+        private void PopulateStoreByType(List<Product> productList, string type)
+        {
+            foreach (var item in productList)
+            {
+                if (type == item.type)
+                {
+                    productPanel = new TableLayoutPanel
+                    {
+                        ColumnCount = 4,
+                        RowCount = 1,
+                        Anchor = AnchorStyles.Top,
+                        Height = 60,
+                        Width = 410,
+                    };
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                    itemPanel.Controls.Add(productPanel);
+
+                    pictureBox = new PictureBox
+                    {
+                        BorderStyle = BorderStyle.Fixed3D,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        Dock = DockStyle.Top,
+                        Image = Image.FromFile(item.imageLocation),
+                    };
+                    productPanel.Controls.Add(pictureBox);
+
+                    nameLabel = new Label
+                    {
+                        Text = item.name,
+                        TextAlign = ContentAlignment.MiddleLeft,
+                    };
+                    productPanel.Controls.Add(nameLabel);
+
+                    priceLabel = new Label
+                    {
+                        Text = item.price + "kr",
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Dock = DockStyle.Fill,
+                    };
+                    productPanel.Controls.Add(priceLabel);
+
+                    addToCartButton = new Button
+                    {
+                        Text = "Add to cart",
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        FlatStyle = FlatStyle.Popup,
+                        BackColor = Color.Coral,
+                        Dock = DockStyle.Fill,
+                    };
+                    productPanel.Controls.Add(addToCartButton);
+                    pictureBox.Click += PictureBox_Click;
+                    pictureBox.Tag = item;
+
+                    //
+                    productPanel.Click += PictureBox_Click;
+                    nameLabel.Click += PictureBox_Click;
+                    priceLabel.Click += PictureBox_Click;
+                    addToCartButton.Click += AddToCartButton_Click;
+
+                    productPanel.Tag = item;
+                    nameLabel.Tag = item;
+                    priceLabel.Tag = item;
+                    addToCartButton.Tag = item;
+                }
+            }
         }
 
         private void AddToCartButton_Click(object sender, EventArgs e)
