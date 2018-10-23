@@ -49,8 +49,8 @@ namespace Butikv3._5
         Button itemButton;
         Button homeButton;
 
-        CartPanel cart = new CartPanel();
-        StorePanel store = new StorePanel();
+        CartPanel cart;
+        StorePanel store;
         #endregion
 
         List<Product> list = new List<Product>();
@@ -77,7 +77,10 @@ namespace Butikv3._5
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Controls.Add(mainPanel);
-            
+
+
+            cart = new CartPanel();
+            store = new StorePanel(cart);
             mainPanel.Controls.Add(store, 1, 1);
             mainPanel.Controls.Add(cart, 1, 1);
             cart.Hide();
