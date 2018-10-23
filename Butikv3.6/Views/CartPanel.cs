@@ -10,7 +10,7 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
-        FlowLayoutPanel productPanel;
+        FlowLayoutPanel itemPanel;
         List<Product> cartItems = new List<Product>();
 
         public CartPanel()
@@ -19,8 +19,8 @@ namespace Butikv3._6
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
             this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 
             #region left menu
@@ -48,14 +48,14 @@ namespace Butikv3._6
             #endregion
 
             #region Product panel
-            productPanel = new FlowLayoutPanel
+            itemPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.LeftToRight,
             };
-            this.Controls.Add(productPanel);
+            this.Controls.Add(itemPanel);
             #endregion
 
             #region Description panel
@@ -65,36 +65,88 @@ namespace Butikv3._6
                 Margin = new Padding(0),
             };
             this.Controls.Add(descriptionPanel);
-
-            Button tempAdd = new Button
-            {
-                Text = "Add to cart",
-                Dock = DockStyle.Top,
-            };
-            tempAdd.Click += TempAdd_Click;
-            descriptionPanel.Controls.Add(tempAdd);
             #endregion
 
         }
         public void AddToCart(Product product)
         {
-            cartItems.Add(product);
+            if (itemPanel.Controls.ContainsKey(product.name))
+            {
+                NumericUpDown numberOfProductsRef = (NumericUpDown)itemPanel.Controls[product.name].Tag;
+                numberOfProductsRef.Value++;
 
-            //TableLayoutPanel 
+                Label priceLabelRef = (Label)numberOfProductsRef.Tag;
+                priceLabelRef.Text = (product.price * numberOfProductsRef.Value) + "kr";
+            }
+            else
+            {
+                cartItems.Add(product);
+                TableLayoutPanel productPanel = new TableLayoutPanel
+                {
+                    Name = product.name,
+                    ColumnCount = 4,
+                    RowCount = 1,
+                    Anchor = AnchorStyles.Top,
+                    Height = 60,
+                    Width = 410,
+                };
+                this.itemPanel.Controls.Add(productPanel);
+
+                PictureBox productPicture = new PictureBox
+                {
+                    ImageLocation = product.imageLocation,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Dock = DockStyle.Top,
+                };
+                productPanel.Controls.Add(productPicture);
+
+                Label productLabel = new Label
+                {
+                    Text = product.name,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Left,
+                };
+                productPanel.Controls.Add(productLabel);
+
+                Label priceLabel = new Label
+                {
+                    Text = product.price.ToString() + "kr",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Left,
+                };
+                productPanel.Controls.Add(priceLabel);
+
+                NumericUpDown productCounter = new NumericUpDown
+                {
+                    Dock = DockStyle.Left,
+                    AutoSize = true,
+                    Value = 1,
+                };
+                productCounter.ValueChanged += ProductCounter_ValueChanged;
+                productPanel.Controls.Add(productCounter);
+
+                // 
+                productPanel.Tag = productCounter;
+                productCounter.Tag = priceLabel;
+                priceLabel.Tag = product;
+            }
         }
 
-
-        private void TempAdd_Click(object sender, EventArgs e)
+        private void ProductCounter_ValueChanged(object sender, EventArgs e)
         {
-            Product product = new Product
+            NumericUpDown numberOfProducts = (NumericUpDown)sender;
+
+            if (numberOfProducts.Value == 0)
             {
-                name = "Äpple",
-                imageLocation = "pictures/0.jpg",
-                price = 5,
-                type = "Fruit",
-                summary = "Smaskig frukt"
-            };
-            AddToCart(product);
+                numberOfProducts.Parent.Dispose();
+            }
+            else
+            {
+                Label priceLabelRef = (Label)numberOfProducts.Tag;
+                Product productRef = (Product)priceLabelRef.Tag;
+
+                priceLabelRef.Text = (productRef.price * numberOfProducts.Value) + "kr";
+            }
         }
     }
 }
