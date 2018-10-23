@@ -19,64 +19,6 @@ namespace Butikv3._6
             public string summary;
             public string imageLocation;
 
-            public Product(int _price, string _name, string _type, string _summary, string _imageLocation)
-            {
-                price = _price;
-                name = _name;
-                type = _type;
-                summary = _summary;
-                imageLocation = _imageLocation;
-
-                this.ColumnCount = 4;
-                this.RowCount = 1;
-                this.Anchor = AnchorStyles.Top;
-                this.Height = 60;
-                this.Width = 410;
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-
-                PictureBox pictureBox = new PictureBox
-                {
-                    BorderStyle = BorderStyle.Fixed3D,
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Top,
-                    Image = Image.FromFile(imageLocation),
-                };
-                this.Controls.Add(pictureBox);
-                pictureBox.Click += Product_Click;
-
-                Label nameLabel = new Label
-                {
-                    Text = name,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                };
-                this.Controls.Add(nameLabel);
-                nameLabel.Click += Product_Click;
-
-                Label priceLabel = new Label
-                {
-                    Text = price + "kr",
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Dock = DockStyle.Fill,
-                };
-                this.Controls.Add(priceLabel);
-                priceLabel.Click += Product_Click;
-
-                Button addToCartButton = new Button
-                {
-                    Text = "Add to cart",
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.Coral,
-                    Dock = DockStyle.Fill,
-                };
-                this.Controls.Add(addToCartButton);
-                this.Click += Product_Click;
-            }
-
             private void Product_Click(object sender, EventArgs e)
             {
                 MessageBox.Show(this.summary);
@@ -89,6 +31,7 @@ namespace Butikv3._6
         }
 
         TableLayoutPanel storePanel;
+        TableLayoutPanel productPanel;
         FlowLayoutPanel itemPanel;
         Label nameLabel;
         Label priceLabel;
@@ -205,10 +148,55 @@ namespace Butikv3._6
 
         private void PopulateStore(List<Product> productList)
         {
-            foreach(Product p in productList)
+            foreach (Product item in productList)
             {
-                itemPanel.Controls.Add(p.GetProduct());
+                productPanel = new TableLayoutPanel
+                {
+                    ColumnCount = 4,
+                    RowCount = 1,
+                    Anchor = AnchorStyles.Top,
+                    Height = 60,
+                    Width = 410,
+                };
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
+                PictureBox pictureBox = new PictureBox
+                {
+                    BorderStyle = BorderStyle.Fixed3D,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Top,
+                    Image = Image.FromFile(item.imageLocation),
+                };
+                productPanel.Controls.Add(pictureBox);
+
+                Label nameLabel = new Label
+                {
+                    Text = item.name,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                };
+                productPanel.Controls.Add(nameLabel);
+
+                Label priceLabel = new Label
+                {
+                    Text = item.price + "kr",
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Dock = DockStyle.Fill,
+                };
+                productPanel.Controls.Add(priceLabel);
+
+                Button addToCartButton = new Button
+                {
+                    Text = "Add to cart",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Coral,
+                    Dock = DockStyle.Fill,
+                };
+                productPanel.Controls.Add(addToCartButton);
             }
         }
 
