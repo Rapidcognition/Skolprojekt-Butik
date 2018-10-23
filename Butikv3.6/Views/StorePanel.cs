@@ -9,38 +9,49 @@ using System.IO;
 
 namespace Butikv3._6
 {
-    class StorePanel
+    class Product
     {
-        private class Product : TableLayoutPanel
+        public int price;
+        public string name;
+        public string type;
+        public string summary;
+        public string imageLocation;
+
+        private void Product_Click(object sender, EventArgs e)
         {
-            public int price;
-            public string name;
-            public string type;
-            public string summary;
-            public string imageLocation;
-
-            private void Product_Click(object sender, EventArgs e)
-            {
-                MessageBox.Show(this.summary);
-            }
-
-            public Product GetProduct()
-            {
-                return this;
-            }
+            MessageBox.Show(this.summary);
         }
 
+        public Product GetProduct()
+        {
+            return this;
+        }
+    }
+    class StorePanel
+    {
+
+        TableLayoutPanel leftPanel;
         TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
-        FlowLayoutPanel itemPanel;
+
+        // Controls connected to description panel
+        PictureBox descriptionPicture;
+        Label descriptionNameLabel;
+        Label descriptionSummaryLabel;
+        TableLayoutPanel descriptionPanel;
+
+        //This label is used in productPanel and descriptionPanel.
         Label nameLabel;
         Label priceLabel;
-
+        PictureBox pictureBox;
+        Button addToCartButton;
+        // The four forms listed above is in itemPanel when it's added to storePanel,
+        // in function PopulateStore.
+        FlowLayoutPanel itemPanel;
         List<Product> productList = new List<Product>();
 
         public StorePanel()
         {
-            QueryFromCSVToList();
             storePanel = new TableLayoutPanel
             {
                 ColumnCount = 2,
@@ -51,7 +62,7 @@ namespace Butikv3._6
             storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
             storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
 
-            TableLayoutPanel leftPanel = new TableLayoutPanel
+            leftPanel = new TableLayoutPanel
             {
                 RowCount = 3,
                 Dock = DockStyle.Fill,
@@ -96,7 +107,7 @@ namespace Butikv3._6
             rightPanel.Controls.Add(itemPanel);
             PopulateStore(productList);
 
-            TableLayoutPanel descriptionPanel = new TableLayoutPanel
+            descriptionPanel = new TableLayoutPanel
             {
                 RowCount = 4,
                 Dock = DockStyle.Fill,
@@ -107,30 +118,30 @@ namespace Butikv3._6
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             rightPanel.Controls.Add(descriptionPanel);
 
-            PictureBox pictureBox = new PictureBox
+            descriptionPicture = new PictureBox
             {
                 BorderStyle = BorderStyle.Fixed3D,
                 Dock = DockStyle.Fill,
             };
-            descriptionPanel.Controls.Add(pictureBox);
+            descriptionPanel.Controls.Add(descriptionPicture);
 
-            nameLabel = new Label
+            descriptionNameLabel = new Label
             {
                 Text = "Items name",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-            descriptionPanel.Controls.Add(nameLabel);
+            descriptionPanel.Controls.Add(descriptionNameLabel);
 
-            priceLabel = new Label
+            descriptionSummaryLabel = new Label
             {
                 Text = "Items summary",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-            descriptionPanel.Controls.Add(priceLabel);
+            descriptionPanel.Controls.Add(descriptionSummaryLabel);
 
-            Button addToCartButton = new Button
+            addToCartButton = new Button
             {
                 Text = "Add to cart",
                 Dock = DockStyle.Fill,
@@ -139,11 +150,15 @@ namespace Butikv3._6
             };
             addToCartButton.Click += AddToCartButton_Click;
             descriptionPanel.Controls.Add(addToCartButton);
+
+            QueryFromCSVToList();
+
+            PopulateStore(productList);
         }
 
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
-            
+            MessageBox.Show("");
         }
 
         private void PopulateStore(List<Product> productList)
@@ -163,8 +178,9 @@ namespace Butikv3._6
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                itemPanel.Controls.Add(productPanel);
 
-                PictureBox pictureBox = new PictureBox
+                pictureBox = new PictureBox
                 {
                     BorderStyle = BorderStyle.Fixed3D,
                     SizeMode = PictureBoxSizeMode.StretchImage,
@@ -173,7 +189,7 @@ namespace Butikv3._6
                 };
                 productPanel.Controls.Add(pictureBox);
 
-                Label nameLabel = new Label
+                nameLabel = new Label
                 {
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
@@ -188,7 +204,7 @@ namespace Butikv3._6
                 };
                 productPanel.Controls.Add(priceLabel);
 
-                Button addToCartButton = new Button
+                addToCartButton = new Button
                 {
                     Text = "Add to cart",
                     TextAlign = ContentAlignment.MiddleCenter,
@@ -197,6 +213,8 @@ namespace Butikv3._6
                     Dock = DockStyle.Fill,
                 };
                 productPanel.Controls.Add(addToCartButton);
+                addToCartButton.Click += AddToCartButton_Click;
+                addToCartButton.Tag = productPanel;
             }
         }
 
@@ -205,14 +223,18 @@ namespace Butikv3._6
             string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
                 Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "").
                 ToArray();
-            
 
-            for(int i = 0; i < path.Length; i++)
+            for (int i = 0; i < path.Length; i++)
             {
-                Product tmp = new Product(int.Parse(path[i][0]), path[i][1], path[i][2], path[i][3], path[i][4]);
-                
+                Product tmp = new Product
+                {
+                    price = int.Parse(path[i][0]),
+                    name = path[i][1],
+                    type = path[i][2],
+                    summary = path[i][3],
+                    imageLocation = path[i][4],
+                };
                 productList.Add(tmp);
-
             }
         }
         
