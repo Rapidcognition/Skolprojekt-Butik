@@ -11,8 +11,8 @@ namespace Butikv3._6
 {
     class MyForm : Form
     {
-        StorePanel store = new StorePanel();
-        CartPanel cart = new CartPanel();
+        CartPanel cart;
+        StorePanel store;
         
         public MyForm()
         {
@@ -69,6 +69,9 @@ namespace Butikv3._6
             };
             cartButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(cartButton);
+
+            cart = new CartPanel();
+            store = new StorePanel(cart);
 
             mainPanel.Controls.Add(store, 0,1);
             mainPanel.Controls.Add(cart, 0, 1);
