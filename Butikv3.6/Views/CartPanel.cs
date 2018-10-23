@@ -10,6 +10,7 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
+        TableLayoutPanel productPanel;
 
         public CartPanel()
         {
@@ -46,7 +47,7 @@ namespace Butikv3._6
             #endregion
 
             #region Product panel
-            TableLayoutPanel productPanel = new TableLayoutPanel
+            productPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
@@ -72,21 +73,49 @@ namespace Butikv3._6
             #endregion
 
         }
-        public void AddToCart(/*Product product*/)
+        public void AddToCart(Product product)
         {
             TableLayoutPanel item = new TableLayoutPanel
             {
-                ColumnCount = 3,
+                RowCount = 3,
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
             };
-            item.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
+            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            productPanel.Controls.Add(item);
+
+            PictureBox productPicture = new PictureBox
+            {
+                ImageLocation = product.imageLocation,
+                Dock = DockStyle.Fill,
+                BackgroundImageLayout = ImageLayout.Zoom,
+            };
+            item.Controls.Add(productPicture);
+
+            Label productName = new Label
+            {
+                Text = product.name,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+
+
         }
 
 
         private void TempAdd_Click(object sender, EventArgs e)
         {
-
+            Product product = new Product
+            {
+                name = "Äpple",
+                imageLocation = "pictures/0.jpg",
+                price = 5,
+                type = "Fruit",
+                summary = "Smaskig frukt"
+            };
+            AddToCart(product);
         }
     }
 }

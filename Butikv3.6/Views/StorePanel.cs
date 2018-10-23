@@ -217,14 +217,35 @@ namespace Butikv3._6
                 productPanel.Controls.Add(addToCartButton);
                 pictureBox.Click += PictureBox_Click;
                 pictureBox.Tag = item;
+
+                //
+                productPanel.Click += PictureBox_Click;
+                nameLabel.Click += PictureBox_Click;
+                priceLabel.Click += PictureBox_Click;
+
+                productPanel.Tag = item;
+                nameLabel.Tag = item;
+                priceLabel.Tag = item;
             }
         }
 
         private void PictureBox_Click(object sender, EventArgs e)
         {
-            PictureBox p = (PictureBox)sender;
-
-            UpdateProductView((Product)p.Tag);
+            if (sender.GetType() == typeof(TableLayoutPanel))
+            {
+                TableLayoutPanel t = (TableLayoutPanel)sender;
+                UpdateProductView((Product)t.Tag);
+            }
+            else if(sender.GetType() == typeof(PictureBox))
+            {
+                PictureBox p = (PictureBox)sender;
+                UpdateProductView((Product)p.Tag);
+            }
+            else if(sender.GetType() == typeof(Label))
+            {
+                Label l = (Label)sender;
+                UpdateProductView((Product)l.Tag);
+            }
         }
 
         private void UpdateProductView(Product tag)
