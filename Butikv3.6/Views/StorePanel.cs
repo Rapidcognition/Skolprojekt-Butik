@@ -208,6 +208,7 @@ namespace Butikv3._6
             foreach(Product p in productList)
             {
                 itemPanel.Controls.Add(p.GetProduct());
+
             }
         }
 
