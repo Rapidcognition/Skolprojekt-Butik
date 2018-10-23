@@ -10,7 +10,8 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
-        TableLayoutPanel productPanel;
+        FlowLayoutPanel productPanel;
+        List<Product> cartItems = new List<Product>();
 
         public CartPanel()
         {
@@ -47,10 +48,12 @@ namespace Butikv3._6
             #endregion
 
             #region Product panel
-            productPanel = new TableLayoutPanel
+            productPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
+                AutoScroll = true,
+                FlowDirection = FlowDirection.LeftToRight,
             };
             this.Controls.Add(productPanel);
             #endregion
@@ -75,31 +78,9 @@ namespace Butikv3._6
         }
         public void AddToCart(Product product)
         {
-            TableLayoutPanel item = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0),
-            };
-            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            item.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            productPanel.Controls.Add(item);
+            cartItems.Add(product);
 
-            PictureBox productPicture = new PictureBox
-            {
-                ImageLocation = product.imageLocation,
-                Dock = DockStyle.Fill,
-                BackgroundImageLayout = ImageLayout.Zoom,
-            };
-            item.Controls.Add(productPicture);
-
-            Label productName = new Label
-            {
-                Text = product.name,
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
-            };
+            //TableLayoutPanel 
         }
 
 
