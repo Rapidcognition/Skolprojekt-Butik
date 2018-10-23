@@ -90,14 +90,15 @@ namespace Butikv3._6
                 Height = 15,
                 Width = 55,
             };
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 85));
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
             leftPanel.Controls.Add(searchControlerPanel);
 
             TextBox searchBox = new TextBox
             {
                 Anchor = AnchorStyles.None,
                 Margin = new Padding(-20,0,-10,0),
+                Width = 200,
             };
             searchControlerPanel.Controls.Add(searchBox);
             searchButton = new Button
@@ -315,7 +316,7 @@ namespace Butikv3._6
                         RowCount = 1,
                         Anchor = AnchorStyles.Top,
                         Height = 60,
-                        Width = 410,
+                        Width = 390,
                     };
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
