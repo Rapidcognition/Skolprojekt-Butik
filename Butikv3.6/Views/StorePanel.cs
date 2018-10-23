@@ -36,6 +36,7 @@ namespace Butikv3._6
         CartPanel cartPanelRef;
 
         TableLayoutPanel leftPanel;
+        Button typeButton;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
 
@@ -54,6 +55,7 @@ namespace Butikv3._6
         // in function PopulateStore.
         FlowLayoutPanel itemPanel;
         List<Product> productList = new List<Product>();
+        List<string> typeList = new List<string>();
 
         public StorePanel(CartPanel reference)
         {
@@ -145,14 +147,39 @@ namespace Butikv3._6
             };
             descriptionPanel.Controls.Add(descriptionSummaryLabel);
 
-
             QueryFromCSVToList();
+            PopulateTypePanel(typeList);
             PopulateStore(productList);
+        }
+
+        private void PopulateTypePanel(List<string> typeList)
+        {
+            foreach (var item in typeList)
+            {
+                typeButton = new Button
+                {
+                    Text = item,
+                    Dock = DockStyle.Top,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Coral,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                };
+                leftPanel.Controls.Add(typeButton);
+                typeButton.Click += TypeButton_Click;
+                typeButton.Tag = item;
+            }
+        }
+
+        private void TypeButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Filter");
+
         }
 
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("");
+            Button b = (Button)sender;
+            cartPanelRef.AddToCart((Product)b.Tag);
         }
 
         private void PopulateStore(List<Product> productList)
@@ -190,7 +217,7 @@ namespace Butikv3._6
                 };
                 productPanel.Controls.Add(nameLabel);
 
-                Label priceLabel = new Label
+                priceLabel = new Label
                 {
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
@@ -214,10 +241,12 @@ namespace Butikv3._6
                 productPanel.Click += PictureBox_Click;
                 nameLabel.Click += PictureBox_Click;
                 priceLabel.Click += PictureBox_Click;
+                addToCartButton.Click += AddToCartButton_Click;
 
                 productPanel.Tag = item;
                 nameLabel.Tag = item;
                 priceLabel.Tag = item;
+                addToCartButton.Tag = item;
             }
         }
 
@@ -255,6 +284,10 @@ namespace Butikv3._6
 
             for (int i = 0; i < path.Length; i++)
             {
+                if (!typeList.Contains(path[i][2]))
+                {
+                    typeList.Add(path[i][2]);
+                }
                 Product tmp = new Product
                 {
                     price = int.Parse(path[i][0]),
