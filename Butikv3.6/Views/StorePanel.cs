@@ -27,11 +27,14 @@ namespace Butikv3._6
                 summary = _summary;
                 imageLocation = _imageLocation;
 
-                this.ColumnCount = 3;
+                this.ColumnCount = 4;
                 this.RowCount = 1;
                 this.Anchor = AnchorStyles.Top;
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                this.Height = 60;
+                this.Width = 410;
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 this.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
@@ -39,7 +42,7 @@ namespace Butikv3._6
                 {
                     BorderStyle = BorderStyle.Fixed3D,
                     SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Fill,
+                    Dock = DockStyle.Top,
                     Image = Image.FromFile(imageLocation),
                 };
                 this.Controls.Add(pictureBox);
@@ -57,16 +60,26 @@ namespace Butikv3._6
                 {
                     Text = price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
+                    Dock = DockStyle.Fill,
                 };
                 this.Controls.Add(priceLabel);
                 priceLabel.Click += Product_Click;
 
+                Button addToCartButton = new Button
+                {
+                    Text = "Add to cart",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Coral,
+                    Dock = DockStyle.Fill,
+                };
+                this.Controls.Add(addToCartButton);
                 this.Click += Product_Click;
             }
 
             private void Product_Click(object sender, EventArgs e)
             {
-                
+                MessageBox.Show(this.summary);
             }
 
             public Product GetProduct()
@@ -133,7 +146,7 @@ namespace Butikv3._6
 
             itemPanel = new FlowLayoutPanel
             {
-                FlowDirection = FlowDirection.TopDown,
+                FlowDirection = FlowDirection.LeftToRight,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
             };
