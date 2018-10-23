@@ -21,8 +21,13 @@ namespace Butikv3._5
 
         TableLayoutPanel temp;
         List<Product> storeList = new List<Product>();
-        public StorePanel()
+
+        CartPanel cartPanelRef;
+
+        public StorePanel(CartPanel reference)
         {
+            cartPanelRef = reference;
+
             this.Name = "Store";
             this.Dock = DockStyle.Fill;
             this.ColumnCount = 2;
@@ -91,12 +96,13 @@ namespace Butikv3._5
 
                 storePic = new PictureBox
                 {
+                    Name = item.name,
                     ImageLocation = item.pictureBox.ImageLocation,
                     Anchor = AnchorStyles.Left,
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Margin = new Padding(),
                 };
-                storePic = item.pictureBox;
+                //storePic = item.pictureBox;
                 temp.Controls.Add(storePic);
 
                 nameLabel = new Label { Text = item.name, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, };
@@ -115,14 +121,19 @@ namespace Butikv3._5
 
         private void StorePic_Click(object sender, EventArgs e)
         {
+            foreach (Product product in storeList)
+            {
+                if ((sender as PictureBox).Name == product.name)
+                {
+                    cartPanelRef.AddToCart(product);
+                }
+            }
+
             PictureBox p = (PictureBox)sender;
             descriptionPicture.Image = p.Image;
             nameLabel.Text = p.Name;
             descriptionLabel.Text = p.Tag.ToString();
-
-
-
-
+            
         }
     }
 }
