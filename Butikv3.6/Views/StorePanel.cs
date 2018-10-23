@@ -30,8 +30,7 @@ namespace Butikv3._6
 
     class StorePanel : TableLayoutPanel
     {
-        public string SelectedProduct { get; set; }
-
+        #region properties used in storePanel and all functions
         // CartPanel 
         CartPanel cartPanelRef;
 
@@ -56,6 +55,8 @@ namespace Butikv3._6
         // The four controls listed above is in itemPanel when it's added to storePanel,
         // in function PopulateStore.
         FlowLayoutPanel itemPanel;
+        #endregion
+
         List<Product> productList = new List<Product>();
         List<string> typeList = new List<string>();
 
@@ -63,14 +64,15 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
 
+            #region Main panel, 2 columns, refered to as "this.".
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Azure;
             this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
-
-            #region Inner leftside table 'leftPanel' of 'this.Controls' that contains filter-func
+            #endregion
+            #region Inner leftside table "leftPanel" of "this." with panel and controls.
             leftPanel = new TableLayoutPanel
             {
                 RowCount = 1,
@@ -106,10 +108,8 @@ namespace Butikv3._6
             };
             searchButton.Click += SearchButton_Click;
             searchControlerPanel.Controls.Add(searchButton);
-
-
             #endregion
-
+            #region Inner rightside table, belongs to this, holds itemPanel (menu with products).
             TableLayoutPanel rightPanel = new TableLayoutPanel
             {
                 ColumnCount = 2,
@@ -128,7 +128,7 @@ namespace Butikv3._6
                 AutoScroll = true,
             };
             rightPanel.Controls.Add(itemPanel);
-
+            #endregion
             #region Panel with controls, nested inside rightPanel
 
             descriptionPanel = new TableLayoutPanel
@@ -170,13 +170,51 @@ namespace Butikv3._6
             PopulateTypePanel(typeList);
             PopulateStore(productList);
         }
+        // Method to display picture, name and summary of item in storePanel.
+        private void UpdateProductView(Product tag)
+        {
+            descriptionPicture.ImageLocation = tag.imageLocation;
+            descriptionNameLabel.Text = tag.name;
+            descriptionSummaryLabel.Text = tag.summary;
+        }
 
+        // On button click inside storePanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
             itemPanel.Controls.Clear();
             PopulateStore(productList);
         }
+        private void TypeButton_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            itemPanel.Controls.Clear();
+            PopulateStoreByType(productList, b.Tag.ToString());
+        }
+        private void AddToCartButton_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            cartPanelRef.AddToCart((Product)b.Tag);
+        }
+        private void PictureBox_Click(object sender, EventArgs e)
+        {
+            if (sender.GetType() == typeof(TableLayoutPanel))
+            {
+                TableLayoutPanel t = (TableLayoutPanel)sender;
+                UpdateProductView((Product)t.Tag);
+            }
+            else if(sender.GetType() == typeof(PictureBox))
+            {
+                PictureBox p = (PictureBox)sender;
+                UpdateProductView((Product)p.Tag);
+            }
+            else if(sender.GetType() == typeof(Label))
+            {
+                Label l = (Label)sender;
+                UpdateProductView((Product)l.Tag);
+            }
+        }
 
+        // Methods that populate storePanel.
         private void PopulateTypePanel(List<string> typeList)
         {
             foreach (var item in typeList)
@@ -194,14 +232,6 @@ namespace Butikv3._6
                 typeButton.Tag = item;
             }
         }
-
-        private void TypeButton_Click(object sender, EventArgs e)
-        {
-            Button b = (Button)sender;
-            itemPanel.Controls.Clear();
-            PopulateStoreByType(productList, b.Tag.ToString());
-        }
-
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             foreach (var item in productList)
@@ -272,13 +302,6 @@ namespace Butikv3._6
                 }
             }
         }
-
-        private void AddToCartButton_Click(object sender, EventArgs e)
-        {
-            Button b = (Button)sender;
-            cartPanelRef.AddToCart((Product)b.Tag);
-        }
-
         private void PopulateStore(List<Product> productList)
         {
             foreach (Product item in productList)
@@ -347,32 +370,8 @@ namespace Butikv3._6
             }
         }
 
-        private void PictureBox_Click(object sender, EventArgs e)
-        {
-            if (sender.GetType() == typeof(TableLayoutPanel))
-            {
-                TableLayoutPanel t = (TableLayoutPanel)sender;
-                UpdateProductView((Product)t.Tag);
-            }
-            else if(sender.GetType() == typeof(PictureBox))
-            {
-                PictureBox p = (PictureBox)sender;
-                UpdateProductView((Product)p.Tag);
-            }
-            else if(sender.GetType() == typeof(Label))
-            {
-                Label l = (Label)sender;
-                UpdateProductView((Product)l.Tag);
-            }
-        }
-
-        private void UpdateProductView(Product tag)
-        {
-            descriptionPicture.ImageLocation = tag.imageLocation;
-            descriptionNameLabel.Text = tag.name;
-            descriptionSummaryLabel.Text = tag.summary;
-        }
-
+        // Collect data from csv and store in storeList.
+        // also store in typeList, methods that filter.
         private void QueryFromCSVToList()
         {
             string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
