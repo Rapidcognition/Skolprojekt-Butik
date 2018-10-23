@@ -32,6 +32,9 @@ namespace Butikv3._6
     {
         public string SelectedProduct { get; set; }
 
+        // CartPanel 
+        CartPanel cartPanelRef;
+
         TableLayoutPanel leftPanel;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
@@ -52,8 +55,10 @@ namespace Butikv3._6
         FlowLayoutPanel itemPanel;
         List<Product> productList = new List<Product>();
 
-        public StorePanel()
+        public StorePanel(CartPanel reference)
         {
+            cartPanelRef = reference;
+
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Azure;

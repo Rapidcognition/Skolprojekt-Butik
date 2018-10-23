@@ -13,8 +13,7 @@ namespace Butikv3._6
     {
         StorePanel store = new StorePanel();
         CartPanel cart = new CartPanel();
-        Label shopTitle;
-
+        
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
@@ -53,7 +52,7 @@ namespace Butikv3._6
             storeButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(storeButton);
 
-            shopTitle = new Label
+            Label shopTitle = new Label
             {
                 Text = "[Placeholder]",
                 TextAlign = ContentAlignment.MiddleLeft,
