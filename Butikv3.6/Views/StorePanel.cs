@@ -29,6 +29,7 @@ namespace Butikv3._6
     }
     class StorePanel
     {
+        public string SelectedProduct { get; set; }
 
         TableLayoutPanel leftPanel;
         TableLayoutPanel storePanel;
@@ -121,6 +122,7 @@ namespace Butikv3._6
             descriptionPicture = new PictureBox
             {
                 BorderStyle = BorderStyle.Fixed3D,
+                SizeMode = PictureBoxSizeMode.StretchImage,
                 Dock = DockStyle.Fill,
             };
             descriptionPanel.Controls.Add(descriptionPicture);
@@ -213,9 +215,23 @@ namespace Butikv3._6
                     Dock = DockStyle.Fill,
                 };
                 productPanel.Controls.Add(addToCartButton);
-                addToCartButton.Click += AddToCartButton_Click;
-                addToCartButton.Tag = productPanel;
+                pictureBox.Click += PictureBox_Click;
+                pictureBox.Tag = item;
             }
+        }
+
+        private void PictureBox_Click(object sender, EventArgs e)
+        {
+            PictureBox p = (PictureBox)sender;
+
+            UpdateProductView((Product)p.Tag);
+        }
+
+        private void UpdateProductView(Product tag)
+        {
+            descriptionPicture.ImageLocation = tag.imageLocation;
+            descriptionNameLabel.Text = tag.name;
+            descriptionSummaryLabel.Text = tag.summary;
         }
 
         private void QueryFromCSVToList()
