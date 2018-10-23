@@ -17,6 +17,7 @@ namespace Butikv3._6
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
+            this.MaximumSize = new Size(1000, 700);
 
             TableLayoutPanel mainPanel = new TableLayoutPanel
             {
