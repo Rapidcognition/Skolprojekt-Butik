@@ -9,95 +9,49 @@ using System.IO;
 
 namespace Butikv3._6
 {
-    class StorePanel
+    class Product
     {
-        private class Product : TableLayoutPanel
+        public int price;
+        public string name;
+        public string type;
+        public string summary;
+        public string imageLocation;
+
+        private void Product_Click(object sender, EventArgs e)
         {
-            public int price;
-            public string name;
-            public string type;
-            public string summary;
-            public string imageLocation;
-
-            public Product(int _price, string _name, string _type, string _summary, string _imageLocation)
-            {
-                price = _price;
-                name = _name;
-                type = _type;
-                summary = _summary;
-                imageLocation = _imageLocation;
-
-                this.ColumnCount = 4;
-                this.RowCount = 1;
-                this.Anchor = AnchorStyles.Top;
-                this.Height = 60;
-                this.Width = 410;
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-
-                PictureBox pictureBox = new PictureBox
-                {
-                    BorderStyle = BorderStyle.Fixed3D,
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Top,
-                    Image = Image.FromFile(imageLocation),
-                };
-                this.Controls.Add(pictureBox);
-                pictureBox.Click += Product_Click;
-
-                Label nameLabel = new Label
-                {
-                    Text = name,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                };
-                this.Controls.Add(nameLabel);
-                nameLabel.Click += Product_Click;
-
-                Label priceLabel = new Label
-                {
-                    Text = price + "kr",
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Dock = DockStyle.Fill,
-                };
-                this.Controls.Add(priceLabel);
-                priceLabel.Click += Product_Click;
-
-                Button addToCartButton = new Button
-                {
-                    Text = "Add to cart",
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.Coral,
-                    Dock = DockStyle.Fill,
-                };
-                this.Controls.Add(addToCartButton);
-                this.Click += Product_Click;
-            }
-
-            private void Product_Click(object sender, EventArgs e)
-            {
-                MessageBox.Show(this.summary);
-            }
-
-            public Product GetProduct()
-            {
-                return this;
-            }
+            MessageBox.Show(this.summary);
         }
 
+        public Product GetProduct()
+        {
+            return this;
+        }
+    }
+    class StorePanel
+    {
+
+        TableLayoutPanel leftPanel;
         TableLayoutPanel storePanel;
-        FlowLayoutPanel itemPanel;
+        TableLayoutPanel productPanel;
+
+        // Controls connected to description panel
+        PictureBox descriptionPicture;
+        Label descriptionNameLabel;
+        Label descriptionSummaryLabel;
+        TableLayoutPanel descriptionPanel;
+
+        //This label is used in productPanel and descriptionPanel.
         Label nameLabel;
         Label priceLabel;
-
+        PictureBox pictureBox;
+        Button addToCartButton;
+        // The four forms listed above is in itemPanel when it's added to storePanel,
+        // in function PopulateStore.
+        FlowLayoutPanel itemPanel;
         List<Product> productList = new List<Product>();
 
         public StorePanel()
         {
-            QueryFromCSVToList();
             storePanel = new TableLayoutPanel
             {
                 ColumnCount = 2,
@@ -108,7 +62,7 @@ namespace Butikv3._6
             storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
             storePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
 
-            TableLayoutPanel leftPanel = new TableLayoutPanel
+            leftPanel = new TableLayoutPanel
             {
                 RowCount = 3,
                 Dock = DockStyle.Fill,
@@ -153,7 +107,7 @@ namespace Butikv3._6
             rightPanel.Controls.Add(itemPanel);
             PopulateStore(productList);
 
-            TableLayoutPanel descriptionPanel = new TableLayoutPanel
+            descriptionPanel = new TableLayoutPanel
             {
                 RowCount = 4,
                 Dock = DockStyle.Fill,
@@ -164,30 +118,30 @@ namespace Butikv3._6
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             rightPanel.Controls.Add(descriptionPanel);
 
-            PictureBox pictureBox = new PictureBox
+            descriptionPicture = new PictureBox
             {
                 BorderStyle = BorderStyle.Fixed3D,
                 Dock = DockStyle.Fill,
             };
-            descriptionPanel.Controls.Add(pictureBox);
+            descriptionPanel.Controls.Add(descriptionPicture);
 
-            nameLabel = new Label
+            descriptionNameLabel = new Label
             {
                 Text = "Items name",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-            descriptionPanel.Controls.Add(nameLabel);
+            descriptionPanel.Controls.Add(descriptionNameLabel);
 
-            priceLabel = new Label
+            descriptionSummaryLabel = new Label
             {
                 Text = "Items summary",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
             };
-            descriptionPanel.Controls.Add(priceLabel);
+            descriptionPanel.Controls.Add(descriptionSummaryLabel);
 
-            Button addToCartButton = new Button
+            addToCartButton = new Button
             {
                 Text = "Add to cart",
                 Dock = DockStyle.Fill,
@@ -196,19 +150,71 @@ namespace Butikv3._6
             };
             addToCartButton.Click += AddToCartButton_Click;
             descriptionPanel.Controls.Add(addToCartButton);
+
+            QueryFromCSVToList();
+
+            PopulateStore(productList);
         }
 
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
-            
+            MessageBox.Show("");
         }
 
         private void PopulateStore(List<Product> productList)
         {
-            foreach(Product p in productList)
+            foreach (Product item in productList)
             {
-                itemPanel.Controls.Add(p.GetProduct());
+                productPanel = new TableLayoutPanel
+                {
+                    ColumnCount = 4,
+                    RowCount = 1,
+                    Anchor = AnchorStyles.Top,
+                    Height = 60,
+                    Width = 410,
+                };
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                itemPanel.Controls.Add(productPanel);
 
+                pictureBox = new PictureBox
+                {
+                    BorderStyle = BorderStyle.Fixed3D,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Top,
+                    Image = Image.FromFile(item.imageLocation),
+                };
+                productPanel.Controls.Add(pictureBox);
+
+                nameLabel = new Label
+                {
+                    Text = item.name,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                };
+                productPanel.Controls.Add(nameLabel);
+
+                Label priceLabel = new Label
+                {
+                    Text = item.price + "kr",
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Dock = DockStyle.Fill,
+                };
+                productPanel.Controls.Add(priceLabel);
+
+                addToCartButton = new Button
+                {
+                    Text = "Add to cart",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Coral,
+                    Dock = DockStyle.Fill,
+                };
+                productPanel.Controls.Add(addToCartButton);
+                addToCartButton.Click += AddToCartButton_Click;
+                addToCartButton.Tag = productPanel;
             }
         }
 
@@ -217,14 +223,18 @@ namespace Butikv3._6
             string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
                 Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "").
                 ToArray();
-            
 
-            for(int i = 0; i < path.Length; i++)
+            for (int i = 0; i < path.Length; i++)
             {
-                Product tmp = new Product(int.Parse(path[i][0]), path[i][1], path[i][2], path[i][3], path[i][4]);
-                
+                Product tmp = new Product
+                {
+                    price = int.Parse(path[i][0]),
+                    name = path[i][1],
+                    type = path[i][2],
+                    summary = path[i][3],
+                    imageLocation = path[i][4],
+                };
                 productList.Add(tmp);
-
             }
         }
         
