@@ -64,6 +64,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Background\fruit.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background\Header.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background\Header.png" />
     <Content Include="Icons\searchButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
