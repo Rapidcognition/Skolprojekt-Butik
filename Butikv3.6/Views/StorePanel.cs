@@ -71,11 +71,12 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
 
+            // Implement event that autoscales the MyForm window
+            // so that images retain their scale.
             #region Main panel, 2 columns, refered to as "this.".
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.WhiteSmoke;
-            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83));
             #endregion
@@ -128,7 +129,6 @@ namespace Butikv3._6
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
                 BackColor = Color.WhiteSmoke,
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
             };
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 420));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
@@ -139,6 +139,8 @@ namespace Butikv3._6
                 FlowDirection = FlowDirection.LeftToRight,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D,
             };
             rightPanel.Controls.Add(itemPanel);
             #endregion
@@ -410,6 +412,7 @@ namespace Butikv3._6
                 }
             }
         }
+
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             foreach (Product item in productList)

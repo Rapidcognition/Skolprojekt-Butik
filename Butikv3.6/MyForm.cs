@@ -35,6 +35,7 @@ namespace Butikv3._6
                 ColumnCount = 3,
                 Dock = DockStyle.Fill,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                BackColor = Color.White,
                 Margin = new Padding(0),
             };
             topPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
@@ -53,10 +54,12 @@ namespace Butikv3._6
             storeButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(storeButton);
 
-            Label shopTitle = new Label
+            PictureBox shopTitle = new PictureBox
             {
-                Text = "[Placeholder]",
-                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill,
+                Image = Image.FromFile("Background/Header.png"),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BorderStyle = BorderStyle.Fixed3D,
             };
             topPanel.Controls.Add(shopTitle);
 
