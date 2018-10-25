@@ -167,7 +167,6 @@ namespace Butikv3._6
             }
             else
             {
-                //product.nrOfProducts = 1;
                 cartItems.Add(product);
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
