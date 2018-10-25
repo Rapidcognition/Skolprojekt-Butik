@@ -316,6 +316,9 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// Updates selected Product button collapse.
+        /// </summary>
         private void UpdateSelectedProduct(TableLayoutPanel clickedProductPanelRef)
         {
             if(selectedProductPanel == null)
