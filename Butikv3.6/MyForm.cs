@@ -25,6 +25,7 @@ namespace Butikv3._6
                 Dock = DockStyle.Fill,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 Padding = new Padding(0),
+                BackgroundImage = Image.FromFile("Background/spacebackground.jpg"),
             };
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));

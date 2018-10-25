@@ -76,7 +76,7 @@ namespace Butikv3._6
             #region Main panel, 2 columns, refered to as "this.".
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
-            this.BackColor = Color.WhiteSmoke;
+            this.BackColor = Color.Transparent;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83));
             #endregion
@@ -86,7 +86,7 @@ namespace Butikv3._6
             {
                 RowCount = 1,
                 Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke,
+                BackColor = Color.Transparent,
             };
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             this.Controls.Add(leftPanel);
@@ -128,7 +128,7 @@ namespace Butikv3._6
             {
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke,
+                BackColor = Color.Transparent,
             };
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 420));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
@@ -139,7 +139,7 @@ namespace Butikv3._6
                 FlowDirection = FlowDirection.LeftToRight,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                BackColor = Color.White,
+                BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.Fixed3D,
             };
             rightPanel.Controls.Add(itemPanel);
@@ -267,7 +267,8 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 390,
+                    Width = 385,
+                    BackColor = Color.White,
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
