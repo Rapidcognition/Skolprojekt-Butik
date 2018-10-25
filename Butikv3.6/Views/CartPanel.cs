@@ -121,93 +121,6 @@ namespace Butikv3._6
             #endregion
         }
 
-        private void ClearCart()
-        {
-            itemPanel.Controls.Clear();
-            foreach (Product p in cartItems)
-            {
-                p.nrOfProducts = 1;
-            }
-            cartItems.Clear();
-        }
-
-        private void LoadCartButton_Click(object sender, EventArgs e)
-        {
-            if (!Directory.Exists(saveFolder)) 
-            {
-                Directory.CreateDirectory(saveFolder);
-            }
-
-            ClearCart();
-            if (File.Exists(saveFolder + "/" + tempSaveFile)) 
-            {
-                string[][] path = File.ReadAllLines(saveFolder + "/" + tempSaveFile).Select(x => x.Split(',')).
-                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "" && x[5] != "").
-                ToArray();
-
-                for(int i = 0; i < path.Length; i++)
-                {
-                    Product tmp = new Product
-                    {
-                        price = int.Parse(path[i][0]),
-                        name = path[i][1],
-                        type = path[i][2],
-                        summary = path[i][3],
-                        imageLocation = path[i][4],
-                        nrOfProducts = int.Parse(path[i][5]),
-                    };
-                    AddToCart(tmp);
-                }
-            }
-        }
-
-        private void SaveCartButton_Click(object sender, EventArgs e)
-        {
-            if(!Directory.Exists(saveFolder))
-            {
-                Directory.CreateDirectory(saveFolder);
-            }
-
-            if(cartItems.Count != 0)
-            {
-                string[] lines = new string[cartItems.Count];
-
-                for(int i = 0; i < cartItems.Count; i++)
-                {
-                    lines[i] = cartItems[i].ToCSV();
-                }
-
-                File.WriteAllLines(saveFolder + "/" + tempSaveFile, lines);
-            }
-        }
-
-        private void ClearCartButton_Click(object sender, EventArgs e)
-        {
-            ClearCart();
-        }
-
-        private void ProductCounter_ValueChanged(object sender, EventArgs e)
-        {
-            NumericUpDown productCounterRef = (NumericUpDown)sender;
-
-            if (productCounterRef.Value == 0)
-            {
-                // get the selected product from cart and remove it from cartItems
-                Product p = (Product)(productCounterRef.Parent as TableLayoutPanel).Tag;
-                cartItems.Remove(p);
-
-                // dispose the parent container when the counter reaches 0
-                productCounterRef.Parent.Dispose();
-            }
-            else
-            {
-                TableLayoutPanel productPanelRef = (TableLayoutPanel)productCounterRef.Parent;
-                Product productRef = (Product)productPanelRef.Tag;
-                Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
-                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
-            }
-        }
-
         public void AddToCart(Product product)
         {
             if (itemPanel.Controls.ContainsKey(product.name))
@@ -283,6 +196,93 @@ namespace Butikv3._6
             }
         }
 
+        private void ClearCart()
+        {
+            itemPanel.Controls.Clear();
+            foreach (Product p in cartItems)
+            {
+                p.nrOfProducts = 1;
+            }
+            cartItems.Clear();
+        }
+
+        private void SaveCartButton_Click(object sender, EventArgs e)
+        {
+            if(!Directory.Exists(saveFolder))
+            {
+                Directory.CreateDirectory(saveFolder);
+            }
+
+            if(cartItems.Count != 0)
+            {
+                string[] lines = new string[cartItems.Count];
+
+                for(int i = 0; i < cartItems.Count; i++)
+                {
+                    lines[i] = cartItems[i].ToCSV();
+                }
+
+                File.WriteAllLines(saveFolder + "/" + tempSaveFile, lines);
+            }
+        }
+
+        private void LoadCartButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(saveFolder)) 
+            {
+                Directory.CreateDirectory(saveFolder);
+            }
+
+            ClearCart();
+            if (File.Exists(saveFolder + "/" + tempSaveFile)) 
+            {
+                string[][] path = File.ReadAllLines(saveFolder + "/" + tempSaveFile).Select(x => x.Split(',')).
+                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "" && x[5] != "").
+                ToArray();
+
+                for(int i = 0; i < path.Length; i++)
+                {
+                    Product tmp = new Product
+                    {
+                        price = int.Parse(path[i][0]),
+                        name = path[i][1],
+                        type = path[i][2],
+                        summary = path[i][3],
+                        imageLocation = path[i][4],
+                        nrOfProducts = int.Parse(path[i][5]),
+                    };
+                    AddToCart(tmp);
+                }
+            }
+        }
+
+        private void ClearCartButton_Click(object sender, EventArgs e)
+        {
+            ClearCart();
+        }
+
+        private void ProductCounter_ValueChanged(object sender, EventArgs e)
+        {
+            NumericUpDown productCounterRef = (NumericUpDown)sender;
+
+            if (productCounterRef.Value == 0)
+            {
+                // get the selected product from cart and remove it from cartItems
+                Product p = (Product)(productCounterRef.Parent as TableLayoutPanel).Tag;
+                cartItems.Remove(p);
+
+                // dispose the parent container when the counter reaches 0
+                productCounterRef.Parent.Dispose();
+            }
+            else
+            {
+                TableLayoutPanel productPanelRef = (TableLayoutPanel)productCounterRef.Parent;
+                Product productRef = (Product)productPanelRef.Tag;
+                Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
+                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
+            }
+        }
+
         private void ProductPanel_Click(object sender, EventArgs e)
         {
             TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
@@ -311,6 +311,9 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// Updates description panel when a product is selected.
+        /// </summary>
         private void UpdateDescriptionPanel(TableLayoutPanel descriptionPanelRef, Product productRef)
         {
             (descriptionPanelRef.Controls["descriptionPicture"] as PictureBox).ImageLocation = productRef.imageLocation;
