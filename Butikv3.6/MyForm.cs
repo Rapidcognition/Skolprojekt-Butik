@@ -58,14 +58,14 @@ namespace Butikv3._6
             storeButton.Click += ViewChangedButton_Click;
             topPanel.Controls.Add(storeButton);
 
-            PictureBox shopTitle = new PictureBox
+            PictureBox headerPicture = new PictureBox
             {
                 Dock = DockStyle.Fill,
-                Image = Image.FromFile("Background/Header.png"),
+                Image = Image.FromFile("Background/Header1.png"),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BorderStyle = BorderStyle.Fixed3D,
             };
-            topPanel.Controls.Add(shopTitle);
+            topPanel.Controls.Add(headerPicture);
 
             Button cartButton = new Button
             {
