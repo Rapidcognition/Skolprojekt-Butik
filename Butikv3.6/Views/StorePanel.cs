@@ -43,6 +43,7 @@ namespace Butikv3._6
         TableLayoutPanel leftPanel;
         TableLayoutPanel searchControlerPanel;
         Button searchButton;
+        TextBox searchBox;
         Button typeButton;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
@@ -100,13 +101,14 @@ namespace Butikv3._6
             searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
             leftPanel.Controls.Add(searchControlerPanel);
 
-            TextBox searchBox = new TextBox
+            searchBox = new TextBox
             {
                 Anchor = AnchorStyles.None,
                 Margin = new Padding(-20,0,-10,0),
                 Width = 200,
             };
             searchControlerPanel.Controls.Add(searchBox);
+            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
             searchButton = new Button
             {
                 // Commented this out because "searchButton.png" isn't present in my Icons folder
@@ -182,6 +184,8 @@ namespace Butikv3._6
             PopulateTypePanel(typeList);
             PopulateStore(productList);
         }
+
+
         // Method to display picture, name and summary of item in storePanel.
         private void UpdateProductView(Product tag)
         {
@@ -193,9 +197,35 @@ namespace Butikv3._6
         // On button click inside storePanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            itemPanel.Controls.Clear();
-            PopulateStore(productList);
+            if(searchBox.Text == string.Empty)
+            {
+                itemPanel.Controls.Clear();
+                PopulateStore(productList);
+            }
+            else
+            {
+                itemPanel.Controls.Clear();
+                PopulateStoreByFilter(productList, searchBox.Text);
+            }
         }
+        private void SearchBox_Enter(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                if(searchBox.Text == "")
+                {
+                    itemPanel.Controls.Clear();
+                    PopulateStore(productList);
+                }
+                else
+                {
+                    itemPanel.Controls.Clear();
+                    PopulateStoreByFilter(productList, searchBox.Text);
+                }
+            }
+        }
+
+
         private void TypeButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
@@ -369,6 +399,75 @@ namespace Butikv3._6
                     pictureBox.Tag = item;
 
                     //
+                    productPanel.Click += PictureBox_Click;
+                    nameLabel.Click += PictureBox_Click;
+                    priceLabel.Click += PictureBox_Click;
+                    addToCartButton.Click += AddToCartButton_Click;
+
+                    productPanel.Tag = item;
+                    nameLabel.Tag = item;
+                    priceLabel.Tag = item;
+                    addToCartButton.Tag = item;
+                }
+            }
+        }
+        private void PopulateStoreByFilter(List<Product> productList, string text)
+        {
+            foreach (Product item in productList)
+            {
+                if(item.name == text || item.type == text)
+                {
+                    productPanel = new TableLayoutPanel
+                    {
+                        ColumnCount = 4,
+                        RowCount = 1,
+                        Anchor = AnchorStyles.Top,
+                        Height = 60,
+                        Width = 390,
+                    };
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                    itemPanel.Controls.Add(productPanel);
+
+                    pictureBox = new PictureBox
+                    {
+                        BorderStyle = BorderStyle.Fixed3D,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        Dock = DockStyle.Top,
+                        Image = Image.FromFile(item.imageLocation),
+                    };
+                    productPanel.Controls.Add(pictureBox);
+
+                    nameLabel = new Label
+                    {
+                        Text = item.name,
+                        TextAlign = ContentAlignment.MiddleLeft,
+                    };
+                    productPanel.Controls.Add(nameLabel);
+
+                    priceLabel = new Label
+                    {
+                        Text = item.price + "kr",
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Dock = DockStyle.Fill,
+                    };
+                    productPanel.Controls.Add(priceLabel);
+
+                    addToCartButton = new Button
+                    {
+                        Text = "Add to cart",
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        FlatStyle = FlatStyle.Popup,
+                        BackColor = Color.Coral,
+                        Dock = DockStyle.Fill,
+                    };
+                    productPanel.Controls.Add(addToCartButton);
+                    pictureBox.Click += PictureBox_Click;
+                    pictureBox.Tag = item;
+
                     productPanel.Click += PictureBox_Click;
                     nameLabel.Click += PictureBox_Click;
                     priceLabel.Click += PictureBox_Click;
