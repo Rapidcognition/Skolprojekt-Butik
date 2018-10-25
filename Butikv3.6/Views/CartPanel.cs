@@ -11,11 +11,12 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
-        private const string saveFolder = "saveFolder";
-        private const string tempSaveFile = "saveFile.csv";
+        private const string SaveFolder = "saveFolder";
+        private const string TempSaveFile = "saveFile.csv";
 
-        FlowLayoutPanel itemPanel;
-        List<Product> cartItems = new List<Product>();
+        private FlowLayoutPanel itemPanel;
+        private TableLayoutPanel selectedProductPanel;
+        private List<Product> cartItems = new List<Product>();
 
         public CartPanel()
         {
@@ -185,7 +186,8 @@ namespace Butikv3._6
                 {
                     Name = "productCounter",
                     Dock = DockStyle.Left,
-                    AutoSize = true,
+                    Anchor = AnchorStyles.Left,
+                    //AutoSize = true,
                     Value = product.nrOfProducts,
                 };
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
@@ -208,9 +210,9 @@ namespace Butikv3._6
 
         private void SaveCartButton_Click(object sender, EventArgs e)
         {
-            if(!Directory.Exists(saveFolder))
+            if(!Directory.Exists(SaveFolder))
             {
-                Directory.CreateDirectory(saveFolder);
+                Directory.CreateDirectory(SaveFolder);
             }
 
             if(cartItems.Count != 0)
@@ -222,21 +224,21 @@ namespace Butikv3._6
                     lines[i] = cartItems[i].ToCSV();
                 }
 
-                File.WriteAllLines(saveFolder + "/" + tempSaveFile, lines);
+                File.WriteAllLines(SaveFolder + "/" + TempSaveFile, lines);
             }
         }
 
         private void LoadCartButton_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(saveFolder)) 
+            if (!Directory.Exists(SaveFolder)) 
             {
-                Directory.CreateDirectory(saveFolder);
+                Directory.CreateDirectory(SaveFolder);
             }
 
             ClearCart();
-            if (File.Exists(saveFolder + "/" + tempSaveFile)) 
+            if (File.Exists(SaveFolder + "/" + TempSaveFile)) 
             {
-                string[][] path = File.ReadAllLines(saveFolder + "/" + tempSaveFile).Select(x => x.Split(',')).
+                string[][] path = File.ReadAllLines(SaveFolder + "/" + TempSaveFile).Select(x => x.Split(',')).
                 Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "" && x[5] != "").
                 ToArray();
 
@@ -294,6 +296,7 @@ namespace Butikv3._6
                 productPanelRef = (TableLayoutPanel)sender;
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
+                UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
@@ -301,6 +304,7 @@ namespace Butikv3._6
                 productPanelRef = (TableLayoutPanel)p.Parent;
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
+                UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(Label))
             {
@@ -308,6 +312,23 @@ namespace Butikv3._6
                 productPanelRef = (TableLayoutPanel)l.Parent;
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
+                UpdateSelectedProduct(productPanelRef);
+            }
+        }
+
+        private void UpdateSelectedProduct(TableLayoutPanel clickedProductPanelRef)
+        {
+            if(selectedProductPanel == null)
+            {
+                selectedProductPanel = clickedProductPanelRef;
+                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
+            }
+
+            if (selectedProductPanel != clickedProductPanelRef)
+            {
+                selectedProductPanel.BorderStyle = BorderStyle.None;
+                selectedProductPanel = clickedProductPanelRef;
+                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
             }
         }
 
