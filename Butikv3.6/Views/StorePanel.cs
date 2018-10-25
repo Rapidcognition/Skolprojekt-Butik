@@ -130,7 +130,7 @@ namespace Butikv3._6
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
             };
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 420));
+            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
             this.Controls.Add(rightPanel);
 
@@ -267,8 +267,7 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 385,
-                    BackColor = Color.White,
+                    Width = 390,
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -290,6 +289,7 @@ namespace Butikv3._6
                 {
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Left,
                 };
                 productPanel.Controls.Add(nameLabel);
 
@@ -297,7 +297,7 @@ namespace Butikv3._6
                 {
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Dock = DockStyle.Fill,
+                    Anchor = AnchorStyles.Left,
                 };
                 productPanel.Controls.Add(priceLabel);
 
@@ -313,7 +313,6 @@ namespace Butikv3._6
                 pictureBox.Click += PictureBox_Click;
                 pictureBox.Tag = item;
 
-                //
                 productPanel.Click += PictureBox_Click;
                 nameLabel.Click += PictureBox_Click;
                 priceLabel.Click += PictureBox_Click;
@@ -399,7 +398,6 @@ namespace Butikv3._6
                     pictureBox.Click += PictureBox_Click;
                     pictureBox.Tag = item;
 
-                    //
                     productPanel.Click += PictureBox_Click;
                     nameLabel.Click += PictureBox_Click;
                     priceLabel.Click += PictureBox_Click;
@@ -409,7 +407,6 @@ namespace Butikv3._6
                     nameLabel.Tag = item;
                     priceLabel.Tag = item;
                     addToCartButton.Tag = item;
-                    QueryFromCSVToList();
                 }
             }
         }
