@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -10,6 +11,9 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
+        private const string saveFolder = "saveFolder";
+        private const string tempSaveFile = "saveFile.csv";
+
         FlowLayoutPanel itemPanel;
         List<Product> cartItems = new List<Product>();
 
@@ -44,7 +48,24 @@ namespace Butikv3._6
                 Text = "Save Cart",
                 Dock = DockStyle.Top,
             };
+            saveCartButton.Click += SaveCartButton_Click;
             leftMenuPanel.Controls.Add(saveCartButton);
+
+            Button loadCartButton = new Button
+            {
+                Text ="Read cart from CSV",
+                Dock = DockStyle.Top,
+            };
+            loadCartButton.Click += LoadCartButton_Click;
+            leftMenuPanel.Controls.Add(loadCartButton);
+
+            Button clearCartButton = new Button
+            {
+                Text = "Clear Cart",
+                Dock = DockStyle.Top,
+            };
+            clearCartButton.Click += ClearCartButton_Click;
+            leftMenuPanel.Controls.Add(clearCartButton);
             #endregion
 
             #region Product panel
@@ -68,6 +89,72 @@ namespace Butikv3._6
             #endregion
 
         }
+
+        private void ClearCart()
+        {
+            itemPanel.Controls.Clear();
+            foreach (Product p in cartItems)
+            {
+                p.nrOfProducts = 1;
+            }
+            cartItems.Clear();
+        }
+
+        private void LoadCartButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(saveFolder)) 
+            {
+                Directory.CreateDirectory(saveFolder);
+            }
+
+            ClearCart();
+            if (File.Exists(saveFolder + "/" + tempSaveFile)) 
+            {
+                string[][] path = File.ReadAllLines(saveFolder + "/" + tempSaveFile).Select(x => x.Split(',')).
+                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "" && x[5] != "").
+                ToArray();
+
+                for(int i = 0; i < path.Length; i++)
+                {
+                    Product tmp = new Product
+                    {
+                        price = int.Parse(path[i][0]),
+                        name = path[i][1],
+                        type = path[i][2],
+                        summary = path[i][3],
+                        imageLocation = path[i][4],
+                        nrOfProducts = int.Parse(path[i][5]),
+                    };
+                    AddToCart(tmp);
+                }
+            }
+        }
+
+        private void SaveCartButton_Click(object sender, EventArgs e)
+        {
+            if(!Directory.Exists(saveFolder))
+            {
+                Directory.CreateDirectory(saveFolder);
+            }
+
+            if(cartItems.Count != 0)
+            {
+                string[] lines = new string[cartItems.Count];
+
+                for(int i = 0; i < cartItems.Count; i++)
+                {
+                    lines[i] = cartItems[i].ToCSV();
+                }
+
+                File.WriteAllLines(saveFolder + "/" + tempSaveFile, lines);
+            }
+        }
+
+        private void ClearCartButton_Click(object sender, EventArgs e)
+        {
+            ClearCart();
+        }
+
         public void AddToCart(Product product)
         {
             if (itemPanel.Controls.ContainsKey(product.name))
@@ -80,6 +167,7 @@ namespace Butikv3._6
             }
             else
             {
+                //product.nrOfProducts = 1;
                 cartItems.Add(product);
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
@@ -110,7 +198,7 @@ namespace Butikv3._6
 
                 Label priceLabel = new Label
                 {
-                    Text = product.price.ToString() + "kr",
+                    Text = (product.price * product.nrOfProducts) + "kr",
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Left,
                 };
@@ -120,7 +208,7 @@ namespace Butikv3._6
                 {
                     Dock = DockStyle.Left,
                     AutoSize = true,
-                    Value = 1,
+                    Value = product.nrOfProducts,
                 };
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
                 productPanel.Controls.Add(productCounter);
@@ -144,7 +232,7 @@ namespace Butikv3._6
             {
                 Label priceLabelRef = (Label)numberOfProducts.Tag;
                 Product productRef = (Product)priceLabelRef.Tag;
-
+                productRef.nrOfProducts = int.Parse(numberOfProducts.Value.ToString());
                 priceLabelRef.Text = (productRef.price * numberOfProducts.Value) + "kr";
             }
         }

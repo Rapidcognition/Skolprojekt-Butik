@@ -16,6 +16,7 @@ namespace Butikv3._6
         public string type;
         public string summary;
         public string imageLocation;
+        public int nrOfProducts;
 
         private void Product_Click(object sender, EventArgs e)
         {
@@ -25,6 +26,11 @@ namespace Butikv3._6
         public Product GetProduct()
         {
             return this;
+        }
+
+        public string ToCSV()
+        {
+            return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
     }
 
@@ -103,7 +109,8 @@ namespace Butikv3._6
             searchControlerPanel.Controls.Add(searchBox);
             searchButton = new Button
             {
-                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
+                // Commented this out because "searchButton.png" isn't present in my Icons folder
+                //BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
                 BackgroundImageLayout = ImageLayout.Zoom,
                 Anchor = AnchorStyles.None,
                 Margin = new Padding(0,0,0,0),
@@ -396,6 +403,7 @@ namespace Butikv3._6
                     type = path[i][2],
                     summary = path[i][3],
                     imageLocation = path[i][4],
+                    nrOfProducts = 1,
                 };
                 productList.Add(tmp);
             }
