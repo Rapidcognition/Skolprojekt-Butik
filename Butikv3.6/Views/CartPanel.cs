@@ -22,9 +22,9 @@ namespace Butikv3._6
             this.ColumnCount = 3;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 135));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
             this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 
             #region left menu
@@ -82,12 +82,42 @@ namespace Butikv3._6
             #region Description panel
             TableLayoutPanel descriptionPanel = new TableLayoutPanel
             {
+                Name = "descriptionPanel",
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0),
+                RowCount = 3,
             };
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
             this.Controls.Add(descriptionPanel);
-            #endregion
 
+            PictureBox descriptionPicture = new PictureBox
+            {
+                Name = "descriptionPicture",
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.Fixed3D,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+            };
+            descriptionPanel.Controls.Add(descriptionPicture);
+
+            Label descriptionProductName = new Label
+            {
+                Name = "descriptionProductName",
+                Text = "No product selected",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+            descriptionPanel.Controls.Add(descriptionProductName);
+
+            Label descriptionProductSummary = new Label
+            {
+                Name = "descriptionProductSummary",
+                Text = " ---",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+            descriptionPanel.Controls.Add(descriptionProductSummary);
+            #endregion
         }
 
         private void ClearCart()
@@ -155,15 +185,34 @@ namespace Butikv3._6
             ClearCart();
         }
 
+        private void ProductCounter_ValueChanged(object sender, EventArgs e)
+        {
+            NumericUpDown productCounterRef = (NumericUpDown)sender;
+
+            if (productCounterRef.Value == 0)
+            {
+                productCounterRef.Parent.Dispose();
+            }
+            else
+            {
+                TableLayoutPanel productPanelRef = (TableLayoutPanel)productCounterRef.Parent;
+                Product productRef = (Product)productPanelRef.Tag;
+                Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
+                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
+            }
+        }
+
         public void AddToCart(Product product)
         {
             if (itemPanel.Controls.ContainsKey(product.name))
             {
-                NumericUpDown numberOfProductsRef = (NumericUpDown)itemPanel.Controls[product.name].Tag;
-                numberOfProductsRef.Value++;
+                TableLayoutPanel productPanelRef = (TableLayoutPanel)itemPanel.Controls[product.name];
+                NumericUpDown productCounterRef = (NumericUpDown)productPanelRef.Controls["productCounter"];
+                Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
+                Product productRef = (Product)productPanelRef.Tag;
 
-                Label priceLabelRef = (Label)numberOfProductsRef.Tag;
-                priceLabelRef.Text = (product.price * numberOfProductsRef.Value) + "kr";
+                productCounterRef.Value++;
+                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
             }
             else
             {
@@ -177,6 +226,7 @@ namespace Butikv3._6
                     Height = 60,
                     Width = 410,
                 };
+                productPanel.Click += ProductPanel_Click;
                 this.itemPanel.Controls.Add(productPanel);
 
                 PictureBox productPicture = new PictureBox
@@ -185,6 +235,7 @@ namespace Butikv3._6
                     SizeMode = PictureBoxSizeMode.Zoom,
                     Dock = DockStyle.Top,
                 };
+                productPicture.Click += ProductPanel_Click;
                 productPanel.Controls.Add(productPicture);
 
                 Label productLabel = new Label
@@ -193,18 +244,22 @@ namespace Butikv3._6
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Left,
                 };
+                productLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(productLabel);
 
                 Label priceLabel = new Label
                 {
+                    Name = "priceLabel",
                     Text = (product.price * product.nrOfProducts) + "kr",
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Left,
                 };
+                priceLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(priceLabel);
 
                 NumericUpDown productCounter = new NumericUpDown
                 {
+                    Name = "productCounter",
                     Dock = DockStyle.Left,
                     AutoSize = true,
                     Value = product.nrOfProducts,
@@ -212,28 +267,46 @@ namespace Butikv3._6
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
                 productPanel.Controls.Add(productCounter);
 
-                // 
-                productPanel.Tag = productCounter;
-                productCounter.Tag = priceLabel;
-                priceLabel.Tag = product;
+                //
+                productPanel.Tag = product;
             }
         }
 
-        private void ProductCounter_ValueChanged(object sender, EventArgs e)
+        private void ProductPanel_Click(object sender, EventArgs e)
         {
-            NumericUpDown numberOfProducts = (NumericUpDown)sender;
+            TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
+            TableLayoutPanel productPanelRef;
+            Product productRef;
 
-            if (numberOfProducts.Value == 0)
+            if (sender.GetType() == typeof(TableLayoutPanel))
             {
-                numberOfProducts.Parent.Dispose();
+                productPanelRef = (TableLayoutPanel)sender;
+                productRef = (Product)productPanelRef.Tag;
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
             }
-            else
+            else if(sender.GetType() == typeof(PictureBox))
             {
-                Label priceLabelRef = (Label)numberOfProducts.Tag;
-                Product productRef = (Product)priceLabelRef.Tag;
-                productRef.nrOfProducts = int.Parse(numberOfProducts.Value.ToString());
-                priceLabelRef.Text = (productRef.price * numberOfProducts.Value) + "kr";
+                PictureBox p = (PictureBox)sender;
+                productPanelRef = (TableLayoutPanel)p.Parent;
+                productRef = (Product)productPanelRef.Tag;
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
             }
+            else if(sender.GetType() == typeof(Label))
+            {
+                Label l = (Label)sender;
+                productPanelRef = (TableLayoutPanel)l.Parent;
+                productRef = (Product)productPanelRef.Tag;
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
+            }
+        }
+
+        private void UpdateDescriptionPanel(TableLayoutPanel descriptionPanelRef, Product productRef)
+        {
+            (descriptionPanelRef.Controls["descriptionPicture"] as PictureBox).ImageLocation = productRef.imageLocation;
+
+            (descriptionPanelRef.Controls["descriptionProductName"] as Label).Text = productRef.name;
+
+            (descriptionPanelRef.Controls["descriptionProductSummary"]).Text = productRef.summary;
         }
     }
 }

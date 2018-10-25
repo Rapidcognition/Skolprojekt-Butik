@@ -73,6 +73,7 @@ namespace Butikv3._6
 
             cart = new CartPanel();
             store = new StorePanel(cart);
+            
 
             mainPanel.Controls.Add(store, 0,1);
             mainPanel.Controls.Add(cart, 0, 1);
