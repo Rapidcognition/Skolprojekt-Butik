@@ -76,7 +76,7 @@ namespace Butikv3._6
             #region Main panel, 2 columns, refered to as "this.".
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
-            this.BackColor = Color.WhiteSmoke;
+            this.BackColor = Color.Transparent;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83));
             #endregion
@@ -86,7 +86,7 @@ namespace Butikv3._6
             {
                 RowCount = 1,
                 Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke,
+                BackColor = Color.Transparent,
             };
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             this.Controls.Add(leftPanel);
@@ -128,9 +128,9 @@ namespace Butikv3._6
             {
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke,
+                BackColor = Color.Transparent,
             };
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 420));
+            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
             this.Controls.Add(rightPanel);
 
@@ -139,7 +139,7 @@ namespace Butikv3._6
                 FlowDirection = FlowDirection.LeftToRight,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                BackColor = Color.White,
+                BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.Fixed3D,
             };
             rightPanel.Controls.Add(itemPanel);
@@ -289,6 +289,7 @@ namespace Butikv3._6
                 {
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Left,
                 };
                 productPanel.Controls.Add(nameLabel);
 
@@ -296,7 +297,7 @@ namespace Butikv3._6
                 {
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Dock = DockStyle.Fill,
+                    Anchor = AnchorStyles.Left,
                 };
                 productPanel.Controls.Add(priceLabel);
 
@@ -312,7 +313,6 @@ namespace Butikv3._6
                 pictureBox.Click += PictureBox_Click;
                 pictureBox.Tag = item;
 
-                //
                 productPanel.Click += PictureBox_Click;
                 nameLabel.Click += PictureBox_Click;
                 priceLabel.Click += PictureBox_Click;
@@ -398,7 +398,6 @@ namespace Butikv3._6
                     pictureBox.Click += PictureBox_Click;
                     pictureBox.Tag = item;
 
-                    //
                     productPanel.Click += PictureBox_Click;
                     nameLabel.Click += PictureBox_Click;
                     priceLabel.Click += PictureBox_Click;
@@ -408,7 +407,6 @@ namespace Butikv3._6
                     nameLabel.Tag = item;
                     priceLabel.Tag = item;
                     addToCartButton.Tag = item;
-                    QueryFromCSVToList();
                 }
             }
         }
