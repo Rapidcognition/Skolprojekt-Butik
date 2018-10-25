@@ -84,11 +84,13 @@ namespace Butikv3._6
             #region Left side table of "this.".
             leftPanel = new TableLayoutPanel
             {
-                RowCount = 1,
+                RowCount = 3,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
             };
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
             this.Controls.Add(leftPanel);
 
             searchControlerPanel = new TableLayoutPanel
@@ -112,15 +114,21 @@ namespace Butikv3._6
             searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
             searchButton = new Button
             {
-                // Commented this out because "searchButton.png" isn't present in my Icons folder
                 BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
                 BackgroundImageLayout = ImageLayout.Zoom,
-                Anchor = AnchorStyles.None,
-                Margin = new Padding(0,0,0,0),
-                Height = 22,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0,0,0,7),
+                Height = 25,
             };
             searchButton.Click += SearchButton_Click;
             searchControlerPanel.Controls.Add(searchButton);
+
+            // Only to create a small space between filterbox and typebuttons.
+            Label l = new Label
+            {
+                Dock = DockStyle.Fill,
+            };
+            leftPanel.Controls.Add(l);
             #endregion
 
             #region Right side table of this, holds itemPanel (menu with products).
@@ -306,7 +314,7 @@ namespace Butikv3._6
                     Text = "Add to cart",
                     TextAlign = ContentAlignment.MiddleCenter,
                     FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.Coral,
+                    BackColor = Color.DarkKhaki,
                     Dock = DockStyle.Fill,
                 };
                 productPanel.Controls.Add(addToCartButton);
@@ -331,16 +339,19 @@ namespace Butikv3._6
                 typeButton = new Button
                 {
                     Text = item,
-                    Dock = DockStyle.Top,
+                    Dock = DockStyle.Fill,
                     FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.Coral,
+                    BackColor = Color.DarkKhaki,
                     TextAlign = ContentAlignment.MiddleCenter,
                 };
                 leftPanel.Controls.Add(typeButton);
+                leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+                leftPanel.RowCount++;
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
         }
+
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             foreach (var item in productList)
@@ -391,7 +402,7 @@ namespace Butikv3._6
                         Text = "Add to cart",
                         TextAlign = ContentAlignment.MiddleCenter,
                         FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.Coral,
+                        BackColor = Color.DarkKhaki,
                         Dock = DockStyle.Fill,
                     };
                     productPanel.Controls.Add(addToCartButton);
@@ -461,7 +472,7 @@ namespace Butikv3._6
                         Text = "Add to cart",
                         TextAlign = ContentAlignment.MiddleCenter,
                         FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.Coral,
+                        BackColor = Color.DarkKhaki,
                         Dock = DockStyle.Fill,
                     };
                     productPanel.Controls.Add(addToCartButton);
@@ -506,6 +517,8 @@ namespace Butikv3._6
                 };
                 productList.Add(tmp);
             }
+            productList = productList.OrderBy(x => x.type).ToList();
+            typeList = typeList.OrderBy(x => x).ToList();
         }
     }
 }
