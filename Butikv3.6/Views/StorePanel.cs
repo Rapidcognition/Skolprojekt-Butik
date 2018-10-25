@@ -110,7 +110,7 @@ namespace Butikv3._6
             searchButton = new Button
             {
                 // Commented this out because "searchButton.png" isn't present in my Icons folder
-                //BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
+                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
                 BackgroundImageLayout = ImageLayout.Zoom,
                 Anchor = AnchorStyles.None,
                 Margin = new Padding(0,0,0,0),
