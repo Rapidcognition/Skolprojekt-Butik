@@ -185,7 +185,6 @@ namespace Butikv3._6
             PopulateStore(productList);
         }
 
-
         // Method to display picture, name and summary of item in storePanel.
         private void UpdateProductView(Product tag)
         {
@@ -224,11 +223,10 @@ namespace Butikv3._6
                 }
             }
         }
-
-
         private void TypeButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
+            searchButton.Focus();
             itemPanel.Controls.Clear();
             PopulateStoreByType(productList, b.Tag.ToString());
         }
