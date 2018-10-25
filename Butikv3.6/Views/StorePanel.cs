@@ -409,6 +409,7 @@ namespace Butikv3._6
                     nameLabel.Tag = item;
                     priceLabel.Tag = item;
                     addToCartButton.Tag = item;
+                    QueryFromCSVToList();
                 }
             }
         }
