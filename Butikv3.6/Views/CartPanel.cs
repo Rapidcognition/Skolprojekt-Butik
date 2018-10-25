@@ -72,9 +72,10 @@ namespace Butikv3._6
             itemPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0),
+                Margin = new Padding(6),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.LeftToRight,
+                BorderStyle = BorderStyle.Fixed3D,
             };
             this.Controls.Add(itemPanel);
             #endregion
@@ -191,6 +192,11 @@ namespace Butikv3._6
 
             if (productCounterRef.Value == 0)
             {
+                // get the selected product from cart and remove it from cartItems
+                Product p = (Product)(productCounterRef.Parent as TableLayoutPanel).Tag;
+                cartItems.Remove(p);
+
+                // dispose the parent container when the counter reaches 0
                 productCounterRef.Parent.Dispose();
             }
             else
@@ -224,16 +230,21 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 410,
+                    Width = 385,
                 };
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.Click += ProductPanel_Click;
                 this.itemPanel.Controls.Add(productPanel);
 
                 PictureBox productPicture = new PictureBox
                 {
                     ImageLocation = product.imageLocation,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Dock = DockStyle.Top,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Left,
+                    BorderStyle = BorderStyle.Fixed3D,
                 };
                 productPicture.Click += ProductPanel_Click;
                 productPanel.Controls.Add(productPicture);
@@ -241,8 +252,8 @@ namespace Butikv3._6
                 Label productLabel = new Label
                 {
                     Text = product.name,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Left,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Left
                 };
                 productLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(productLabel);
@@ -251,8 +262,8 @@ namespace Butikv3._6
                 {
                     Name = "priceLabel",
                     Text = (product.price * product.nrOfProducts) + "kr",
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Left,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Right,
                 };
                 priceLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(priceLabel);

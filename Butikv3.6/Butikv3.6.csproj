@@ -70,7 +70,9 @@
     <Content Include="Background\Header.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Background\Header.png" />
+    <Content Include="Background\Header.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\searchButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
