@@ -229,6 +229,7 @@ namespace Butikv3._6
         private void TypeButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
+            searchButton.Focus();
             itemPanel.Controls.Clear();
             PopulateStoreByType(productList, b.Tag.ToString());
         }
