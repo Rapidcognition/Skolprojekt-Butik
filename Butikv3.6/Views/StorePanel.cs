@@ -9,6 +9,31 @@ using System.IO;
 
 namespace Butikv3._6
 {
+    class Product
+    {
+        public int price;
+        public string name;
+        public string type;
+        public string summary;
+        public string imageLocation;
+        public int nrOfProducts;
+
+        private void Product_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(this.summary);
+        }
+
+        public Product GetProduct()
+        {
+            return this;
+        }
+
+        public string ToCSV()
+        {
+            return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
+        }
+    }
+
     class StorePanel : TableLayoutPanel
     {
         #region properties used in storePanel and all functions
