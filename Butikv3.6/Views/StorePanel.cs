@@ -45,7 +45,7 @@ namespace Butikv3._6
         Button searchButton;
         TextBox searchBox;
         Button typeButton;
-        FlowLayoutPanel typePanel;
+        TableLayoutPanel typePanel;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
 
@@ -125,9 +125,8 @@ namespace Butikv3._6
             searchButton.Click += SearchButton_Click;
             searchControlerPanel.Controls.Add(searchButton);
 
-            typePanel = new FlowLayoutPanel
+            typePanel = new TableLayoutPanel
             {
-                FlowDirection = FlowDirection.RightToLeft,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 Width = 130,
@@ -291,7 +290,8 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 390,
+                    Width = 400,
+                    Margin = new Padding(0),
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -358,17 +358,16 @@ namespace Butikv3._6
                     FlatStyle = FlatStyle.Popup,
                     BackColor = Color.DarkKhaki,
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Anchor = AnchorStyles.Left,
+                    Dock = DockStyle.Top,
                     Height = 30,
                     Width = 100,
-                    Margin = new Padding(0,0,15,0)
+                    Margin = new Padding(0,0,32,0),
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
         }
-
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             foreach (var item in productList)
@@ -381,7 +380,8 @@ namespace Butikv3._6
                         RowCount = 1,
                         Anchor = AnchorStyles.Top,
                         Height = 60,
-                        Width = 390,
+                        Width = 400,
+                        Margin = new Padding(0),
                     };
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -438,7 +438,6 @@ namespace Butikv3._6
                 }
             }
         }
-
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             foreach (Product item in productList)
@@ -451,7 +450,8 @@ namespace Butikv3._6
                         RowCount = 1,
                         Anchor = AnchorStyles.Top,
                         Height = 60,
-                        Width = 390,
+                        Width = 400,
+                        Margin = new Padding(0),
                     };
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                     productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
