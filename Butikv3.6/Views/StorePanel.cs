@@ -45,6 +45,7 @@ namespace Butikv3._6
         Button searchButton;
         TextBox searchBox;
         Button typeButton;
+        FlowLayoutPanel typePanel;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
 
@@ -77,8 +78,8 @@ namespace Butikv3._6
             this.ColumnCount = 2;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Transparent;
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 82));
             #endregion
 
             #region Left side table of "this.".
@@ -87,6 +88,7 @@ namespace Butikv3._6
                 RowCount = 3,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
+                Margin = new Padding(0),
             };
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
@@ -106,7 +108,7 @@ namespace Butikv3._6
 
             searchBox = new TextBox
             {
-                Anchor = AnchorStyles.None,
+                Anchor = AnchorStyles.Top,
                 Margin = new Padding(-20,0,-10,0),
                 Width = 200,
             };
@@ -123,12 +125,22 @@ namespace Butikv3._6
             searchButton.Click += SearchButton_Click;
             searchControlerPanel.Controls.Add(searchButton);
 
+            typePanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.RightToLeft,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                Width = 130,
+                Padding = new Padding(0,0,0,0),
+            };
+
             // Only to create a small space between filterbox and typebuttons.
             Label l = new Label
             {
                 Dock = DockStyle.Fill,
             };
             leftPanel.Controls.Add(l);
+            leftPanel.Controls.Add(typePanel);
             #endregion
 
             #region Right side table of this, holds itemPanel (menu with products).
@@ -149,6 +161,7 @@ namespace Butikv3._6
                 AutoScroll = true,
                 BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.Fixed3D,
+                Margin = new Padding(0),
             };
             rightPanel.Controls.Add(itemPanel);
             #endregion
@@ -170,6 +183,8 @@ namespace Butikv3._6
                 BorderStyle = BorderStyle.Fixed3D,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Dock = DockStyle.Fill,
+                BackgroundImage = Image.FromFile("Icons/placeholder.png"),
+                BackgroundImageLayout = ImageLayout.Stretch,
             };
             descriptionPanel.Controls.Add(descriptionPicture);
 
@@ -186,6 +201,7 @@ namespace Butikv3._6
                 Text = "Items summary",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.TopLeft,
+                FlatStyle = FlatStyle.Popup,
             };
             descriptionPanel.Controls.Add(descriptionSummaryLabel);
             #endregion
@@ -279,8 +295,8 @@ namespace Butikv3._6
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
                 productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                 itemPanel.Controls.Add(productPanel);
 
@@ -311,7 +327,7 @@ namespace Butikv3._6
 
                 addToCartButton = new Button
                 {
-                    Text = "Add to cart",
+                    Text = "Lägg i kundvagn",
                     TextAlign = ContentAlignment.MiddleCenter,
                     FlatStyle = FlatStyle.Popup,
                     BackColor = Color.DarkKhaki,
@@ -339,14 +355,15 @@ namespace Butikv3._6
                 typeButton = new Button
                 {
                     Text = item,
-                    Dock = DockStyle.Fill,
                     FlatStyle = FlatStyle.Popup,
                     BackColor = Color.DarkKhaki,
                     TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = AnchorStyles.Left,
+                    Height = 30,
+                    Width = 100,
+                    Margin = new Padding(0,0,15,0)
                 };
-                leftPanel.Controls.Add(typeButton);
-                leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-                leftPanel.RowCount++;
+                typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
