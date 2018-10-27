@@ -20,7 +20,6 @@ namespace Butikv3._6
             this.MaximumSize = new Size(1000, 700);
             this.Font = new Font("Calibri", 12);
 
-
             TableLayoutPanel mainPanel = new TableLayoutPanel
             {
                 RowCount = 2,
@@ -82,7 +81,7 @@ namespace Butikv3._6
             store = new StorePanel(cart);
             
 
-            mainPanel.Controls.Add(store, 0,1);
+            mainPanel.Controls.Add(store, 0, 1);
             mainPanel.Controls.Add(cart, 0, 1);
             cart.Hide();
         }
