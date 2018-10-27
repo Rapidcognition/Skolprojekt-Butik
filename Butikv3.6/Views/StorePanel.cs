@@ -247,6 +247,8 @@ namespace Butikv3._6
                     PopulateStoreByFilter(productList, searchBox.Text);
                 }
             }
+            e.SuppressKeyPress = true;
+            e.Handled = true;
         }
         private void TypeButton_Click(object sender, EventArgs e)
         {
@@ -416,7 +418,7 @@ namespace Butikv3._6
 
                     addToCartButton = new Button
                     {
-                        Text = "Add to cart",
+                        Text = "Lägg i kundvagn",
                         TextAlign = ContentAlignment.MiddleCenter,
                         FlatStyle = FlatStyle.Popup,
                         BackColor = Color.DarkKhaki,
@@ -486,7 +488,7 @@ namespace Butikv3._6
 
                     addToCartButton = new Button
                     {
-                        Text = "Add to cart",
+                        Text = "Lägg i kundvagn",
                         TextAlign = ContentAlignment.MiddleCenter,
                         FlatStyle = FlatStyle.Popup,
                         BackColor = Color.DarkKhaki,
