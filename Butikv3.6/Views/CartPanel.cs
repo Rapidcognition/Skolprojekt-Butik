@@ -25,7 +25,7 @@ namespace Butikv3._6
             this.Margin = new Padding(0);
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 135));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
             this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 
             #region left menu
@@ -144,7 +144,7 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 385,
+                    Width = 400,
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));

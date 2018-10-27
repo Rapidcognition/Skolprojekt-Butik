@@ -68,6 +68,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Background\Header.png" />
+    <Content Include="Background\Header1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Background\plantbackground.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -75,6 +78,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Background\Header.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\placeholder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\searchButton.png">
