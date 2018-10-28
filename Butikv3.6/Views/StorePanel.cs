@@ -240,15 +240,15 @@ namespace Butikv3._6
                 {
                     itemPanel.Controls.Clear();
                     PopulateStore(productList);
+                    e.SuppressKeyPress = true;
                 }
                 else
                 {
                     itemPanel.Controls.Clear();
                     PopulateStoreByFilter(productList, searchBox.Text);
+                    e.SuppressKeyPress = true;
                 }
             }
-            e.SuppressKeyPress = true;
-            e.Handled = true;
         }
         private void TypeButton_Click(object sender, EventArgs e)
         {
@@ -281,7 +281,10 @@ namespace Butikv3._6
             }
         }
 
-        // Methods that populate storePanel/typePanel.
+        /// <summary>
+        /// Function used to populate the store with products with list(objects) of products.
+        /// </summary>
+        /// <param name="productList"></param>
         private void PopulateStore(List<Product> productList)
         {
             foreach (Product item in productList)
@@ -350,6 +353,11 @@ namespace Butikv3._6
                 addToCartButton.Tag = item;
             }
         }
+
+        /// <summary>
+        /// Function to populate panel with types of product from a string-list.
+        /// </summary>
+        /// <param name="typeList"></param>
         private void PopulateTypePanel(List<string> typeList)
         {
             foreach (var item in typeList)
@@ -363,156 +371,40 @@ namespace Butikv3._6
                     Dock = DockStyle.Top,
                     Height = 30,
                     Width = 100,
-                    Margin = new Padding(0,0,32,0),
+                    Margin = new Padding(0,7,32,0),
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
         }
+
+        /// <summary>
+        /// Queries into a 'tmp' list with certain conditions, calls function PopulateStore on 'tmp'.
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="type"></param>
         private void PopulateStoreByType(List<Product> productList, string type)
         {
-            foreach (var item in productList)
-            {
-                if (type == item.type)
-                {
-                    productPanel = new TableLayoutPanel
-                    {
-                        ColumnCount = 4,
-                        RowCount = 1,
-                        Anchor = AnchorStyles.Top,
-                        Height = 60,
-                        Width = 400,
-                        Margin = new Padding(0),
-                    };
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    itemPanel.Controls.Add(productPanel);
-
-                    pictureBox = new PictureBox
-                    {
-                        BorderStyle = BorderStyle.Fixed3D,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Dock = DockStyle.Top,
-                        Image = Image.FromFile(item.imageLocation),
-                    };
-                    productPanel.Controls.Add(pictureBox);
-
-                    nameLabel = new Label
-                    {
-                        Text = item.name,
-                        TextAlign = ContentAlignment.MiddleLeft,
-                    };
-                    productPanel.Controls.Add(nameLabel);
-
-                    priceLabel = new Label
-                    {
-                        Text = item.price + "kr",
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(priceLabel);
-
-                    addToCartButton = new Button
-                    {
-                        Text = "Lägg i kundvagn",
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.DarkKhaki,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(addToCartButton);
-                    pictureBox.Click += PictureBox_Click;
-                    pictureBox.Tag = item;
-
-                    productPanel.Click += PictureBox_Click;
-                    nameLabel.Click += PictureBox_Click;
-                    priceLabel.Click += PictureBox_Click;
-                    addToCartButton.Click += AddToCartButton_Click;
-
-                    productPanel.Tag = item;
-                    nameLabel.Tag = item;
-                    priceLabel.Tag = item;
-                    addToCartButton.Tag = item;
-                }
-            }
+            var tmp = productList.Where(x => x.type == type).ToList();
+            PopulateStore(tmp);
         }
+
+        /// <summary>
+        /// Queries into a 'tmp' list based on conditions and calls func PopulateStore(tmp).
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            foreach (Product item in productList)
-            {
-                if(item.name == text || item.type == text)
-                {
-                    productPanel = new TableLayoutPanel
-                    {
-                        ColumnCount = 4,
-                        RowCount = 1,
-                        Anchor = AnchorStyles.Top,
-                        Height = 60,
-                        Width = 400,
-                        Margin = new Padding(0),
-                    };
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    itemPanel.Controls.Add(productPanel);
-
-                    pictureBox = new PictureBox
-                    {
-                        BorderStyle = BorderStyle.Fixed3D,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Dock = DockStyle.Top,
-                        Image = Image.FromFile(item.imageLocation),
-                    };
-                    productPanel.Controls.Add(pictureBox);
-
-                    nameLabel = new Label
-                    {
-                        Text = item.name,
-                        TextAlign = ContentAlignment.MiddleLeft,
-                    };
-                    productPanel.Controls.Add(nameLabel);
-
-                    priceLabel = new Label
-                    {
-                        Text = item.price + "kr",
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(priceLabel);
-
-                    addToCartButton = new Button
-                    {
-                        Text = "Lägg i kundvagn",
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.DarkKhaki,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(addToCartButton);
-                    pictureBox.Click += PictureBox_Click;
-                    pictureBox.Tag = item;
-
-                    productPanel.Click += PictureBox_Click;
-                    nameLabel.Click += PictureBox_Click;
-                    priceLabel.Click += PictureBox_Click;
-                    addToCartButton.Click += AddToCartButton_Click;
-
-                    productPanel.Tag = item;
-                    nameLabel.Tag = item;
-                    priceLabel.Tag = item;
-                    addToCartButton.Tag = item;
-                }
-            }
+            var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
+            PopulateStore(tmp);
         }
 
-        // Collect data from csv and store in storeList.
-        // also store in typeList, methods that filter.
+        /// <summary>
+        /// Function to collect data from CSV and store in one list(objects) of products, and one list(string) of types,
+        /// the lists are later used in function "PopulateStore"(list of objects) and function "PopulateTypePanel"(list of strings).
+        /// </summary>
         private void QueryFromCSVToList()
         {
             string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).

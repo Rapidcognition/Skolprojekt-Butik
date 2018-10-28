@@ -41,6 +41,7 @@ namespace Butikv3._6
             {
                 Text = "Checkout",
                 Dock = DockStyle.Top,
+                Height = 30,
             };
             leftMenuPanel.Controls.Add(checkoutButton);
 
@@ -48,6 +49,7 @@ namespace Butikv3._6
             {
                 Text = "Save Cart",
                 Dock = DockStyle.Top,
+                Height = 30,
             };
             saveCartButton.Click += SaveCartButton_Click;
             leftMenuPanel.Controls.Add(saveCartButton);
@@ -56,6 +58,7 @@ namespace Butikv3._6
             {
                 Text ="Read cart from CSV",
                 Dock = DockStyle.Top,
+                Height = 30,
             };
             loadCartButton.Click += LoadCartButton_Click;
             leftMenuPanel.Controls.Add(loadCartButton);
@@ -64,6 +67,7 @@ namespace Butikv3._6
             {
                 Text = "Clear Cart",
                 Dock = DockStyle.Top,
+                Height = 30,
             };
             clearCartButton.Click += ClearCartButton_Click;
             leftMenuPanel.Controls.Add(clearCartButton);
