@@ -262,7 +262,7 @@ namespace Butikv3._6
             Button b = (Button)sender;
             cartPanelRef.AddToCart((Product)b.Tag);
         }
-        private void PictureBox_Click(object sender, EventArgs e)
+        private void ProductPanel_Click(object sender, EventArgs e)
         {
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
@@ -339,12 +339,12 @@ namespace Butikv3._6
                     Dock = DockStyle.Fill,
                 };
                 productPanel.Controls.Add(addToCartButton);
-                pictureBox.Click += PictureBox_Click;
+                pictureBox.Click += ProductPanel_Click;
                 pictureBox.Tag = item;
 
-                productPanel.Click += PictureBox_Click;
-                nameLabel.Click += PictureBox_Click;
-                priceLabel.Click += PictureBox_Click;
+                productPanel.Click += ProductPanel_Click;
+                nameLabel.Click += ProductPanel_Click;
+                priceLabel.Click += ProductPanel_Click;
                 addToCartButton.Click += AddToCartButton_Click;
 
                 productPanel.Tag = item;
