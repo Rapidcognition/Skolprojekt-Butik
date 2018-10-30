@@ -289,7 +289,7 @@ namespace Butikv3._6
         /// Function used to populate the store with products with list(objects) of products.
         /// </summary>
         /// <param name="productList"></param>
-        private void PopulateStore(List<Product> productList = null, Product tmp = null)
+        private void PopulateStore(List<Product> productList = null, List<Product> tmp = null)
         {
             if(tmp == null)
             {
@@ -361,68 +361,71 @@ namespace Butikv3._6
             }
             else
             {
-                productPanel = new TableLayoutPanel
+                foreach(Product item in tmp)
                 {
-                    ColumnCount = 4,
-                    RowCount = 1,
-                    Anchor = AnchorStyles.Top,
-                    Height = 60,
-                    Width = 400,
-                    Margin = new Padding(0),
-                };
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                itemPanel.Controls.Add(productPanel);
+                    productPanel = new TableLayoutPanel
+                    {
+                        ColumnCount = 4,
+                        RowCount = 1,
+                        Anchor = AnchorStyles.Top,
+                        Height = 60,
+                        Width = 400,
+                        Margin = new Padding(0),
+                    };
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                    itemPanel.Controls.Add(productPanel);
 
-                pictureBox = new PictureBox
-                {
-                    BorderStyle = BorderStyle.Fixed3D,
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Top,
-                    Image = Image.FromFile(tmp.imageLocation),
-                };
-                productPanel.Controls.Add(pictureBox);
+                    pictureBox = new PictureBox
+                    {
+                        BorderStyle = BorderStyle.Fixed3D,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        Dock = DockStyle.Top,
+                        Image = Image.FromFile(item.imageLocation),
+                    };
+                    productPanel.Controls.Add(pictureBox);
 
-                nameLabel = new Label
-                {
-                    Text = tmp.name,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Anchor = AnchorStyles.Left,
-                };
-                productPanel.Controls.Add(nameLabel);
+                    nameLabel = new Label
+                    {
+                        Text = item.name,
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Anchor = AnchorStyles.Left,
+                    };
+                    productPanel.Controls.Add(nameLabel);
 
-                priceLabel = new Label
-                {
-                    Text = tmp.price + "kr",
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Anchor = AnchorStyles.Left,
-                };
-                productPanel.Controls.Add(priceLabel);
+                    priceLabel = new Label
+                    {
+                        Text = item.price + "kr",
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Anchor = AnchorStyles.Left,
+                    };
+                    productPanel.Controls.Add(priceLabel);
 
-                addToCartButton = new Button
-                {
-                    Text = "Lägg i kundvagn",
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.DarkKhaki,
-                    Dock = DockStyle.Fill,
-                };
-                productPanel.Controls.Add(addToCartButton);
-                pictureBox.Click += PictureBox_Click;
-                pictureBox.Tag = tmp;
+                    addToCartButton = new Button
+                    {
+                        Text = "Lägg i kundvagn",
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        FlatStyle = FlatStyle.Popup,
+                        BackColor = Color.DarkKhaki,
+                        Dock = DockStyle.Fill,
+                    };
+                    productPanel.Controls.Add(addToCartButton);
+                    pictureBox.Click += PictureBox_Click;
+                    pictureBox.Tag = item;
 
-                productPanel.Click += PictureBox_Click;
-                nameLabel.Click += PictureBox_Click;
-                priceLabel.Click += PictureBox_Click;
-                addToCartButton.Click += AddToCartButton_Click;
+                    productPanel.Click += PictureBox_Click;
+                    nameLabel.Click += PictureBox_Click;
+                    priceLabel.Click += PictureBox_Click;
+                    addToCartButton.Click += AddToCartButton_Click;
 
-                productPanel.Tag = tmp;
-                nameLabel.Tag = tmp;
-                priceLabel.Tag = tmp;
-                addToCartButton.Tag = tmp;
+                    productPanel.Tag = item;
+                    nameLabel.Tag = item;
+                    priceLabel.Tag = item;
+                    addToCartButton.Tag = item;
+                }
             }
         }
 
@@ -469,23 +472,21 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            Product foo = null;
+            List<Product> foo = new List<Product>();
             foreach (var item in productList)
             {
                 // Condition that ignores casing when searching for a match in productList,
                 // it also matches the length so it doesnt return true if a substring matches.
-                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true)
-                {
-                    foo = item;
-                    PopulateStore(null, foo);
-                    break;
-                }
+                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true && !foo.Contains(item))
+                    foo.Add(item);
             }
             if (foo == null)
             {
                 var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
                 PopulateStore(tmp, null);
             }
+            else
+                PopulateStore(null, foo);
         }
 
         /// <summary>
