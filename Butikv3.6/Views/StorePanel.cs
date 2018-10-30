@@ -41,14 +41,13 @@ namespace Butikv3._6
         // CartPanel 
         CartPanel cartPanelRef;
 
+        // Left panel and its child controls.
         TableLayoutPanel leftPanel;
         TableLayoutPanel searchControlerPanel;
-        Button searchButton;
         TextBox searchBox;
+        Button searchButton;
         Button typeButton;
         FlowLayoutPanel typePanel;
-        //TableLayoutPanel storePanel;
-        TableLayoutPanel productPanel;
 
         // Controls connected to description panel
         PictureBox descriptionPicture;
@@ -56,16 +55,19 @@ namespace Butikv3._6
         Label descriptionSummaryLabel;
         TableLayoutPanel descriptionPanel;
 
-        //This label is used in productPanel and descriptionPanel.
+
+        FlowLayoutPanel itemPanel;
+        // Panel that we store all items in that is displayed in itemPanel.
+        TableLayoutPanel productPanel;
         Label nameLabel;
         Label priceLabel;
         PictureBox pictureBox;
         Button addToCartButton;
-        // The four controls listed above is in itemPanel when it's added to storePanel,
-        // in function PopulateStore.
-        FlowLayoutPanel itemPanel;
+        // The four controls listed above is used in storePanel,
+        // in method PopulateStore.
         #endregion
 
+        private TableLayoutPanel selectedProductPanel;
         List<Product> productList = new List<Product>();
         List<string> typeList = new List<string>();
 
@@ -230,7 +232,7 @@ namespace Butikv3._6
             if(searchBox.Text == string.Empty)
             {
                 itemPanel.Controls.Clear();
-                PopulateStore(productList);
+                PopulateStoreWithNonNullList(productList);
             }
             else
             {
@@ -245,7 +247,7 @@ namespace Butikv3._6
                 if(searchBox.Text == "")
                 {
                     itemPanel.Controls.Clear();
-                    PopulateStore(productList);
+                    PopulateStoreWithNonNullList(productList);
                     e.SuppressKeyPress = true;
                 }
                 else
@@ -270,166 +272,132 @@ namespace Butikv3._6
         }
         private void PictureBox_Click(object sender, EventArgs e)
         {
+            TableLayoutPanel productPanelRef;
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
                 TableLayoutPanel t = (TableLayoutPanel)sender;
+                productPanelRef = (TableLayoutPanel)sender;
                 UpdateProductView((Product)t.Tag);
+                UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
                 PictureBox p = (PictureBox)sender;
+                productPanelRef = (TableLayoutPanel)p.Parent;
                 UpdateProductView((Product)p.Tag);
+                UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(Label))
             {
                 Label l = (Label)sender;
+                productPanelRef = (TableLayoutPanel)l.Parent;
                 UpdateProductView((Product)l.Tag);
+                UpdateSelectedProduct(productPanelRef);
+            }
+        }
+        private void UpdateSelectedProduct(TableLayoutPanel clickedProductPanelRef)
+        {
+            if (selectedProductPanel == null)
+            {
+                selectedProductPanel = clickedProductPanelRef;
+                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
+            }
+
+            if (selectedProductPanel != clickedProductPanelRef)
+            {
+                selectedProductPanel.BorderStyle = BorderStyle.None;
+                selectedProductPanel = clickedProductPanelRef;
+                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
             }
         }
 
         /// <summary>
-        /// Function used to populate the store with products with list(objects) of products.
+        /// Function used to populate the store with products with list(objects) of products or a list of filtered products.
         /// </summary>
-        /// <param name="productList"></param>
-        private void PopulateStore(List<Product> productList = null, List<Product> tmp = null)
+        /// <param name="productList"><param name="tmp">
+        private void PopulateStoreWithNonNullList(List<Product> productList = null, List<Product> tmp = null)
         {
             if(tmp == null)
             {
-                foreach (Product item in productList)
-                {
-                    productPanel = new TableLayoutPanel
-                    {
-                        ColumnCount = 4,
-                        RowCount = 1,
-                        Anchor = AnchorStyles.Top,
-                        Height = 60,
-                        Width = 400,
-                        Margin = new Padding(0),
-                    };
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    itemPanel.Controls.Add(productPanel);
-
-                    pictureBox = new PictureBox
-                    {
-                        BorderStyle = BorderStyle.Fixed3D,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Dock = DockStyle.Top,
-                        Image = Image.FromFile(item.imageLocation),
-                    };
-                    productPanel.Controls.Add(pictureBox);
-
-                    nameLabel = new Label
-                    {
-                        Text = item.name,
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Anchor = AnchorStyles.Left,
-                    };
-                    productPanel.Controls.Add(nameLabel);
-
-                    priceLabel = new Label
-                    {
-                        Text = item.price + "kr",
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Anchor = AnchorStyles.Left,
-                    };
-                    productPanel.Controls.Add(priceLabel);
-
-                    addToCartButton = new Button
-                    {
-                        Text = "Lägg i kundvagn",
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.DarkKhaki,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(addToCartButton);
-                    pictureBox.Click += PictureBox_Click;
-                    pictureBox.Tag = item;
-
-                    productPanel.Click += PictureBox_Click;
-                    nameLabel.Click += PictureBox_Click;
-                    priceLabel.Click += PictureBox_Click;
-                    addToCartButton.Click += AddToCartButton_Click;
-
-                    productPanel.Tag = item;
-                    nameLabel.Tag = item;
-                    priceLabel.Tag = item;
-                    addToCartButton.Tag = item;
-                }
+                PopulateStore(productList);
             }
             else
             {
-                foreach(Product item in tmp)
-                {
-                    productPanel = new TableLayoutPanel
-                    {
-                        ColumnCount = 4,
-                        RowCount = 1,
-                        Anchor = AnchorStyles.Top,
-                        Height = 60,
-                        Width = 400,
-                        Margin = new Padding(0),
-                    };
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
-                    productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                    productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    itemPanel.Controls.Add(productPanel);
-
-                    pictureBox = new PictureBox
-                    {
-                        BorderStyle = BorderStyle.Fixed3D,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Dock = DockStyle.Top,
-                        Image = Image.FromFile(item.imageLocation),
-                    };
-                    productPanel.Controls.Add(pictureBox);
-
-                    nameLabel = new Label
-                    {
-                        Text = item.name,
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Anchor = AnchorStyles.Left,
-                    };
-                    productPanel.Controls.Add(nameLabel);
-
-                    priceLabel = new Label
-                    {
-                        Text = item.price + "kr",
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Anchor = AnchorStyles.Left,
-                    };
-                    productPanel.Controls.Add(priceLabel);
-
-                    addToCartButton = new Button
-                    {
-                        Text = "Lägg i kundvagn",
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        FlatStyle = FlatStyle.Popup,
-                        BackColor = Color.DarkKhaki,
-                        Dock = DockStyle.Fill,
-                    };
-                    productPanel.Controls.Add(addToCartButton);
-                    pictureBox.Click += PictureBox_Click;
-                    pictureBox.Tag = item;
-
-                    productPanel.Click += PictureBox_Click;
-                    nameLabel.Click += PictureBox_Click;
-                    priceLabel.Click += PictureBox_Click;
-                    addToCartButton.Click += AddToCartButton_Click;
-
-                    productPanel.Tag = item;
-                    nameLabel.Tag = item;
-                    priceLabel.Tag = item;
-                    addToCartButton.Tag = item;
-                }
+                PopulateStore(tmp);
             }
         }
+
+        private void PopulateStore(List<Product> productList)
+        {
+            foreach (Product item in productList)
+            {
+                productPanel = new TableLayoutPanel
+                {
+                    ColumnCount = 4,
+                    RowCount = 1,
+                    Anchor = AnchorStyles.Top,
+                    Height = 60,
+                    Width = 400,
+                    Margin = new Padding(0),
+                };
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                itemPanel.Controls.Add(productPanel);
+
+                pictureBox = new PictureBox
+                {
+                    BorderStyle = BorderStyle.Fixed3D,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Top,
+                    Image = Image.FromFile(item.imageLocation),
+                };
+                productPanel.Controls.Add(pictureBox);
+
+                nameLabel = new Label
+                {
+                    Text = item.name,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Left,
+                };
+                productPanel.Controls.Add(nameLabel);
+
+                priceLabel = new Label
+                {
+                    Text = item.price + "kr",
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Anchor = AnchorStyles.Left,
+                };
+                productPanel.Controls.Add(priceLabel);
+
+                addToCartButton = new Button
+                {
+                    Text = "Lägg i kundvagn",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.DarkKhaki,
+                    Anchor = AnchorStyles.Left,
+                    Height = 50,
+                    Width = 80,
+                };
+                productPanel.Controls.Add(addToCartButton);
+                pictureBox.Click += PictureBox_Click;
+                pictureBox.Tag = item;
+
+                productPanel.Click += PictureBox_Click;
+                nameLabel.Click += PictureBox_Click;
+                priceLabel.Click += PictureBox_Click;
+                addToCartButton.Click += AddToCartButton_Click;
+
+                productPanel.Tag = item;
+                nameLabel.Tag = item;
+                priceLabel.Tag = item;
+                addToCartButton.Tag = item;
+            }
+        }
+
 
         /// <summary>
         /// Function to populate panel with types of product from a string-list.
@@ -465,7 +433,7 @@ namespace Butikv3._6
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             var tmp = productList.Where(x => x.type == type).ToList();
-            PopulateStore(tmp);
+            PopulateStoreWithNonNullList(tmp);
         }
 
         /// <summary>
@@ -487,10 +455,12 @@ namespace Butikv3._6
             if (foo == null)
             {
                 var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                PopulateStore(tmp, null);
+                PopulateStoreWithNonNullList(tmp, null);
             }
             else
-                PopulateStore(null, foo);
+            {
+                PopulateStoreWithNonNullList(null, foo);
+            }
         }
 
         /// <summary>
