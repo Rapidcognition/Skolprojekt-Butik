@@ -469,8 +469,7 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            Product foo;
-            bool isMatch = false;
+            Product foo = null;
             foreach (var item in productList)
             {
                 // Condition that ignores casing when searching for a match in productList,
@@ -479,11 +478,10 @@ namespace Butikv3._6
                 {
                     foo = item;
                     PopulateStore(null, foo);
-                    isMatch = true;
                     break;
                 }
             }
-            if (isMatch == false)
+            if (foo == null)
             {
                 var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
                 PopulateStore(tmp, null);
