@@ -334,7 +334,7 @@ namespace Butikv3._6
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
                 productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                 itemPanel.Controls.Add(productPanel);
