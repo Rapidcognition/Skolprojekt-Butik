@@ -473,7 +473,7 @@ namespace Butikv3._6
             bool isMatch = false;
             foreach (var item in productList)
             {
-                if(Regex.IsMatch(text, item.name, RegexOptions.IgnoreCase) == true && isMatch == false)
+                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true && item.name.Length == text.Length && isMatch == false)
                 {
                     foo = item;
                     PopulateStore(null, foo);
