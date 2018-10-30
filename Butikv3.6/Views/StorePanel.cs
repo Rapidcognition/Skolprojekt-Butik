@@ -371,7 +371,7 @@ namespace Butikv3._6
                     Dock = DockStyle.Top,
                     Height = 30,
                     Width = 100,
-                    Margin = new Padding(0,6,32,0),
+                    Margin = new Padding(0,6,10,0),
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
