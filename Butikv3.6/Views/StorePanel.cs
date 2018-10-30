@@ -239,7 +239,7 @@ namespace Butikv3._6
             if(searchBox.Text == string.Empty)
             {
                 itemPanel.Controls.Clear();
-                PopulateWithTheListThatIsntNull(productList);
+                PopulateStore(productList);
             }
             else
             {
@@ -254,7 +254,7 @@ namespace Butikv3._6
                 if(searchBox.Text == "")
                 {
                     itemPanel.Controls.Clear();
-                    PopulateWithTheListThatIsntNull(productList);
+                    PopulateStore(productList);
                     e.SuppressKeyPress = true;
                 }
                 else
@@ -318,21 +318,6 @@ namespace Butikv3._6
             }
         }
 
-        /// <summary>
-        /// Function used to populate the store with products with list(objects) of products or a list of filtered products.
-        /// </summary>
-        /// <param name="productList"><param name="tmp">
-        private void PopulateWithTheListThatIsntNull(List<Product> productList = null, List<Product> tmp = null)
-        {
-            if(tmp == null)
-            {
-                PopulateStore(productList);
-            }
-            else
-            {
-                PopulateStore(tmp);
-            }
-        }
 
         private void PopulateStore(List<Product> productList)
         {
@@ -405,12 +390,10 @@ namespace Butikv3._6
             }
         }
 
-
         /// <summary>
         /// Function to populate panel with types of product from a string-list.
         /// </summary>
         /// <param name="typeList"></param>
-
         private void PopulateTypePanel(List<string> typeList)
         {
             foreach (var item in typeList)
@@ -441,7 +424,7 @@ namespace Butikv3._6
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             var tmp = productList.Where(x => x.type == type).ToList();
-            PopulateWithTheListThatIsntNull(tmp);
+            PopulateStore(tmp);
         }
 
         /// <summary>
@@ -456,18 +439,19 @@ namespace Butikv3._6
             foreach (var item in productList)
             {
                 // Condition that ignores casing when searching for a match in productList.
-                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true 
-                    || Regex.IsMatch(item.type, text, RegexOptions.IgnoreCase) && !foo.Contains(item))
+                if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true || Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
+                {
                     foo.Add(item);
+                }
             }
-            if (foo == null)
+            if (foo.Count == 0)
             {
                 var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                PopulateWithTheListThatIsntNull(tmp, null);
+                PopulateStore(tmp);
             }
             else
             {
-                PopulateWithTheListThatIsntNull(null, foo);
+                PopulateStore(foo);
             }
         }
 
