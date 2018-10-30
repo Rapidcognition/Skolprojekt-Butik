@@ -154,7 +154,7 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 400,
+                    Width = 397,
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));

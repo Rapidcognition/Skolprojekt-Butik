@@ -111,7 +111,7 @@ namespace Butikv3._6
             searchBox = new TextBox
             {
                 Anchor = AnchorStyles.Top,
-                Margin = new Padding(-20,0,-10,0),
+                Margin = new Padding(-20,1,-10,0),
                 Width = 200,
             };
             searchControlerPanel.Controls.Add(searchBox);
@@ -121,7 +121,7 @@ namespace Butikv3._6
                 BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
                 BackgroundImageLayout = ImageLayout.Zoom,
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0,0,0,7),
+                Margin = new Padding(0,0,0,10),
                 Height = 25,
             };
             searchButton.Click += SearchButton_Click;
@@ -152,6 +152,7 @@ namespace Butikv3._6
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
+                Margin = new Padding(0,0,0,0),
             };
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
@@ -164,7 +165,7 @@ namespace Butikv3._6
                 AutoScroll = true,
                 BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.Fixed3D,
-                Margin = new Padding(0),
+                Margin = new Padding(0,4,0,0),
             };
             rightPanel.Controls.Add(itemPanel);
             #endregion
@@ -175,6 +176,7 @@ namespace Butikv3._6
             {
                 RowCount = 3,
                 Dock = DockStyle.Fill,
+                Margin = new Padding(0, 1, 0, 0),
             };
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
@@ -474,6 +476,7 @@ namespace Butikv3._6
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             List<Product> foo = new List<Product>();
+            text = text.TrimStart().TrimEnd();
             foreach (var item in productList)
             {
                 // Condition that ignores casing when searching for a match in productList.
