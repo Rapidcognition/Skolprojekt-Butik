@@ -474,7 +474,7 @@ namespace Butikv3._6
             {
                 // Condition that ignores casing when searching for a match in productList,
                 // it also matches the length so it doesnt return true if a substring matches.
-                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true && item.name.Length == text.Length)
+                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true)
                 {
                     foo = item;
                     PopulateStore(null, foo);
