@@ -46,7 +46,7 @@ namespace Butikv3._6
         Button searchButton;
         TextBox searchBox;
         Button typeButton;
-        TableLayoutPanel typePanel;
+        FlowLayoutPanel typePanel;
         //TableLayoutPanel storePanel;
         TableLayoutPanel productPanel;
 
@@ -127,15 +127,6 @@ namespace Butikv3._6
             searchButton.Click += SearchButton_Click;
             searchControlerPanel.Controls.Add(searchButton);
 
-            typePanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Width = 130,
-                Padding = new Padding(0),
-                AutoScroll = true,
-            };
-            typePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
-
             // Only to create a small space between filterbox and typebuttons.
             Label l = new Label
             {
@@ -143,6 +134,15 @@ namespace Butikv3._6
                 BackColor = Color.Transparent,
             };
             leftPanel.Controls.Add(l);
+
+            typePanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Width = 130,
+                Padding = new Padding(0),
+                AutoScroll = true,
+            };
+
             leftPanel.Controls.Add(typePanel);
             #endregion
 
@@ -445,8 +445,9 @@ namespace Butikv3._6
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Top,
                     Height = 30,
-                    Width = 100,
+                    Width = 115,
                     Margin = new Padding(0,5,10,0),
+                    
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
@@ -475,9 +476,9 @@ namespace Butikv3._6
             List<Product> foo = new List<Product>();
             foreach (var item in productList)
             {
-                // Condition that ignores casing when searching for a match in productList,
-                // it also matches the length so it doesnt return true if a substring matches.
-                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true && !foo.Contains(item))
+                // Condition that ignores casing when searching for a match in productList.
+                if(Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true 
+                    || Regex.IsMatch(item.type, text, RegexOptions.IgnoreCase) && !foo.Contains(item))
                     foo.Add(item);
             }
             if (foo == null)
