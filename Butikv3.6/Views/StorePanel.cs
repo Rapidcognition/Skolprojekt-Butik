@@ -38,7 +38,8 @@ namespace Butikv3._6
     class StorePanel : TableLayoutPanel
     {
         #region properties used in storePanel and all functions
-        // CartPanel 
+        // Object that is constant, we use this reference
+        // to send objects from storePanel to cartPanel.
         CartPanel cartPanelRef;
 
         // Left panel and its child controls.
@@ -66,8 +67,13 @@ namespace Butikv3._6
         // The four controls listed above is used in storePanel,
         // in method PopulateStore.
         #endregion
-
+        
+        // Used when productpanel is clicked to give it
+        // a graphical change.
         private TableLayoutPanel selectedProductPanel;
+
+        // Lists that contains our products and the type of our products
+        // when we populate typePanel and PopulateStore.
         List<Product> productList = new List<Product>();
         List<string> typeList = new List<string>();
 
@@ -227,12 +233,13 @@ namespace Butikv3._6
         }
 
         // On button click inside storePanel.
+
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(searchBox.Text == string.Empty)
             {
                 itemPanel.Controls.Clear();
-                PopulateStoreWithNonNullList(productList);
+                PopulateWithTheListThatIsntNull(productList);
             }
             else
             {
@@ -247,7 +254,7 @@ namespace Butikv3._6
                 if(searchBox.Text == "")
                 {
                     itemPanel.Controls.Clear();
-                    PopulateStoreWithNonNullList(productList);
+                    PopulateWithTheListThatIsntNull(productList);
                     e.SuppressKeyPress = true;
                 }
                 else
@@ -315,7 +322,7 @@ namespace Butikv3._6
         /// Function used to populate the store with products with list(objects) of products or a list of filtered products.
         /// </summary>
         /// <param name="productList"><param name="tmp">
-        private void PopulateStoreWithNonNullList(List<Product> productList = null, List<Product> tmp = null)
+        private void PopulateWithTheListThatIsntNull(List<Product> productList = null, List<Product> tmp = null)
         {
             if(tmp == null)
             {
@@ -380,7 +387,7 @@ namespace Butikv3._6
                     BackColor = Color.DarkKhaki,
                     Anchor = AnchorStyles.Left,
                     Height = 50,
-                    Width = 80,
+                    Width = 82,
                 };
                 productPanel.Controls.Add(addToCartButton);
                 pictureBox.Click += PictureBox_Click;
@@ -403,6 +410,7 @@ namespace Butikv3._6
         /// Function to populate panel with types of product from a string-list.
         /// </summary>
         /// <param name="typeList"></param>
+
         private void PopulateTypePanel(List<string> typeList)
         {
             foreach (var item in typeList)
@@ -433,7 +441,7 @@ namespace Butikv3._6
         private void PopulateStoreByType(List<Product> productList, string type)
         {
             var tmp = productList.Where(x => x.type == type).ToList();
-            PopulateStoreWithNonNullList(tmp);
+            PopulateWithTheListThatIsntNull(tmp);
         }
 
         /// <summary>
@@ -455,11 +463,11 @@ namespace Butikv3._6
             if (foo == null)
             {
                 var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                PopulateStoreWithNonNullList(tmp, null);
+                PopulateWithTheListThatIsntNull(tmp, null);
             }
             else
             {
-                PopulateStoreWithNonNullList(null, foo);
+                PopulateWithTheListThatIsntNull(null, foo);
             }
         }
 
