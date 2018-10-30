@@ -136,6 +136,12 @@ namespace Butikv3._6
                 Product productRef = (Product)productPanelRef.Tag;
 
                 productCounterRef.Value++;
+                
+                // Temp bug fix
+                // Tidy up
+                productRef.nrOfProducts++;
+                //
+
                 priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
             }
             else
