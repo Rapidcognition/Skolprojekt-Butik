@@ -333,8 +333,8 @@ namespace Butikv3._6
                     Margin = new Padding(0),
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
                 productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                 itemPanel.Controls.Add(productPanel);
