@@ -33,6 +33,21 @@ namespace Butikv3._6
         {
             return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
+
+        public static Product ToCSV(string foo)
+        {
+            string[] tmp = foo.Split(',');
+            Product p = new Product
+            {
+                price = int.Parse(tmp[0]),
+                name = tmp[1],
+                type = tmp[2],
+                summary = tmp[3],
+                imageLocation = tmp[4],
+                nrOfProducts = 1,
+            };
+            return p;
+        }
     }
 
     class StorePanel : TableLayoutPanel
@@ -279,7 +294,7 @@ namespace Butikv3._6
             Button b = (Button)sender;
             cartPanelRef.AddToCart((Product)b.Tag);
         }
-        private void PictureBox_Click(object sender, EventArgs e)
+        private void ProductPanel_Click(object sender, EventArgs e)
         {
             TableLayoutPanel productPanelRef;
             if (sender.GetType() == typeof(TableLayoutPanel))
@@ -377,12 +392,12 @@ namespace Butikv3._6
                     Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 productPanel.Controls.Add(addToCartButton);
-                pictureBox.Click += PictureBox_Click;
+                pictureBox.Click += ProductPanel_Click;
                 pictureBox.Tag = item;
 
-                productPanel.Click += PictureBox_Click;
-                nameLabel.Click += PictureBox_Click;
-                priceLabel.Click += PictureBox_Click;
+                productPanel.Click += ProductPanel_Click;
+                nameLabel.Click += ProductPanel_Click;
+                priceLabel.Click += ProductPanel_Click;
                 addToCartButton.Click += AddToCartButton_Click;
 
                 productPanel.Tag = item;
@@ -458,29 +473,9 @@ namespace Butikv3._6
         /// </summary>
         private void QueryFromCSVToList()
         {
-            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
-                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "").
-                ToArray();
-
-            for (int i = 0; i < path.Length; i++)
-            {
-                if (!typeList.Contains(path[i][2]))
-                {
-                    typeList.Add(path[i][2]);
-                }
-                Product tmp = new Product
-                {
-                    price = int.Parse(path[i][0]),
-                    name = path[i][1],
-                    type = path[i][2],
-                    summary = path[i][3],
-                    imageLocation = path[i][4],
-                    nrOfProducts = 1,
-                };
-                productList.Add(tmp);
-            }
-            productList = productList.OrderBy(x => x.type).ToList();
-            typeList = typeList.OrderBy(x => x).ToList();
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).ToList();
+            typeList = productList.Select(x => x.type).ToList();
+            typeList = typeList.Distinct().ToList();
         }
     }
 }
