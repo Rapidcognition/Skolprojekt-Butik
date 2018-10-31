@@ -180,7 +180,6 @@ namespace Butikv3._6
                 
                 // Temp bug fix
                 // Tidy up
-                productRef.nrOfProducts++;
                 //
 
                 priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";

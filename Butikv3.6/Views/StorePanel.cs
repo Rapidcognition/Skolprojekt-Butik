@@ -34,9 +34,9 @@ namespace Butikv3._6
             return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
 
-        public static Product ToCSV(string foo)
+        public static Product ToCSV(string CSVLine)
         {
-            string[] tmp = foo.Split(',');
+            string[] tmp = CSVLine.Split(',');
             Product p = new Product
             {
                 price = int.Parse(tmp[0]),
@@ -474,8 +474,7 @@ namespace Butikv3._6
         private void QueryFromCSVToList()
         {
             productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).ToList();
-            typeList = productList.Select(x => x.type).ToList();
-            typeList = typeList.Distinct().ToList();
+            typeList = productList.Select(x => x.type).Distinct().ToList();
         }
     }
 }
