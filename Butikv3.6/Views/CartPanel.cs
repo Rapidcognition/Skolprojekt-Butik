@@ -16,6 +16,8 @@ namespace Butikv3._6
 
         private FlowLayoutPanel itemPanel;
         private TableLayoutPanel selectedProductPanel;
+        private TextBox discountCodeTextBox;
+        private RecieptForm reciept = new RecieptForm();
         private List<Product> cartItems = new List<Product>();
 
         public CartPanel()
@@ -29,15 +31,29 @@ namespace Butikv3._6
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 92));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 8));
+            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
 
             #region left menu
             TableLayoutPanel leftMenuPanel = new TableLayoutPanel
             {
+                Name = "leftMenuPanel",
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
             };
             this.SetRowSpan(leftMenuPanel, 2);
             this.Controls.Add(leftMenuPanel, 0, 0);
+
+            discountCodeTextBox = new TextBox
+            {
+                Name = "discountCodeTextBox",
+                Text = "Discount Code",
+                BackColor = Color.LightGray,
+                TextAlign = HorizontalAlignment.Center,
+                Dock = DockStyle.Top,
+            };
+            discountCodeTextBox.GotFocus += DiscountCodeTextBox_GotFocus;
+            discountCodeTextBox.LostFocus += DiscountCodeTextBox_LostFocus;
+            leftMenuPanel.Controls.Add(discountCodeTextBox);
 
             Button checkoutButton = new Button
             {
@@ -161,10 +177,18 @@ namespace Butikv3._6
             descriptionPanel.Controls.Add(descriptionProductSummary);
             #endregion
         }
-
-        private void CheckoutButton_Click(object sender, EventArgs e)
+        
+        private void DiscountCodeTextBox_GotFocus(object sender, EventArgs e)
         {
-            
+            discountCodeTextBox.Text = string.Empty;
+        }
+
+        private void DiscountCodeTextBox_LostFocus(object sender, EventArgs e)
+        {
+            if(discountCodeTextBox.Text == string.Empty)
+            {
+                discountCodeTextBox.Text = "Discount Code";
+            }
         }
 
         public void AddToCart(Product product)
@@ -177,7 +201,7 @@ namespace Butikv3._6
                 Product productRef = (Product)productPanelRef.Tag;
 
                 productCounterRef.Value++;
-                
+
                 // Temp bug fix
                 // Tidy up
                 productRef.nrOfProducts++;
@@ -250,6 +274,25 @@ namespace Butikv3._6
             UpdateSummaryPanel();
         }
 
+        private void CheckoutButton_Click(object sender, EventArgs e)
+        {
+            if(cartItems.Count == 0)
+            {
+                MessageBox.Show("No items in cart.", ">:(" , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if(!reciept.IsDisposed)
+            {
+                MessageBox.Show("Already in checkout process", ">:(", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else if(reciept.IsDisposed)
+            {
+                reciept = new RecieptForm(cartItems);
+                reciept.Show();
+            }
+        }
+        
         private void ClearCart()
         {
             itemPanel.Controls.Clear();
@@ -403,7 +446,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Updates sum and total amount of products in cart.
+        /// Updates sum and total number of products in cart.
         /// </summary>
         private void UpdateSummaryPanel()
         {
@@ -415,7 +458,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Helper method. Returns a string representing the total number of products in cart.
+        /// Returns a string representing the total number of products in cart.
         /// </summary>
         private string GetNrOfProducts()
         {
@@ -428,7 +471,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Helper method. Returns a string representing the sum of all products in cart.
+        /// Returns a string representing the sum of all products in cart.
         /// </summary>
         private string GetSumOfProducts()
         {
