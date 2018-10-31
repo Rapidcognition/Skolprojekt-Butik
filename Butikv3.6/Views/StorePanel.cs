@@ -206,6 +206,7 @@ namespace Butikv3._6
                 Text = "Items name",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Calibri", 12, FontStyle.Bold),
             };
             descriptionPanel.Controls.Add(descriptionNameLabel);
 
@@ -373,6 +374,7 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Left,
                     Height = 50,
                     Width = 82,
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 productPanel.Controls.Add(addToCartButton);
                 pictureBox.Click += PictureBox_Click;
@@ -408,7 +410,7 @@ namespace Butikv3._6
                     Height = 30,
                     Width = 115,
                     Margin = new Padding(0,5,10,0),
-                    
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
@@ -416,11 +418,6 @@ namespace Butikv3._6
             }
         }
 
-        /// <summary>
-        /// Queries into a 'tmp' list based on conditions and calls func PopulateStore(tmp).
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             List<Product> foo = new List<Product>();
