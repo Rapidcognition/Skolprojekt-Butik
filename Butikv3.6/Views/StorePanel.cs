@@ -449,12 +449,12 @@ namespace Butikv3._6
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             List<Product> foo = new List<Product>();
-            text = text.TrimStart().TrimEnd();
             try
             {
                 var rx = new Regex(text, RegexOptions.IgnoreCase);
+                text = text.TrimStart().TrimEnd();
                 foo = productList.Where(p => rx.IsMatch(p.name) || rx.IsMatch(p.type)).Distinct().ToList();
-                if (foo.Count == 0)
+                if (foo.Count == 0 || text[0] == '^')
                 {
                     var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
                     PopulateStore(tmp);
@@ -467,6 +467,7 @@ namespace Butikv3._6
             catch
             {
                 // ArgumentException, because '*' can't be parsed...
+                // And a lot of special signs cause weird bugs.
                 // TODO-list: Fix this shit!
             }
         }
