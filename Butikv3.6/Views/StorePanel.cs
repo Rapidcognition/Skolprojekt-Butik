@@ -438,10 +438,20 @@ namespace Butikv3._6
             text = text.TrimStart().TrimEnd();
             foreach (var item in productList)
             {
-                // Condition that ignores casing when searching for a match in productList.
-                if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) == true || Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
+                // Because can't parse ex. ' * ' as the first character
+                // in the string that user filtered by.
+                try
                 {
-                    foo.Add(item);
+                    // Condition that ignores casing when searching for a match in productList.
+                    if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) || Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
+                    {
+                        foo.Add(item);
+                    }
+                }
+                // Mainly argumentException 
+                catch
+                {
+                    continue;
                 }
             }
             if (foo.Count == 0)
