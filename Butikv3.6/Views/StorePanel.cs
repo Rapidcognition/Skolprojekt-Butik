@@ -86,12 +86,12 @@ namespace Butikv3._6
         // Used when productpanel is clicked to give it
         // a graphical change.
         private TableLayoutPanel selectedProductPanel;
-        TableLayoutPanel productPanelRef;
+        private TableLayoutPanel productPanelRef;
 
         // Lists that contains our products and the type of our products
         // when we populate typePanel and PopulateStore.
-        List<Product> productList = new List<Product>();
-        List<string> typeList = new List<string>();
+        private List<Product> productList = new List<Product>();
+        private List<string> typeList = new List<string>();
 
         public StorePanel(CartPanel reference)
         {
@@ -450,33 +450,24 @@ namespace Butikv3._6
         {
             List<Product> foo = new List<Product>();
             text = text.TrimStart().TrimEnd();
-            foreach (var item in productList)
+            try
             {
-                // Because can't parse ex. ' * ' as the first character
-                // in the string that user filtered by.
-                try
+                var rx = new Regex(text, RegexOptions.IgnoreCase);
+                foo = productList.Where(p => rx.IsMatch(p.name) || rx.IsMatch(p.type)).Distinct().ToList();
+                if (foo.Count == 0)
                 {
-                    // Condition that ignores casing when searching for a match in productList.
-                    if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) || 
-                        Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
-                    {
-                        foo.Add(item);
-                    }
+                    var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
+                    PopulateStore(tmp);
                 }
-                // Mainly argumentException 
-                catch
+                else
                 {
-                    continue;
+                    PopulateStore(foo);
                 }
             }
-            if (foo.Count == 0)
+            catch
             {
-                var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                PopulateStore(tmp);
-            }
-            else
-            {
-                PopulateStore(foo);
+                // ArgumentException, because '*' can't be parsed...
+                // TODO-list: Fix this shit!
             }
         }
 
