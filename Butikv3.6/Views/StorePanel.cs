@@ -86,6 +86,7 @@ namespace Butikv3._6
         // Used when productpanel is clicked to give it
         // a graphical change.
         private TableLayoutPanel selectedProductPanel;
+        TableLayoutPanel productPanelRef;
 
         // Lists that contains our products and the type of our products
         // when we populate typePanel and PopulateStore.
@@ -293,10 +294,11 @@ namespace Butikv3._6
         {
             Button b = (Button)sender;
             cartPanelRef.AddToCart((Product)b.Tag);
-        }
+            productPanelRef = (TableLayoutPanel)b.Parent;
+            UpdateSelectedProduct(productPanelRef);
+        }   
         private void ProductPanel_Click(object sender, EventArgs e)
         {
-            TableLayoutPanel productPanelRef;
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
                 TableLayoutPanel t = (TableLayoutPanel)sender;
@@ -335,6 +337,11 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// Single method to deal with the logic as to how we display 
+        /// products in productPanel store.
+        /// </summary>
+        /// <param name="productList"></param>
         private void PopulateStore(List<Product> productList)
         {
             foreach (Product item in productList)
@@ -408,7 +415,8 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Function to populate panel with types of product from a string-list.
+        /// Method to populate typePanel with the difference types of products in
+        /// (string)typeList.
         /// </summary>
         /// <param name="typeList"></param>
         private void PopulateTypePanel(List<string> typeList)
@@ -473,8 +481,9 @@ namespace Butikv3._6
         /// </summary>
         private void QueryFromCSVToList()
         {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).ToList();
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).OrderBy(x => x.type).ToList();
             typeList = productList.Select(x => x.type).Distinct().ToList();
+            typeList.Sort();
         }
     }
 }
