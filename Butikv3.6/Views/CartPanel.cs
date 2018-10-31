@@ -35,7 +35,6 @@ namespace Butikv3._6
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
             };
             this.SetRowSpan(leftMenuPanel, 2);
             this.Controls.Add(leftMenuPanel, 0, 0);
@@ -93,9 +92,8 @@ namespace Butikv3._6
                 Name = "sumOfProductsPanel",
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                Margin = new Padding(6, 0, 6, 0),
-                BorderStyle = BorderStyle.FixedSingle,
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                Margin = new Padding(6, 0, 6, 2),
+                BorderStyle = BorderStyle.Fixed3D,
             };
             sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -163,41 +161,6 @@ namespace Butikv3._6
             descriptionPanel.Controls.Add(descriptionProductSummary);
             #endregion
         }
-        
-        // Methods for nrOfProductsLabel
-        private void UpdateNrOfProductsLabel()
-        {
-            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                Text = "Number of Products: " + GetNrOfProducts();
-        }
-
-        private string GetNrOfProducts()
-        {
-            int nrOfProducts = 0;
-            foreach(Product product in cartItems)
-            {
-                nrOfProducts += product.nrOfProducts;
-            }
-            return nrOfProducts.ToString();
-        }
-
-        // Methods for sum label
-        private void UpdateSumLabel()
-        {
-            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                Text = "Sum: " + GetSumOfProducts();
-        }
-
-        private string GetSumOfProducts()
-        {
-            int sum = 0;
-            foreach(Product product in cartItems)
-            {
-                sum += (product.price * product.nrOfProducts);
-            }
-            return sum.ToString() + " kr";
-        }
-        //
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
@@ -284,8 +247,7 @@ namespace Butikv3._6
                 //
                 productPanel.Tag = product;
             }
-            UpdateSumLabel();
-            UpdateNrOfProductsLabel();
+            UpdateSummaryPanel();
         }
 
         private void ClearCart()
@@ -296,6 +258,7 @@ namespace Butikv3._6
                 p.nrOfProducts = 1;
             }
             cartItems.Clear();
+            UpdateSummaryPanel();
         }
 
         private void SaveCartButton_Click(object sender, EventArgs e)
@@ -374,8 +337,7 @@ namespace Butikv3._6
                 priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
                 productRef.nrOfProducts = (int)productCounterRef.Value;
             }
-            UpdateSumLabel();
-            UpdateNrOfProductsLabel();
+            UpdateSummaryPanel();
         }
 
         private void ProductPanel_Click(object sender, EventArgs e)
@@ -438,6 +400,44 @@ namespace Butikv3._6
             (descriptionPanelRef.Controls["descriptionProductName"] as Label).Text = productRef.name;
 
             (descriptionPanelRef.Controls["descriptionProductSummary"]).Text = productRef.summary;
+        }
+
+        /// <summary>
+        /// Updates sum and total amount of products in cart.
+        /// </summary>
+        private void UpdateSummaryPanel()
+        {
+            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
+                Text = "Number of Products: " + GetNrOfProducts();
+
+            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
+                Text = "Sum: " + GetSumOfProducts();
+        }
+
+        /// <summary>
+        /// Helper method. Returns a string representing the total number of products in cart.
+        /// </summary>
+        private string GetNrOfProducts()
+        {
+            int nrOfProducts = 0;
+            foreach (Product product in cartItems)
+            {
+                nrOfProducts += product.nrOfProducts;
+            }
+            return nrOfProducts.ToString();
+        }
+
+        /// <summary>
+        /// Helper method. Returns a string representing the sum of all products in cart.
+        /// </summary>
+        private string GetSumOfProducts()
+        {
+            int sum = 0;
+            foreach (Product product in cartItems)
+            {
+                sum += (product.price * product.nrOfProducts);
+            }
+            return sum.ToString() + " kr";
         }
     }
 }
