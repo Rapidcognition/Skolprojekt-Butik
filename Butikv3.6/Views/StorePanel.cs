@@ -441,6 +441,11 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// This method is called upon when the search-function is used.
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             List<Product> foo = new List<Product>();
@@ -476,8 +481,8 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Function to collect data from CSV and store in one list(objects) of products, and one list(string) of types,
-        /// the lists are later used in function "PopulateStore"(list of objects) and function "PopulateTypePanel"(list of strings).
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
         /// </summary>
         private void QueryFromCSVToList()
         {
