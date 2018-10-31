@@ -33,6 +33,21 @@ namespace Butikv3._6
         {
             return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
+
+        public static Product ToCSV(string CSVLine)
+        {
+            string[] tmp = CSVLine.Split(',');
+            Product p = new Product
+            {
+                price = int.Parse(tmp[0]),
+                name = tmp[1],
+                type = tmp[2],
+                summary = tmp[3],
+                imageLocation = tmp[4],
+                nrOfProducts = 1,
+            };
+            return p;
+        }
     }
 
     class StorePanel : TableLayoutPanel
@@ -71,11 +86,12 @@ namespace Butikv3._6
         // Used when productpanel is clicked to give it
         // a graphical change.
         private TableLayoutPanel selectedProductPanel;
+        private TableLayoutPanel productPanelRef;
 
         // Lists that contains our products and the type of our products
         // when we populate typePanel and PopulateStore.
-        List<Product> productList = new List<Product>();
-        List<string> typeList = new List<string>();
+        private List<Product> productList = new List<Product>();
+        private List<string> typeList = new List<string>();
 
         public StorePanel(CartPanel reference)
         {
@@ -206,6 +222,7 @@ namespace Butikv3._6
                 Text = "Items name",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Calibri", 12, FontStyle.Bold),
             };
             descriptionPanel.Controls.Add(descriptionNameLabel);
 
@@ -232,8 +249,7 @@ namespace Butikv3._6
             descriptionSummaryLabel.Text = tag.summary;
         }
 
-        // On button click inside storePanel.
-
+        // On button click leftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(searchBox.Text == string.Empty)
@@ -270,16 +286,19 @@ namespace Butikv3._6
             Button b = (Button)sender;
             searchButton.Focus();
             itemPanel.Controls.Clear();
-            PopulateStoreByType(productList, b.Tag.ToString());
+            PopulateStoreByFilter(productList, b.Tag.ToString());
         }
+
+        // On button click rightPanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
             cartPanelRef.AddToCart((Product)b.Tag);
-        }
-        private void PictureBox_Click(object sender, EventArgs e)
+            productPanelRef = (TableLayoutPanel)b.Parent;
+            UpdateSelectedProduct(productPanelRef);
+        }   
+        private void ProductPanel_Click(object sender, EventArgs e)
         {
-            TableLayoutPanel productPanelRef;
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
                 TableLayoutPanel t = (TableLayoutPanel)sender;
@@ -318,6 +337,11 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// Single method to deal with the logic as to how we display 
+        /// products in productPanel store.
+        /// </summary>
+        /// <param name="productList"></param>
         private void PopulateStore(List<Product> productList)
         {
             foreach (Product item in productList)
@@ -372,14 +396,15 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Left,
                     Height = 50,
                     Width = 82,
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 productPanel.Controls.Add(addToCartButton);
-                pictureBox.Click += PictureBox_Click;
+                pictureBox.Click += ProductPanel_Click;
                 pictureBox.Tag = item;
 
-                productPanel.Click += PictureBox_Click;
-                nameLabel.Click += PictureBox_Click;
-                priceLabel.Click += PictureBox_Click;
+                productPanel.Click += ProductPanel_Click;
+                nameLabel.Click += ProductPanel_Click;
+                priceLabel.Click += ProductPanel_Click;
                 addToCartButton.Click += AddToCartButton_Click;
 
                 productPanel.Tag = item;
@@ -390,7 +415,8 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Function to populate panel with types of product from a string-list.
+        /// Method to populate typePanel with the difference types of products in
+        /// (string)typeList.
         /// </summary>
         /// <param name="typeList"></param>
         private void PopulateTypePanel(List<string> typeList)
@@ -407,7 +433,7 @@ namespace Butikv3._6
                     Height = 30,
                     Width = 115,
                     Margin = new Padding(0,5,10,0),
-                    
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
@@ -416,84 +442,45 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Queries into a 'tmp' list with certain conditions, calls function PopulateStore on 'tmp'.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="type"></param>
-        private void PopulateStoreByType(List<Product> productList, string type)
-        {
-            var tmp = productList.Where(x => x.type == type).ToList();
-            PopulateStore(tmp);
-        }
-
-        /// <summary>
-        /// Queries into a 'tmp' list based on conditions and calls func PopulateStore(tmp).
+        /// This method is called upon when the search-function is used.
         /// </summary>
         /// <param name="productList"></param>
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             List<Product> foo = new List<Product>();
-            text = text.TrimStart().TrimEnd();
-            foreach (var item in productList)
+            try
             {
-                // Because can't parse ex. ' * ' as the first character
-                // in the string that user filtered by.
-                try
+                var rx = new Regex(text, RegexOptions.IgnoreCase);
+                text = text.TrimStart().TrimEnd();
+                foo = productList.Where(p => rx.IsMatch(p.name) || rx.IsMatch(p.type)).Distinct().ToList();
+                if (foo.Count == 0 || text[0] == '^')
                 {
-                    // Condition that ignores casing when searching for a match in productList.
-                    if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) || 
-                        Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
-                    {
-                        foo.Add(item);
-                    }
+                    var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
+                    PopulateStore(tmp);
                 }
-                // Mainly argumentException 
-                catch
+                else
                 {
-                    continue;
+                    PopulateStore(foo);
                 }
             }
-            if (foo.Count == 0)
+            catch
             {
-                var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                PopulateStore(tmp);
-            }
-            else
-            {
-                PopulateStore(foo);
+                // ArgumentException, because '*' can't be parsed...
+                // And a lot of special signs cause weird bugs.
+                // TODO-list: Fix this shit!
             }
         }
 
         /// <summary>
-        /// Function to collect data from CSV and store in one list(objects) of products, and one list(string) of types,
-        /// the lists are later used in function "PopulateStore"(list of objects) and function "PopulateTypePanel"(list of strings).
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
         /// </summary>
         private void QueryFromCSVToList()
         {
-            string[][] path = File.ReadAllLines(@"TextFile1.csv").Select(x => x.Split(',')).
-                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "").
-                ToArray();
-
-            for (int i = 0; i < path.Length; i++)
-            {
-                if (!typeList.Contains(path[i][2]))
-                {
-                    typeList.Add(path[i][2]);
-                }
-                Product tmp = new Product
-                {
-                    price = int.Parse(path[i][0]),
-                    name = path[i][1],
-                    type = path[i][2],
-                    summary = path[i][3],
-                    imageLocation = path[i][4],
-                    nrOfProducts = 1,
-                };
-                productList.Add(tmp);
-            }
-            productList = productList.OrderBy(x => x.type).ToList();
-            typeList = typeList.OrderBy(x => x).ToList();
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).OrderBy(x => x.type).ToList();
+            typeList = productList.Select(x => x.type).Distinct().ToList();
+            typeList.Sort();
         }
     }
 }
