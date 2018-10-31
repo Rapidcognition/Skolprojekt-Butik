@@ -318,7 +318,6 @@ namespace Butikv3._6
             }
         }
 
-
         private void PopulateStore(List<Product> productList)
         {
             foreach (Product item in productList)
