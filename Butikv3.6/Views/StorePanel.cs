@@ -443,7 +443,8 @@ namespace Butikv3._6
                 try
                 {
                     // Condition that ignores casing when searching for a match in productList.
-                    if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) || Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
+                    if (Regex.IsMatch(item.name, text, RegexOptions.IgnoreCase) || 
+                        Regex.IsMatch(text, item.type, RegexOptions.IgnoreCase) && !foo.Contains(item))
                     {
                         foo.Add(item);
                     }
