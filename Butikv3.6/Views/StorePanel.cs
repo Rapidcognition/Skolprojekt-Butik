@@ -232,8 +232,7 @@ namespace Butikv3._6
             descriptionSummaryLabel.Text = tag.summary;
         }
 
-        // On button click inside storePanel.
-
+        // On button click leftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(searchBox.Text == string.Empty)
@@ -270,8 +269,10 @@ namespace Butikv3._6
             Button b = (Button)sender;
             searchButton.Focus();
             itemPanel.Controls.Clear();
-            PopulateStoreByType(productList, b.Tag.ToString());
+            PopulateStoreByFilter(productList, b.Tag.ToString());
         }
+
+        // On button click rightPanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
@@ -413,17 +414,6 @@ namespace Butikv3._6
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
-        }
-
-        /// <summary>
-        /// Queries into a 'tmp' list with certain conditions, calls function PopulateStore on 'tmp'.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="type"></param>
-        private void PopulateStoreByType(List<Product> productList, string type)
-        {
-            var tmp = productList.Where(x => x.type == type).ToList();
-            PopulateStore(tmp);
         }
 
         /// <summary>
