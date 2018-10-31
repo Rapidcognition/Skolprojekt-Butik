@@ -21,21 +21,23 @@ namespace Butikv3._6
         public CartPanel()
         {
             this.ColumnCount = 3;
+            this.RowCount = 2;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 135));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
-            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 92));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 8));
 
             #region left menu
             TableLayoutPanel leftMenuPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
             };
-            this.Controls.Add(leftMenuPanel);
+            this.SetRowSpan(leftMenuPanel, 2);
+            this.Controls.Add(leftMenuPanel, 0, 0);
 
             Button checkoutButton = new Button
             {
@@ -43,6 +45,7 @@ namespace Butikv3._6
                 Dock = DockStyle.Top,
                 Height = 30,
             };
+            checkoutButton.Click += CheckoutButton_Click;
             leftMenuPanel.Controls.Add(checkoutButton);
 
             Button saveCartButton = new Button
@@ -82,7 +85,38 @@ namespace Butikv3._6
                 FlowDirection = FlowDirection.LeftToRight,
                 BorderStyle = BorderStyle.Fixed3D,
             };
-            this.Controls.Add(itemPanel);
+            this.Controls.Add(itemPanel, 1, 0);
+
+            TableLayoutPanel sumOfProductsPanel = new TableLayoutPanel
+            {
+                Name = "sumOfProductsPanel",
+                ColumnCount = 2,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(6, 0, 6, 2),
+                BorderStyle = BorderStyle.Fixed3D,
+            };
+            sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+            this.Controls.Add(sumOfProductsPanel, 1, 1);
+
+            Label nrOfProductsLabel = new Label
+            {
+                Name = "nrOfProductsLabel",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Text = "Number of Products: " + GetNrOfProducts(),
+            };
+            sumOfProductsPanel.Controls.Add(nrOfProductsLabel);
+
+            Label sumLabel = new Label
+            {
+                Name = "sumLabel",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleRight,
+                Text = "Sum: " + GetSumOfProducts(),
+            };
+            sumOfProductsPanel.Controls.Add(sumLabel);
             #endregion
 
             #region Description panel
@@ -93,9 +127,10 @@ namespace Butikv3._6
                 RowCount = 3,
             };
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
-            this.Controls.Add(descriptionPanel);
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+            this.SetRowSpan(leftMenuPanel, 2);
+            this.Controls.Add(descriptionPanel, 2, 0);
 
             PictureBox descriptionPicture = new PictureBox
             {
@@ -111,7 +146,8 @@ namespace Butikv3._6
                 Name = "descriptionProductName",
                 Text = "No product selected",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Calibri", 12, FontStyle.Bold),
+                TextAlign = ContentAlignment.TopLeft,
             };
             descriptionPanel.Controls.Add(descriptionProductName);
 
@@ -120,10 +156,15 @@ namespace Butikv3._6
                 Name = "descriptionProductSummary",
                 Text = " ---",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
+                TextAlign = ContentAlignment.TopLeft,
             };
             descriptionPanel.Controls.Add(descriptionProductSummary);
             #endregion
+        }
+
+        private void CheckoutButton_Click(object sender, EventArgs e)
+        {
+            
         }
 
         public void AddToCart(Product product)
@@ -206,6 +247,7 @@ namespace Butikv3._6
                 //
                 productPanel.Tag = product;
             }
+            UpdateSummaryPanel();
         }
 
         private void ClearCart()
@@ -216,6 +258,7 @@ namespace Butikv3._6
                 p.nrOfProducts = 1;
             }
             cartItems.Clear();
+            UpdateSummaryPanel();
         }
 
         private void SaveCartButton_Click(object sender, EventArgs e)
@@ -292,7 +335,9 @@ namespace Butikv3._6
                 Product productRef = (Product)productPanelRef.Tag;
                 Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
                 priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
+                productRef.nrOfProducts = (int)productCounterRef.Value;
             }
+            UpdateSummaryPanel();
         }
 
         private void ProductPanel_Click(object sender, EventArgs e)
@@ -355,6 +400,44 @@ namespace Butikv3._6
             (descriptionPanelRef.Controls["descriptionProductName"] as Label).Text = productRef.name;
 
             (descriptionPanelRef.Controls["descriptionProductSummary"]).Text = productRef.summary;
+        }
+
+        /// <summary>
+        /// Updates sum and total amount of products in cart.
+        /// </summary>
+        private void UpdateSummaryPanel()
+        {
+            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
+                Text = "Number of Products: " + GetNrOfProducts();
+
+            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
+                Text = "Sum: " + GetSumOfProducts();
+        }
+
+        /// <summary>
+        /// Helper method. Returns a string representing the total number of products in cart.
+        /// </summary>
+        private string GetNrOfProducts()
+        {
+            int nrOfProducts = 0;
+            foreach (Product product in cartItems)
+            {
+                nrOfProducts += product.nrOfProducts;
+            }
+            return nrOfProducts.ToString();
+        }
+
+        /// <summary>
+        /// Helper method. Returns a string representing the sum of all products in cart.
+        /// </summary>
+        private string GetSumOfProducts()
+        {
+            int sum = 0;
+            foreach (Product product in cartItems)
+            {
+                sum += (product.price * product.nrOfProducts);
+            }
+            return sum.ToString() + " kr";
         }
     }
 }
