@@ -50,7 +50,7 @@ namespace Butikv3._6
         }
     }
 
-    class StorePanel : TableLayoutPanel
+    class StorePanel : ViewPanel
     {
         #region properties used in storePanel and all functions
         // Object that is constant, we use this reference
@@ -65,13 +65,6 @@ namespace Butikv3._6
         Button typeButton;
         FlowLayoutPanel typePanel;
 
-        // Controls connected to description panel
-        PictureBox descriptionPicture;
-        Label descriptionNameLabel;
-        Label descriptionSummaryLabel;
-        TableLayoutPanel descriptionPanel;
-
-
         FlowLayoutPanel itemPanel;
         // Panel that we store all items in that is displayed in itemPanel.
         TableLayoutPanel productPanel;
@@ -85,7 +78,6 @@ namespace Butikv3._6
         
         // Used when productpanel.Click to display
         // a graphical change on clicked productPanel.
-        private TableLayoutPanel selectedProductPanel;
         private TableLayoutPanel productPanelRef;
 
         // Lists that contains our products and the type of our products
@@ -95,35 +87,17 @@ namespace Butikv3._6
 
         public StorePanel(CartPanel reference)
         {
+            // So we always point to the same memory place when we add items to cartPanel.
             cartPanelRef = reference;
 
-            // Implement event that autoscales the MyForm window
-            // so that images retain their scale.
-            #region Main panel, 2 columns, refered to as "this.".
-            this.ColumnCount = 2;
-            this.Dock = DockStyle.Fill;
-            this.BackColor = Color.Transparent;
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 82));
-            #endregion
-
             LeftPanel();
-            RightPanel();
-
+            MiddlePanel();
             QueryFromCSVToList();
             PopulateTypePanel(typeList);
             PopulateStore(productList);
         }
 
-        // Method to display picture, name and summary of item in storePanel.
-        private void UpdateProductView(Product tag)
-        {
-            descriptionPicture.ImageLocation = tag.imageLocation;
-            descriptionNameLabel.Text = tag.name;
-            descriptionSummaryLabel.Text = tag.summary;
-        }
-
-        // On button click leftPanel.
+        #region Methods related to click events in LeftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(searchBox.Text == string.Empty)
@@ -162,8 +136,9 @@ namespace Butikv3._6
             itemPanel.Controls.Clear();
             PopulateStoreByFilter(productList, b.Tag.ToString());
         }
+        #endregion
 
-        // On button click rightPanel.
+        #region Methods related to click events on MiddlePanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
@@ -173,7 +148,6 @@ namespace Butikv3._6
         }   
         private void ProductPanel_Click(object sender, EventArgs e)
         {
-
             TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
             TableLayoutPanel productPanelRef;
             Product productRef;
@@ -182,7 +156,7 @@ namespace Butikv3._6
             {
                 productPanelRef = (TableLayoutPanel)sender;
                 productRef = (Product)productPanelRef.Tag;
-                //UpdateProductView((Product)t.Tag);
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(PictureBox))
@@ -190,7 +164,7 @@ namespace Butikv3._6
                 PictureBox p = (PictureBox)sender;
                 productPanelRef = (TableLayoutPanel)p.Parent;
                 productRef = (Product)productPanelRef.Tag;
-                UpdateProductView((Product)p.Tag);
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(Label))
@@ -198,25 +172,12 @@ namespace Butikv3._6
                 Label l = (Label)sender;
                 productPanelRef = (TableLayoutPanel)l.Parent;
                 productRef = (Product)productPanelRef.Tag;
-                UpdateProductView((Product)l.Tag);
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
             }
         }
-        private void UpdateSelectedProduct(TableLayoutPanel clickedProductPanelRef)
-        {
-            if (selectedProductPanel == null)
-            {
-                selectedProductPanel = clickedProductPanelRef;
-                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
-            }
+        #endregion
 
-            if (selectedProductPanel != clickedProductPanelRef)
-            {
-                selectedProductPanel.BorderStyle = BorderStyle.None;
-                selectedProductPanel = clickedProductPanelRef;
-                selectedProductPanel.BorderStyle = BorderStyle.Fixed3D;
-            }
-        }
 
         /// <summary>
         /// Single method to deal with the logic as to how we display 
@@ -233,7 +194,7 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 400,
+                    Width = 300,
                     Margin = new Padding(0),
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
@@ -257,6 +218,7 @@ namespace Butikv3._6
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
                     Anchor = AnchorStyles.Left,
+                    Font = new Font("Calibri", 10,FontStyle.Bold),
                 };
                 productPanel.Controls.Add(nameLabel);
 
@@ -265,6 +227,8 @@ namespace Butikv3._6
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
                     Anchor = AnchorStyles.Left,
+                    Font = new Font("Calibri", 9, FontStyle.Bold),
+
                 };
                 productPanel.Controls.Add(priceLabel);
 
@@ -277,7 +241,7 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Left,
                     Height = 50,
                     Width = 82,
-                    Font = new Font("Calibri", 10, FontStyle.Bold),
+                    Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
                 productPanel.Controls.Add(addToCartButton);
                 pictureBox.Click += ProductPanel_Click;
@@ -312,7 +276,7 @@ namespace Butikv3._6
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Top,
                     Height = 30,
-                    Width = 115,
+                    Width = 112,
                     Margin = new Padding(0,5,10,0),
                     Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
@@ -354,18 +318,6 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Method to ReadAllLines from database and store in (products)list,
-        /// also store all the different types in a (string)list.
-        /// </summary>
-        private void QueryFromCSVToList()
-        {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
-
-            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
-        }
-        
-        /// <summary>
         /// Abstracted away logic for left-side panel for readability.
         /// </summary>
         private void LeftPanel()
@@ -381,7 +333,8 @@ namespace Butikv3._6
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.Controls.Add(leftPanel);
+            this.SetRowSpan(leftPanel, 2);
+            this.Controls.Add(leftPanel, 0, 0);
 
             searchControlerPanel = new TableLayoutPanel
             {
@@ -390,7 +343,7 @@ namespace Butikv3._6
                 Height = 15,
                 Width = 55,
             };
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
             leftPanel.Controls.Add(searchControlerPanel);
 
@@ -431,21 +384,20 @@ namespace Butikv3._6
 
             leftPanel.Controls.Add(typePanel);
         }
+
         /// <summary>
         /// Abstracted away logic for the right-side panel for readability.
         /// </summary>
-        private void RightPanel()
+        private void MiddlePanel()
         {
             TableLayoutPanel rightPanel = new TableLayoutPanel
             {
-                ColumnCount = 2,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
                 Margin = new Padding(0, 0, 0, 0),
             };
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
-            this.Controls.Add(rightPanel);
+            this.SetRowSpan(rightPanel, 2);
+            this.Controls.Add(rightPanel, 1, 0);
 
             itemPanel = new FlowLayoutPanel
             {
@@ -458,43 +410,18 @@ namespace Butikv3._6
             };
             rightPanel.Controls.Add(itemPanel);
 
-            descriptionPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 1, 0, 0),
-            };
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
-            rightPanel.Controls.Add(descriptionPanel);
+        }
+        
+        /// <summary>
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
+        /// </summary>
+        private void QueryFromCSVToList()
+        {
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
+                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
-            descriptionPicture = new PictureBox
-            {
-                BorderStyle = BorderStyle.Fixed3D,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Dock = DockStyle.Fill,
-                BackgroundImageLayout = ImageLayout.Stretch,
-            };
-            descriptionPanel.Controls.Add(descriptionPicture);
-
-            descriptionNameLabel = new Label
-            {
-                Text = "Items name",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Font = new Font("Calibri", 12, FontStyle.Bold),
-            };
-            descriptionPanel.Controls.Add(descriptionNameLabel);
-
-            descriptionSummaryLabel = new Label
-            {
-                Text = "Items summary",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.TopLeft,
-                FlatStyle = FlatStyle.Popup,
-            };
-            descriptionPanel.Controls.Add(descriptionSummaryLabel);
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
     }
 }

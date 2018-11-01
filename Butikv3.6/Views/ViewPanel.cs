@@ -18,7 +18,7 @@ namespace Butikv3._6
             this.RowCount = 2;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
-            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 135));
+            this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 92));
@@ -31,7 +31,7 @@ namespace Butikv3._6
                 Dock = DockStyle.Fill,
                 RowCount = 3,
             };
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 210));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
             this.Controls.Add(descriptionPanel, 2, 0);
