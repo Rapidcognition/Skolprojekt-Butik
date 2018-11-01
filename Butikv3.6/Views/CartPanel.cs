@@ -38,6 +38,7 @@ namespace Butikv3._6
             #region left menu
             TableLayoutPanel leftMenuPanel = new TableLayoutPanel
             {
+                Name = "leftMenuPanel",
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
             };
@@ -262,7 +263,7 @@ namespace Butikv3._6
                 Product productRef = (Product)productPanelRef.Tag;
 
                 productCounterRef.Value++;
-                
+
                 // Temp bug fix
                 // Tidy up
                 //
@@ -487,7 +488,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Updates sum and total amount of products in cart.
+        /// Updates sum and total number of products in cart.
         /// </summary>
         private void UpdateSummaryPanel()
         {
@@ -517,7 +518,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Helper method. Returns a string representing the total number of products in cart.
+        /// Returns a string representing the total number of products in cart.
         /// </summary>
         private string GetNrOfProducts()
         {
@@ -530,7 +531,7 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// Helper method. Returns a string representing the sum of all products in cart.
+        /// Returns a string representing the sum of all products in cart.
         /// </summary>
         private double GetSumOfProducts()
         {
