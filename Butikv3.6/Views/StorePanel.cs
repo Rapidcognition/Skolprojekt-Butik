@@ -448,20 +448,20 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            List<Product> foo = new List<Product>();
+            var rgx = new Regex(@"^[A-Za-z]");
             try
             {
                 text = text.TrimStart().TrimEnd();
 
                 // Matches all occurances of p.name in text and returns it.
-                foo = productList.Where(p => Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) || 
-                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase) || p.price.ToString() == text && 
-                    int.Parse(text) >= p.price).Distinct().ToList();
+                var foo = productList.Where(p => rgx.IsMatch(text) ?
+                    (Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) || 
+                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase))
+                    : 
+                    (int.Parse(text) >= p.price)).Distinct().ToList();
 
                 if (foo.Count != 0)
-                {
                     PopulateStore(foo);
-                }
             }
             catch
             {
