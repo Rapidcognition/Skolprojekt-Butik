@@ -11,6 +11,11 @@ namespace Butikv3._6
 {
     class CartPanel : TableLayoutPanel
     {
+        private double Sum = 0;
+        private Label sumBeforDis;
+        private Label sumAfterDis;
+        private Label sumLabel;
+        private bool codeActive = false;
         private const string SaveFolder = "saveFolder";
         private const string TempSaveFile = "saveFile.csv";
 
@@ -74,6 +79,50 @@ namespace Butikv3._6
             };
             clearCartButton.Click += ClearCartButton_Click;
             leftMenuPanel.Controls.Add(clearCartButton);
+
+            Label DiscountCodeLable = new Label
+            {
+                Text = "Discount Code here!",
+                Font = new Font("Arial",9),
+                Dock = DockStyle.Top,
+                Height = 50,
+                TextAlign = ContentAlignment.BottomCenter,
+            };
+            leftMenuPanel.Controls.Add(DiscountCodeLable);
+
+            TextBox DiscountCodeBox = new TextBox
+            {
+                Text = "Discount code",
+                Dock= DockStyle.Top,
+                Font = new Font("Arial", 10),
+                AutoSize = true,
+                TextAlign= HorizontalAlignment.Center,
+                BackColor = Color.White,
+
+        };
+            leftMenuPanel.Controls.Add(DiscountCodeBox);
+            DiscountCodeBox.GotFocus += ClearText;
+            DiscountCodeBox.KeyPress += ChackCode;
+
+            sumBeforDis = new Label
+            {
+                Text = "Your amout befor discount:"+ GetSumOfProducts() + " kr",
+                Font = new Font("Arial", 9),
+                Dock = DockStyle.Top,
+                Height=55,
+                TextAlign = ContentAlignment.MiddleCenter,
+            };
+            leftMenuPanel.Controls.Add(sumBeforDis);
+
+            sumAfterDis = new Label
+            {
+                Text = "Your amout After discount:" + GetSumOfProducts() + " kr",
+                Font = new Font("Arial", 9),
+                Dock = DockStyle.Top,
+                Height=50,
+                TextAlign = ContentAlignment.MiddleCenter,
+            };
+            leftMenuPanel.Controls.Add(sumAfterDis);
             #endregion
 
             #region Product panel
@@ -109,12 +158,13 @@ namespace Butikv3._6
             };
             sumOfProductsPanel.Controls.Add(nrOfProductsLabel);
 
-            Label sumLabel = new Label
+            sumLabel = new Label
             {
                 Name = "sumLabel",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleRight,
-                Text = "Sum: " + GetSumOfProducts(),
+                Text = "Sum: " + GetSumOfProducts()+" kr",
+                
             };
             sumOfProductsPanel.Controls.Add(sumLabel);
             #endregion
@@ -160,6 +210,41 @@ namespace Butikv3._6
             };
             descriptionPanel.Controls.Add(descriptionProductSummary);
             #endregion
+        }
+
+        private void ClearText(object sender, EventArgs e)
+        {
+            TextBox textB = (TextBox)sender;
+            if (textB.BackColor != Color.LightGreen)
+            {
+                textB.Clear();
+                textB.BackColor = Color.White;
+                //textB.Hide();
+            }
+            else
+                textB.AcceptsReturn = false;
+        }
+
+        private void ChackCode(object sender, EventArgs e)
+        {
+            TextBox txtbcode = (TextBox)sender;
+            List<string> DisCodList = File.ReadAllLines(@"RabatCoder.csv").ToList();
+            foreach (string item in DisCodList)
+            {
+                if (txtbcode.Text == item)
+                {
+                    DisCodList.Remove(item);
+                    txtbcode.BackColor = Color.LightGreen;
+                    sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
+                    sumLabel.Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
+                    codeActive = true;
+                }
+                break;
+            }
+            //File.Delete(@"RabatCoder.csv");
+            //File.Create(@"RabatCoder.csv");
+            File.WriteAllText(@"RabatCoder.csv", string.Empty);
+            File.WriteAllLines(@"RabatCoder.csv", DisCodList);
         }
 
         private void CheckoutButton_Click(object sender, EventArgs e)
@@ -406,11 +491,29 @@ namespace Butikv3._6
         /// </summary>
         private void UpdateSummaryPanel()
         {
+            if(codeActive)
+            {
             ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
                 Text = "Number of Products: " + GetNrOfProducts();
 
             ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                Text = "Sum: " + GetSumOfProducts();
+                Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
+            sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
+
+            sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
+            }
+            else
+            {
+                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
+                Text = "Number of Products: " + GetNrOfProducts();
+
+                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
+                    Text = "Sum: " + GetSumOfProducts() + " kr";
+                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
+
+                sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProducts() + " kr";
+            }
+
         }
 
         /// <summary>
@@ -429,14 +532,25 @@ namespace Butikv3._6
         /// <summary>
         /// Helper method. Returns a string representing the sum of all products in cart.
         /// </summary>
-        private string GetSumOfProducts()
+        private double GetSumOfProducts()
         {
-            int sum = 0;
+            Sum = 0;
+            foreach (Product product in cartItems)
+            {
+                Sum += (product.price * product.nrOfProducts);
+            }
+            return Sum;
+        }
+
+        private double GetSumOfProductsAfterDis()
+        {
+            double sum = 0;
             foreach (Product product in cartItems)
             {
                 sum += (product.price * product.nrOfProducts);
             }
-            return sum.ToString() + " kr";
+            sum -= Math.Round(sum * 15, 2)/100;
+            return sum;
         }
     }
 }
