@@ -24,8 +24,10 @@ namespace Butikv3._6
 
         public CartPanel()
         {
+
             #region left menu
             TableLayoutPanel leftMenuPanel = new TableLayoutPanel
+            // one comment
             {
                 Name = "leftMenuPanel",
                 Dock = DockStyle.Fill,
