@@ -212,7 +212,6 @@ namespace Butikv3._6
                 BorderStyle = BorderStyle.Fixed3D,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Dock = DockStyle.Fill,
-                BackgroundImage = Image.FromFile("Icons/placeholder.png"),
                 BackgroundImageLayout = ImageLayout.Stretch,
             };
             descriptionPanel.Controls.Add(descriptionPicture);
@@ -448,21 +447,21 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            List<Product> foo = new List<Product>();
+            var rgx = new Regex(@"^[0-9]");
+            text = text.TrimStart().TrimEnd();
             try
             {
-                var rx = new Regex(text, RegexOptions.IgnoreCase);
-                text = text.TrimStart().TrimEnd();
-                foo = productList.Where(p => rx.IsMatch(p.name) || rx.IsMatch(p.type)).Distinct().ToList();
-                if (foo.Count == 0 || text[0] == '^')
-                {
-                    var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                    PopulateStore(tmp);
-                }
-                else
-                {
+                // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
+                // if false, we find all occurances of the integer and down to lowest inclusively.
+                var foo = productList.Where(p => rgx.IsMatch(text) ? 
+                    (int.Parse(text) >= p.price)
+                    :
+                    (Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase)))
+                    .Distinct().ToList();
+
+                if (foo.Count != 0)
                     PopulateStore(foo);
-                }
             }
             catch
             {
@@ -478,9 +477,10 @@ namespace Butikv3._6
         /// </summary>
         private void QueryFromCSVToList()
         {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).OrderBy(x => x.type).ToList();
-            typeList = productList.Select(x => x.type).Distinct().ToList();
-            typeList.Sort();
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
+                OrderBy(x => x.type).ToList();
+
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
     }
 }
