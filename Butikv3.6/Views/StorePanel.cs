@@ -351,6 +351,34 @@ namespace Butikv3._6
         }
 
         /// <summary>
+        /// This method is called upon when the search-function is used.
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="text"></param>
+        private void PopulateStoreByFilter(List<Product> productList, string text)
+        {
+            text = text.Trim();
+            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
+            var rgxstring = new Regex(@"[A-Za-z\p{L}]");
+
+            if(rgxstring.IsMatch(rgxtext))
+            {
+                var tmp = productList.
+                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
+                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
+                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
+
+                PopulateStore(tmp);
+            }
+            else
+            {
+                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
+                PopulateStore(tmp);
+            }
+        }
+
+        /// <summary>
         /// Method to populate typePanel with the difference types of products in
         /// (string)typeList.
         /// </summary>
@@ -374,33 +402,6 @@ namespace Butikv3._6
                 typePanel.Controls.Add(typeButton);
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
-            }
-        }
-
-        /// <summary>
-        /// This method is called upon when the search-function is used.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="text"></param>
-        private void PopulateStoreByFilter(List<Product> productList, string text)
-        {
-            text = text.Trim();
-            var rgxstring = new Regex(@"[A-Za-z\p{L}]");
-            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-
-            if(rgxstring.IsMatch(rgxtext))
-            {
-                var tmp = productList.Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
-                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
-                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) ||
-                    Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
-
-                PopulateStore(tmp);
-            }
-            else
-            {
-                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
-                PopulateStore(tmp);
             }
         }
         
