@@ -83,8 +83,8 @@ namespace Butikv3._6
         // in method PopulateStore.
         #endregion
         
-        // Used when productpanel is clicked to give it
-        // a graphical change.
+        // Used when productpanel.Click to display
+        // a graphical change on clicked productPanel.
         private TableLayoutPanel selectedProductPanel;
         private TableLayoutPanel productPanelRef;
 
@@ -107,133 +107,8 @@ namespace Butikv3._6
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 82));
             #endregion
 
-            #region Left side table of "this.".
-            leftPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0),
-            };
-            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.Controls.Add(leftPanel);
-
-            searchControlerPanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                Dock = DockStyle.Fill,
-                Height = 15,
-                Width = 55,
-            };
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
-            leftPanel.Controls.Add(searchControlerPanel);
-
-            searchBox = new TextBox
-            {
-                Anchor = AnchorStyles.Top,
-                Margin = new Padding(-20,1,-10,0),
-                Width = 200,
-            };
-            searchControlerPanel.Controls.Add(searchBox);
-            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
-            searchButton = new Button
-            {
-                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
-                BackgroundImageLayout = ImageLayout.Zoom,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0,0,0,10),
-                Height = 25,
-            };
-            searchButton.Click += SearchButton_Click;
-            searchControlerPanel.Controls.Add(searchButton);
-
-            // Only to create a small space between filterbox and typebuttons.
-            Label l = new Label
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-            };
-            leftPanel.Controls.Add(l);
-
-            typePanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Width = 130,
-                Padding = new Padding(0),
-                AutoScroll = true,
-            };
-
-            leftPanel.Controls.Add(typePanel);
-            #endregion
-
-            #region Right side table of this, holds itemPanel (menu with products).
-            TableLayoutPanel rightPanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0,0,0,0),
-            };
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
-            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
-            this.Controls.Add(rightPanel);
-
-            itemPanel = new FlowLayoutPanel
-            {
-                FlowDirection = FlowDirection.LeftToRight,
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                BorderStyle = BorderStyle.Fixed3D,
-                Margin = new Padding(0,4,0,0),
-            };
-            rightPanel.Controls.Add(itemPanel);
-            #endregion
-
-            #region Panel with controls, nested inside rightPanel
-
-            descriptionPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 1, 0, 0),
-            };
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
-            rightPanel.Controls.Add(descriptionPanel);
-
-            descriptionPicture = new PictureBox
-            {
-                BorderStyle = BorderStyle.Fixed3D,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Dock = DockStyle.Fill,
-                BackgroundImageLayout = ImageLayout.Stretch,
-            };
-            descriptionPanel.Controls.Add(descriptionPicture);
-
-            descriptionNameLabel = new Label
-            {
-                Text = "Items name",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Font = new Font("Calibri", 12, FontStyle.Bold),
-            };
-            descriptionPanel.Controls.Add(descriptionNameLabel);
-
-            descriptionSummaryLabel = new Label
-            {
-                Text = "Items summary",
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.TopLeft,
-                FlatStyle = FlatStyle.Popup,
-            };
-            descriptionPanel.Controls.Add(descriptionSummaryLabel);
-            #endregion
+            LeftPanel();
+            RightPanel();
 
             QueryFromCSVToList();
             PopulateTypePanel(typeList);
@@ -298,17 +173,23 @@ namespace Butikv3._6
         }   
         private void ProductPanel_Click(object sender, EventArgs e)
         {
+
+            TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
+            TableLayoutPanel productPanelRef;
+            Product productRef;
+
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
-                TableLayoutPanel t = (TableLayoutPanel)sender;
                 productPanelRef = (TableLayoutPanel)sender;
-                UpdateProductView((Product)t.Tag);
+                productRef = (Product)productPanelRef.Tag;
+                //UpdateProductView((Product)t.Tag);
                 UpdateSelectedProduct(productPanelRef);
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
                 PictureBox p = (PictureBox)sender;
                 productPanelRef = (TableLayoutPanel)p.Parent;
+                productRef = (Product)productPanelRef.Tag;
                 UpdateProductView((Product)p.Tag);
                 UpdateSelectedProduct(productPanelRef);
             }
@@ -316,6 +197,7 @@ namespace Butikv3._6
             {
                 Label l = (Label)sender;
                 productPanelRef = (TableLayoutPanel)l.Parent;
+                productRef = (Product)productPanelRef.Tag;
                 UpdateProductView((Product)l.Tag);
                 UpdateSelectedProduct(productPanelRef);
             }
@@ -447,27 +329,27 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
+            text = text.Trim();
             var rgx = new Regex(@"^[0-9]");
-            text = text.TrimStart().TrimEnd();
-            try
-            {
-                // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
-                // if false, we find all occurances of the integer and down to lowest inclusively.
-                var foo = productList.Where(p => rgx.IsMatch(text) ? 
-                    (int.Parse(text) >= p.price)
-                    :
-                    (Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) ||
-                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase)))
-                    .Distinct().ToList();
 
-                if (foo.Count != 0)
-                    PopulateStore(foo);
-            }
-            catch
+            // 
+            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
+            // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
+            // if false, we find all occurances of the integer and down to lowest inclusively.
+            var foo = productList.Where(p => rgx.IsMatch(rgxtext) ? 
+                (int.Parse(text) >= p.price) :
+                (Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase) ||
+                Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)))
+                .Distinct().ToList();
+
+            if (foo.Count != 0 && rgx.IsMatch(rgxtext))
             {
-                // ArgumentException, because '*' can't be parsed...
-                // And a lot of special signs cause weird bugs.
-                // TODO-list: Fix this shit!
+                foo = foo.OrderByDescending(p => p.price).ToList();
+                PopulateStore(foo);
+            }
+            else
+            {
+                PopulateStore(foo);
             }
         }
 
@@ -478,9 +360,141 @@ namespace Butikv3._6
         private void QueryFromCSVToList()
         {
             productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
-                OrderBy(x => x.type).ToList();
+                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
             typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
+        }
+        
+        /// <summary>
+        /// Abstracted away logic for left-side panel for readability.
+        /// </summary>
+        private void LeftPanel()
+        {
+            leftPanel = new TableLayoutPanel
+            {
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+            };
+            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+            this.Controls.Add(leftPanel);
+
+            searchControlerPanel = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                Dock = DockStyle.Fill,
+                Height = 15,
+                Width = 55,
+            };
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
+            leftPanel.Controls.Add(searchControlerPanel);
+
+            searchBox = new TextBox
+            {
+                Anchor = AnchorStyles.Top,
+                Margin = new Padding(-20, 1, -10, 0),
+                Width = 200,
+            };
+            searchControlerPanel.Controls.Add(searchBox);
+            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
+            searchButton = new Button
+            {
+                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
+                BackgroundImageLayout = ImageLayout.Zoom,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 10),
+                Height = 25,
+            };
+            searchButton.Click += SearchButton_Click;
+            searchControlerPanel.Controls.Add(searchButton);
+
+            // Only to create a small space between filterbox and typebuttons.
+            Label l = new Label
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+            };
+            leftPanel.Controls.Add(l);
+
+            typePanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Width = 130,
+                Padding = new Padding(0),
+                AutoScroll = true,
+            };
+
+            leftPanel.Controls.Add(typePanel);
+        }
+        /// <summary>
+        /// Abstracted away logic for the right-side panel for readability.
+        /// </summary>
+        private void RightPanel()
+        {
+            TableLayoutPanel rightPanel = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 430));
+            rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 60));
+            this.Controls.Add(rightPanel);
+
+            itemPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                BorderStyle = BorderStyle.Fixed3D,
+                Margin = new Padding(0, 4, 0, 0),
+            };
+            rightPanel.Controls.Add(itemPanel);
+
+            descriptionPanel = new TableLayoutPanel
+            {
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 1, 0, 0),
+            };
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
+            rightPanel.Controls.Add(descriptionPanel);
+
+            descriptionPicture = new PictureBox
+            {
+                BorderStyle = BorderStyle.Fixed3D,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Dock = DockStyle.Fill,
+                BackgroundImageLayout = ImageLayout.Stretch,
+            };
+            descriptionPanel.Controls.Add(descriptionPicture);
+
+            descriptionNameLabel = new Label
+            {
+                Text = "Items name",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Calibri", 12, FontStyle.Bold),
+            };
+            descriptionPanel.Controls.Add(descriptionNameLabel);
+
+            descriptionSummaryLabel = new Label
+            {
+                Text = "Items summary",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.TopLeft,
+                FlatStyle = FlatStyle.Popup,
+            };
+            descriptionPanel.Controls.Add(descriptionSummaryLabel);
         }
     }
 }

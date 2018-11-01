@@ -50,6 +50,10 @@ namespace Butikv3._6
                 Text = "Checkout",
                 Dock = DockStyle.Top,
                 Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
+
             };
             checkoutButton.Click += CheckoutButton_Click;
             leftMenuPanel.Controls.Add(checkoutButton);
@@ -59,6 +63,9 @@ namespace Butikv3._6
                 Text = "Save Cart",
                 Dock = DockStyle.Top,
                 Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
             saveCartButton.Click += SaveCartButton_Click;
             leftMenuPanel.Controls.Add(saveCartButton);
@@ -68,6 +75,9 @@ namespace Butikv3._6
                 Text ="Read cart from CSV",
                 Dock = DockStyle.Top,
                 Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
             loadCartButton.Click += LoadCartButton_Click;
             leftMenuPanel.Controls.Add(loadCartButton);
@@ -77,6 +87,9 @@ namespace Butikv3._6
                 Text = "Clear Cart",
                 Dock = DockStyle.Top,
                 Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
             clearCartButton.Click += ClearCartButton_Click;
             leftMenuPanel.Controls.Add(clearCartButton);
