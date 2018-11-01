@@ -10,7 +10,7 @@ namespace Butikv3._6
 {
     class RecieptForm : Form
     {
-        private Point mouseLocation;
+        private Point mousePos;
         FlowLayoutPanel itemPanel;
 
         public RecieptForm()
@@ -24,7 +24,7 @@ namespace Butikv3._6
             this.Size = new Size(300, 500);
             this.BackColor = Color.White;
             this.FormBorderStyle = FormBorderStyle.None;
-            mouseLocation = Point.Empty;
+            mousePos = Point.Empty;
 
             TableLayoutPanel recieptPanel = new TableLayoutPanel
             {
@@ -138,9 +138,9 @@ namespace Butikv3._6
         /// </summary>
         private void RecieptPicture_MouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left && mouseLocation.IsEmpty)
+            if(e.Button == MouseButtons.Left && mousePos.IsEmpty)
             {
-                mouseLocation = new Point(e.X, e.Y);
+                mousePos = new Point(e.X, e.Y);
             }
         }
 
@@ -157,12 +157,12 @@ namespace Butikv3._6
         /// </summary>
         private void RecieptPicture_Move(object sender, MouseEventArgs e)
         {
-            if(mouseLocation != Point.Empty)
+            if(mousePos != Point.Empty)
             {
                 Point windowPos = new Point
                 {
-                    X = this.Left + (e.X - mouseLocation.X),
-                    Y = this.Top + (e.Y - mouseLocation.Y),
+                    X = this.Left + (e.X - mousePos.X),
+                    Y = this.Top + (e.Y - mousePos.Y),
                 };
                 this.Location = windowPos;
             }
@@ -175,7 +175,7 @@ namespace Butikv3._6
         {
             if(e.Button == MouseButtons.Left)
             {
-                mouseLocation = Point.Empty;
+                mousePos = Point.Empty;
             }
         }
     }
