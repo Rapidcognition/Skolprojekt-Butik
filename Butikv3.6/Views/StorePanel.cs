@@ -212,7 +212,6 @@ namespace Butikv3._6
                 BorderStyle = BorderStyle.Fixed3D,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Dock = DockStyle.Fill,
-                BackgroundImage = Image.FromFile("Icons/placeholder.png"),
                 BackgroundImageLayout = ImageLayout.Stretch,
             };
             descriptionPanel.Controls.Add(descriptionPicture);
@@ -448,17 +447,18 @@ namespace Butikv3._6
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
-            var rgx = new Regex(@"^[A-Za-z]");
+            var rgx = new Regex(@"^[0-9]");
+            text = text.TrimStart().TrimEnd();
             try
             {
-                text = text.TrimStart().TrimEnd();
-
-                // Matches all occurances of p.name in text and returns it.
-                var foo = productList.Where(p => rgx.IsMatch(text) ?
-                    (Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) || 
-                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase))
-                    : 
-                    (int.Parse(text) >= p.price)).Distinct().ToList();
+                // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
+                // if false, we find all occurances of the integer and down to lowest inclusively.
+                var foo = productList.Where(p => rgx.IsMatch(text) ? 
+                    (int.Parse(text) >= p.price)
+                    :
+                    (Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase)))
+                    .Distinct().ToList();
 
                 if (foo.Count != 0)
                     PopulateStore(foo);

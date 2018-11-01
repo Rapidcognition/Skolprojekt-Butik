@@ -58,7 +58,7 @@ namespace Butikv3._6
             PictureBox headerPicture = new PictureBox
             {
                 Dock = DockStyle.Fill,
-                Image = Image.FromFile("Background/Header1.png"),
+                Image = Image.FromFile("Background/Header1.jpg"),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BorderStyle = BorderStyle.Fixed3D,
             };
