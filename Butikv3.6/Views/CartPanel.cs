@@ -82,13 +82,13 @@ namespace Butikv3._6
 
             TextBox DiscountCodeBox = new TextBox
             {
+                Name = "discountCodeBox",
                 Text = "Discount code",
                 Dock= DockStyle.Top,
                 Font = new Font("Arial", 10),
                 AutoSize = true,
                 TextAlign= HorizontalAlignment.Center,
                 BackColor = Color.White,
-
             };
             leftMenuPanel.Controls.Add(DiscountCodeBox);
             DiscountCodeBox.GotFocus += ClearText;
@@ -171,6 +171,8 @@ namespace Butikv3._6
             }
             else
                 textB.AcceptsReturn = false;
+
+            
         }
 
         private void ChackCode(object sender, EventArgs e)
@@ -193,6 +195,11 @@ namespace Butikv3._6
             //File.Create(@"RabatCoder.csv");
             File.WriteAllText(@"RabatCoder.csv", string.Empty);
             File.WriteAllLines(@"RabatCoder.csv", DisCodList);
+
+            if(codeActive)
+            {
+                txtbcode.Enabled = false;
+            }
         }
 
         private void CheckoutButton_Click(object sender, EventArgs e)
@@ -291,6 +298,11 @@ namespace Butikv3._6
             }
             cartItems.Clear();
             UpdateSummaryPanel();
+
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Enabled = true;
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Text = "Discount Code";
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].BackColor = Color.White;
+            codeActive = false;
         }
 
         private void SaveCartButton_Click(object sender, EventArgs e)
