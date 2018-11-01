@@ -451,15 +451,14 @@ namespace Butikv3._6
             List<Product> foo = new List<Product>();
             try
             {
-                var rx = new Regex(text, RegexOptions.IgnoreCase);
                 text = text.TrimStart().TrimEnd();
-                foo = productList.Where(p => rx.IsMatch(p.name) || rx.IsMatch(p.type)).Distinct().ToList();
-                if (foo.Count == 0 || text[0] == '^')
-                {
-                    var tmp = productList.Where(x => x.name == text || x.type == text || x.price.ToString() == text).ToList();
-                    PopulateStore(tmp);
-                }
-                else
+
+                // Matches all occurances of p.name in text and returns it.
+                foo = productList.Where(p => Regex.IsMatch(p.name, text, RegexOptions.IgnoreCase) || 
+                    Regex.IsMatch(text, p.type, RegexOptions.IgnoreCase) || p.price.ToString() == text && 
+                    int.Parse(text) >= p.price).Distinct().ToList();
+
+                if (foo.Count != 0)
                 {
                     PopulateStore(foo);
                 }
@@ -478,9 +477,10 @@ namespace Butikv3._6
         /// </summary>
         private void QueryFromCSVToList()
         {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).OrderBy(x => x.type).ToList();
-            typeList = productList.Select(x => x.type).Distinct().ToList();
-            typeList.Sort();
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
+                OrderBy(x => x.type).ToList();
+
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
     }
 }
