@@ -9,6 +9,74 @@ using System.IO;
 
 namespace Butikv3._6
 {
+    class Receipt: Form
+    {
+        public Receipt(List<Product> ppp, double d)
+        {
+            TableLayoutPanel ReceiptPanel = new TableLayoutPanel
+            {
+                AutoSize= true,
+                ColumnCount = 3,
+                Dock = DockStyle.Fill,
+                Width = 150,
+            };
+            Controls.Add(ReceiptPanel);
+
+            foreach (Product item in ppp)
+            {
+
+                Label labelName = new Label
+                {
+                    Text = item.name,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Arial",9),
+                    Dock = DockStyle.Top,
+                };
+                ReceiptPanel.Controls.Add(labelName);
+                Label labelProductsAmount = new Label
+                {
+                    Text = item.price.ToString(),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Arial", 9),
+                    Dock = DockStyle.Top,
+                };
+                ReceiptPanel.Controls.Add(labelProductsAmount);
+                Label labelProductTotPrice = new Label
+                {
+                    Text = item.nrOfProducts.ToString(),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Arial", 9),
+                    Dock = DockStyle.Top,
+                };
+                ReceiptPanel.Controls.Add(labelProductTotPrice);
+
+            }
+
+            Label labelTotalSum = new Label
+            {
+                Text = "The total amount is: "+d+"kr",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 9),
+                Dock = DockStyle.Bottom,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            ReceiptPanel.Controls.Add(labelTotalSum);
+            ReceiptPanel.SetColumnSpan(labelTotalSum, 3);
+
+            Label labelInfo = new Label
+            {
+                Text = "Öppet köp i 60 dagar oänvänd",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 9),
+                Dock = DockStyle.Bottom,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            ReceiptPanel.Controls.Add(labelInfo);
+            ReceiptPanel.SetColumnSpan(labelInfo, 3);
+        }
+    }
     class MyForm : Form
     {
         CartPanel cart;

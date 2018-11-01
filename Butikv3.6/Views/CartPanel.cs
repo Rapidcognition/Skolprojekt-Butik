@@ -11,7 +11,8 @@ namespace Butikv3._6
 {
     class CartPanel : ViewPanel
     {
-        private double Sum = 0;
+        Receipt receiptForm;
+        static double Sum { get; set; }
         private Label sumBeforDis;
         private Label sumAfterDis;
         private Label sumLabel;
@@ -217,7 +218,8 @@ namespace Butikv3._6
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
-            
+            receiptForm = new Receipt(cartItems,Sum);
+            receiptForm.Show();
         }
 
         public void AddToCart(Product product)
@@ -486,13 +488,13 @@ namespace Butikv3._6
 
         private double GetSumOfProductsAfterDis()
         {
-            double sum = 0;
+            Sum = 0;
             foreach (Product product in cartItems)
             {
-                sum += (product.price * product.nrOfProducts);
+                Sum += (product.price * product.nrOfProducts);
             }
-            sum -= Math.Round(sum * 15, 2)/100;
-            return sum;
+            Sum -= Math.Round(Sum * 15, 2)/100;
+            return Sum;
         }
     }
 }
