@@ -79,6 +79,9 @@
     <Content Include="Background\header1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Icons\home-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Icons\searchButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

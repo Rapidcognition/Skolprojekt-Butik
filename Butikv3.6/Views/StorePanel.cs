@@ -19,11 +19,6 @@ namespace Butikv3._6
         public string imageLocation;
         public int nrOfProducts;
 
-        private void Product_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this.summary);
-        }
-
         public Product GetProduct()
         {
             return this;
@@ -34,7 +29,7 @@ namespace Butikv3._6
             return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
 
-        public static Product ToCSV(string CSVLine)
+        public static Product FromCSV(string CSVLine)
         {
             string[] tmp = CSVLine.Split(',');
             Product p = new Product
@@ -137,6 +132,75 @@ namespace Butikv3._6
             PopulateStoreByFilter(productList, b.Tag.ToString());
         }
         #endregion
+        
+        /// <summary>
+        /// Abstracted away logic for left-side panel for readability.
+        /// </summary>
+        private void LeftPanel()
+        {
+            leftPanel = new TableLayoutPanel
+            {
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+            };
+            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+            this.SetRowSpan(leftPanel, 2);
+            this.Controls.Add(leftPanel, 0, 0);
+
+            searchControlerPanel = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                Dock = DockStyle.Fill,
+                Height = 15,
+                Width = 55,
+            };
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
+            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
+            leftPanel.Controls.Add(searchControlerPanel);
+
+            searchBox = new TextBox
+            {
+                Anchor = AnchorStyles.Top,
+                Margin = new Padding(-20, 1, -10, 0),
+                Width = 200,
+            };
+            searchControlerPanel.Controls.Add(searchBox);
+            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
+            searchButton = new Button
+            {
+                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
+                BackgroundImageLayout = ImageLayout.Zoom,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 10),
+                Height = 25,
+            };
+            searchButton.Click += SearchButton_Click;
+            searchControlerPanel.Controls.Add(searchButton);
+
+            // Only to create a small space between filterbox and typebuttons.
+            Label l = new Label
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+            };
+            leftPanel.Controls.Add(l);
+
+            typePanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Width = 130,
+                Padding = new Padding(0),
+                AutoScroll = true,
+            };
+
+            leftPanel.Controls.Add(typePanel);
+        }
+
 
         #region Methods related to click events on MiddlePanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
@@ -177,6 +241,33 @@ namespace Butikv3._6
             }
         }
         #endregion
+        
+        /// <summary>
+        /// Abstracted away logic for the right-side panel for readability.
+        /// </summary>
+        private void MiddlePanel()
+        {
+            TableLayoutPanel rightPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            this.SetRowSpan(rightPanel, 2);
+            this.Controls.Add(rightPanel, 1, 0);
+
+            itemPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                BorderStyle = BorderStyle.Fixed3D,
+                Margin = new Padding(0, 4, 0, 0),
+            };
+            rightPanel.Controls.Add(itemPanel);
+
+        }
 
 
         /// <summary>
@@ -294,122 +385,23 @@ namespace Butikv3._6
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             text = text.Trim();
-            var rgx = new Regex(@"^[0-9]");
-
-            // 
+            var rgxstring = new Regex(@"[A-Za-z\p{L}]");
             string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-            // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
-            // if false, we find all occurances of the integer and down to lowest inclusively.
-            var foo = productList.Where(p => rgx.IsMatch(rgxtext) ? 
-                (int.Parse(text) >= p.price) :
-                (Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)))
-                .Distinct().ToList();
 
-            if (foo.Count != 0 && rgx.IsMatch(rgxtext))
+            if(rgxstring.IsMatch(rgxtext))
             {
-                foo = foo.OrderByDescending(p => p.price).ToList();
-                PopulateStore(foo);
+                var tmp = productList.Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
+                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
+
+                PopulateStore(tmp);
             }
             else
             {
-                PopulateStore(foo);
+                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
+                PopulateStore(tmp);
             }
-        }
-
-        /// <summary>
-        /// Abstracted away logic for left-side panel for readability.
-        /// </summary>
-        private void LeftPanel()
-        {
-            leftPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0),
-            };
-            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.SetRowSpan(leftPanel, 2);
-            this.Controls.Add(leftPanel, 0, 0);
-
-            searchControlerPanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                Dock = DockStyle.Fill,
-                Height = 15,
-                Width = 55,
-            };
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
-            leftPanel.Controls.Add(searchControlerPanel);
-
-            searchBox = new TextBox
-            {
-                Anchor = AnchorStyles.Top,
-                Margin = new Padding(-20, 1, -10, 0),
-                Width = 200,
-            };
-            searchControlerPanel.Controls.Add(searchBox);
-            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
-            searchButton = new Button
-            {
-                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
-                BackgroundImageLayout = ImageLayout.Zoom,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 10),
-                Height = 25,
-            };
-            searchButton.Click += SearchButton_Click;
-            searchControlerPanel.Controls.Add(searchButton);
-
-            // Only to create a small space between filterbox and typebuttons.
-            Label l = new Label
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-            };
-            leftPanel.Controls.Add(l);
-
-            typePanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Width = 130,
-                Padding = new Padding(0),
-                AutoScroll = true,
-            };
-
-            leftPanel.Controls.Add(typePanel);
-        }
-
-        /// <summary>
-        /// Abstracted away logic for the right-side panel for readability.
-        /// </summary>
-        private void MiddlePanel()
-        {
-            TableLayoutPanel rightPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 0),
-            };
-            this.SetRowSpan(rightPanel, 2);
-            this.Controls.Add(rightPanel, 1, 0);
-
-            itemPanel = new FlowLayoutPanel
-            {
-                FlowDirection = FlowDirection.LeftToRight,
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                BorderStyle = BorderStyle.Fixed3D,
-                Margin = new Padding(0, 4, 0, 0),
-            };
-            rightPanel.Controls.Add(itemPanel);
-
         }
         
         /// <summary>
@@ -418,7 +410,7 @@ namespace Butikv3._6
         /// </summary>
         private void QueryFromCSVToList()
         {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
                 OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
             typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
