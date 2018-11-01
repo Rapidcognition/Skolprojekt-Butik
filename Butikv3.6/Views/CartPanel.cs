@@ -178,19 +178,6 @@ namespace Butikv3._6
             #endregion
         }
         
-        private void DiscountCodeTextBox_GotFocus(object sender, EventArgs e)
-        {
-            discountCodeTextBox.Text = string.Empty;
-        }
-
-        private void DiscountCodeTextBox_LostFocus(object sender, EventArgs e)
-        {
-            if(discountCodeTextBox.Text == string.Empty)
-            {
-                discountCodeTextBox.Text = "Discount Code";
-            }
-        }
-
         public void AddToCart(Product product)
         {
             if (itemPanel.Controls.ContainsKey(product.name))
@@ -271,6 +258,19 @@ namespace Butikv3._6
                 productPanel.Tag = product;
             }
             UpdateSummaryPanel();
+        }
+
+        private void DiscountCodeTextBox_GotFocus(object sender, EventArgs e)
+        {
+            discountCodeTextBox.Text = string.Empty;
+        }
+
+        private void DiscountCodeTextBox_LostFocus(object sender, EventArgs e)
+        {
+            if(discountCodeTextBox.Text == string.Empty)
+            {
+                discountCodeTextBox.Text = "Discount Code";
+            }
         }
 
         private void CheckoutButton_Click(object sender, EventArgs e)
