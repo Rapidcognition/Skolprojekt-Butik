@@ -13,14 +13,48 @@ namespace Butikv3._6
     {
         public Receipt(List<Product> ppp, double d)
         {
+            Height= 500;
+            AutoScroll=true;
             TableLayoutPanel ReceiptPanel = new TableLayoutPanel
             {
-                AutoSize= true,
-                ColumnCount = 3,
+                RowCount = 2,
+                AutoSize = true,
                 Dock = DockStyle.Fill,
-                Width = 150,
+
             };
             Controls.Add(ReceiptPanel);
+
+            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
+            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+
+            TableLayoutPanel panelProductsPrices = new TableLayoutPanel
+            {
+                AutoSize = true,
+                ColumnCount = 3,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            ReceiptPanel.Controls.Add(panelProductsPrices);
+
+            TableLayoutPanel panelTotlpINfo = new TableLayoutPanel
+            {
+                AutoSize = true,
+                Dock = DockStyle.Fill,
+            };
+            ReceiptPanel.Controls.Add(panelTotlpINfo);
+
+            Label labelTime = new Label
+            {
+                Text = "LAGERHUS \n" +
+                "Date \t :   "+DateTime.Now,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial",9,FontStyle.Bold),
+                Dock = DockStyle.Top,
+                Height=50,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            panelProductsPrices.Controls.Add(labelTime);
+            panelProductsPrices.SetColumnSpan(labelTime, 3);
 
             foreach (Product item in ppp)
             {
@@ -32,7 +66,7 @@ namespace Butikv3._6
                     Font = new Font("Arial",9),
                     Dock = DockStyle.Top,
                 };
-                ReceiptPanel.Controls.Add(labelName);
+                panelProductsPrices.Controls.Add(labelName);
                 Label labelProductsAmount = new Label
                 {
                     Text = item.price.ToString(),
@@ -40,7 +74,7 @@ namespace Butikv3._6
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Top,
                 };
-                ReceiptPanel.Controls.Add(labelProductsAmount);
+                panelProductsPrices.Controls.Add(labelProductsAmount);
                 Label labelProductTotPrice = new Label
                 {
                     Text = item.nrOfProducts.ToString(),
@@ -48,8 +82,23 @@ namespace Butikv3._6
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Top,
                 };
-                ReceiptPanel.Controls.Add(labelProductTotPrice);
+                panelProductsPrices.Controls.Add(labelProductTotPrice);
 
+            }
+
+            if(d!= 0)
+            {
+                Label labelMoms = new Label
+                {
+                    Text = "         Moms: 25%         "+ d*0.25+
+                    "\nKEEP YOUR RECEIPT!",
+                    TextAlign = ContentAlignment.BottomLeft,
+                    Font = new Font("Arial", 9),
+                    Dock = DockStyle.Bottom,
+                    Height = 35,
+                };
+                panelProductsPrices.Controls.Add(labelMoms);
+                panelProductsPrices.SetColumnSpan(labelMoms, 3);
             }
 
             Label labelTotalSum = new Label
@@ -57,24 +106,21 @@ namespace Butikv3._6
                 Text = "The total amount is: "+d+"kr",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9),
-                Dock = DockStyle.Bottom,
+                Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(0, 0, 0, 0),
+                //Margin = new Padding(0, 0, 0, 0),
             };
-            ReceiptPanel.Controls.Add(labelTotalSum);
-            ReceiptPanel.SetColumnSpan(labelTotalSum, 3);
+            panelTotlpINfo.Controls.Add(labelTotalSum);
 
             Label labelInfo = new Label
             {
-                Text = "Öppet köp i 60 dagar oänvänd",
+                Text = "30 days to return without useing the produkts!",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9),
-                Dock = DockStyle.Bottom,
-                BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(0, 0, 0, 0),
+                Dock = DockStyle.Fill,
+               // Margin = new Padding(0, 0, 0, 0),
             };
-            ReceiptPanel.Controls.Add(labelInfo);
-            ReceiptPanel.SetColumnSpan(labelInfo, 3);
+            panelTotlpINfo.Controls.Add(labelInfo);
         }
     }
     class MyForm : Form
