@@ -39,8 +39,15 @@ namespace Butikv3._6
                 type = tmp[2],
                 summary = tmp[3],
                 imageLocation = tmp[4],
-                nrOfProducts = 1,
             };
+            if(tmp.Length <= 5)
+            {
+                p.nrOfProducts = 1;
+            }
+            else
+            {
+                p.nrOfProducts = int.Parse(tmp[5]);
+            }
             return p;
         }
     }
@@ -85,12 +92,25 @@ namespace Butikv3._6
             // So we always point to the same memory place when we add items to cartPanel.
             cartPanelRef = reference;
 
+            QueryFromCSVToList();
             LeftPanel();
             MiddlePanel();
-            QueryFromCSVToList();
-            PopulateTypePanel(typeList);
             PopulateStore(productList);
+            PopulateTypePanel(typeList);
         }
+
+        /// <summary>
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
+        /// </summary>
+        private void QueryFromCSVToList()
+        {
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
+                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
+
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
+        }
+
 
         #region Methods related to click events in LeftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
@@ -201,7 +221,6 @@ namespace Butikv3._6
             leftPanel.Controls.Add(typePanel);
         }
 
-
         #region Methods related to click events on MiddlePanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
@@ -267,6 +286,34 @@ namespace Butikv3._6
             };
             rightPanel.Controls.Add(itemPanel);
 
+        }
+
+        /// <summary>
+        /// This method is called upon when the search-function is used.
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="text"></param>
+        private void PopulateStoreByFilter(List<Product> productList, string text)
+        {
+            text = text.Trim();
+            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
+            var rgxstring = new Regex(@"[A-Za-z\p{L}]");
+
+            if(rgxstring.IsMatch(rgxtext))
+            {
+                var tmp = productList.
+                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
+                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
+                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
+
+                PopulateStore(tmp);
+            }
+            else
+            {
+                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
+                PopulateStore(tmp);
+            }
         }
 
 
@@ -351,34 +398,6 @@ namespace Butikv3._6
         }
 
         /// <summary>
-        /// This method is called upon when the search-function is used.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="text"></param>
-        private void PopulateStoreByFilter(List<Product> productList, string text)
-        {
-            text = text.Trim();
-            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-            var rgxstring = new Regex(@"[A-Za-z\p{L}]");
-
-            if(rgxstring.IsMatch(rgxtext))
-            {
-                var tmp = productList.
-                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
-                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
-                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
-                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
-
-                PopulateStore(tmp);
-            }
-            else
-            {
-                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
-                PopulateStore(tmp);
-            }
-        }
-
-        /// <summary>
         /// Method to populate typePanel with the difference types of products in
         /// (string)typeList.
         /// </summary>
@@ -403,18 +422,6 @@ namespace Butikv3._6
                 typeButton.Click += TypeButton_Click;
                 typeButton.Tag = item;
             }
-        }
-        
-        /// <summary>
-        /// Method to ReadAllLines from database and store in (products)list,
-        /// also store all the different types in a (string)list.
-        /// </summary>
-        private void QueryFromCSVToList()
-        {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
-
-            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
     }
 }
