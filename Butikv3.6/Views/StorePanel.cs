@@ -19,9 +19,14 @@ namespace Butikv3._6
         public string imageLocation;
         public int nrOfProducts;
 
+        public int interestPoints;
+        public bool stage1;
+        public bool stage2;
+        public bool stage3;
+
         public string ToCSV()
         {
-            return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
+            return $"{interestPoints},{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
 
         private static Product p;
@@ -38,19 +43,20 @@ namespace Butikv3._6
             {
                 p = new Product
                 {
-                    price = int.Parse(tmp[0]),
-                    name = tmp[1],
-                    type = tmp[2],
-                    summary = tmp[3],
-                    imageLocation = tmp[4],
+                    interestPoints = int.Parse(tmp[0]),
+                    price = int.Parse(tmp[1]),
+                    name = tmp[2],
+                    type = tmp[3],
+                    summary = tmp[4],
+                    imageLocation = tmp[5],
                 };
-                if(tmp.Length <= 5)
+                if(tmp.Length <= 6)
                 {
                     p.nrOfProducts = 1;
                 }
                 else
                 {
-                    p.nrOfProducts = int.Parse(tmp[5]);
+                    p.nrOfProducts = int.Parse(tmp[6]);
                 }
                 return p;
             }
@@ -107,6 +113,37 @@ namespace Butikv3._6
                 OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
             typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
+        }
+        /// <summary>
+        /// This method is called upon when the search-function, search-button and
+        /// when the typeButtons are used, to filter store.
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <param name="text"></param>
+        private void PopulateStoreByFilter(List<Product> productList, string text)
+        {
+            text = text.Trim();
+            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
+            // A-Za-z for all english letters, \p{L} is for "non" english letters.
+            // \x20 is hexadecimal for space.
+            // So any trace of aforementioned will trigger the first condition.
+            var rgxstring = new Regex(@"[A-Z a-z \p{L} \x20]");
+
+            if(rgxstring.IsMatch(rgxtext))
+            {
+                var tmp = productList.
+                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
+                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
+                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
+
+                PopulateStorePanel(tmp);
+            }
+            else
+            {
+                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
+                PopulateStorePanel(tmp);
+            }
         }
 
         #region Methods related to click events on LeftPanel.
@@ -246,7 +283,11 @@ namespace Butikv3._6
             cartPanelRef.AddToCart((Product)b.Tag);
             productPanelRef = (TableLayoutPanel)b.Parent;
             UpdateSelectedProduct(productPanelRef);
-        }   
+
+            Product productRef = (Product)b.Tag;
+            productRef.stage1 = true;
+            productRef.stage2 = true;
+        }
         private void ProductPanel_Click(object sender, EventArgs e)
         {
             TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
@@ -259,6 +300,7 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+                productRef.stage1 = true;
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
@@ -267,6 +309,7 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+                productRef.stage1 = true;
             }
             else if(sender.GetType() == typeof(Label))
             {
@@ -275,6 +318,7 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+                productRef.stage1 = true;
             }
         }
         #endregion
@@ -380,36 +424,5 @@ namespace Butikv3._6
             }
         }
 
-        /// <summary>
-        /// This method is called upon when the search-function, search-button and
-        /// when the typeButtons are used, to filter store.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="text"></param>
-        private void PopulateStoreByFilter(List<Product> productList, string text)
-        {
-            text = text.Trim();
-            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-            // A-Za-z for all english letters, \p{L} is for "non" english letters.
-            // \x20 is hexadecimal for space.
-            // So any trace of aforementioned will trigger the first condition.
-            var rgxstring = new Regex(@"[A-Z a-z \p{L} \x20]");
-
-            if(rgxstring.IsMatch(rgxtext))
-            {
-                var tmp = productList.
-                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
-                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
-                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
-                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
-
-                PopulateStorePanel(tmp);
-            }
-            else
-            {
-                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
-                PopulateStorePanel(tmp);
-            }
-        }
     }
 }
