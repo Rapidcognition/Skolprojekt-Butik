@@ -322,41 +322,71 @@ namespace Butikv3._6
 
         private void SaveCartButton_Click(object sender, EventArgs e)
         {
-            if(!Directory.Exists(SaveFolder))
+            if (!Directory.Exists(SaveFolder))
             {
                 Directory.CreateDirectory(SaveFolder);
             }
 
-            if(cartItems.Count != 0)
+            if (cartItems.Count == 0)
             {
-                string[] lines = new string[cartItems.Count];
+                MessageBox.Show("Cannot save an empty cart.", "༼つಠ益ಠ༽つ", MessageBoxButtons.OK);
+            }
+            else
+            {
+                SaveFileDialog fileDialog = new SaveFileDialog();
+                fileDialog.Filter = "Csv file|*.csv";
+                fileDialog.Title = "Save shopping cart";
+                fileDialog.InitialDirectory = SaveFolder;
 
-                for(int i = 0; i < cartItems.Count; i++)
+                DialogResult result = fileDialog.ShowDialog();
+                string saveFilePath = fileDialog.FileName;
+
+                if (result == DialogResult.Cancel)
                 {
-                    lines[i] = cartItems[i].ToCSV();
+                    MessageBox.Show("Shopping cart was not saved.", "☉ ‿ ⚆", MessageBoxButtons.OK);
                 }
+                else if (result == DialogResult.OK)
+                {
+                    string[] lines = new string[cartItems.Count];
 
-                File.WriteAllLines(SaveFolder + "/" + TempSaveFile, lines);
+                    for (int i = 0; i < cartItems.Count; i++)
+                    {
+                        lines[i] = cartItems[i].ToCSV();
+                    }
+
+                    File.WriteAllLines(saveFilePath, lines);
+                }
             }
         }
 
         private void LoadCartButton_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(SaveFolder)) 
+            if (!Directory.Exists(SaveFolder))
             {
                 Directory.CreateDirectory(SaveFolder);
             }
 
-            ClearCart();
-            if (File.Exists(SaveFolder + "/" + TempSaveFile)) 
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Csv file|*.csv";
+            fileDialog.Title = "Read from save file";
+            fileDialog.InitialDirectory = SaveFolder;
+
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.Cancel)
             {
-                var tmp = File.ReadAllLines(SaveFolder + "/" + TempSaveFile).
+                MessageBox.Show("No save file selected.", @"¯\_(ツ)_/¯", MessageBoxButtons.OK);
+            }
+            else if (result == DialogResult.OK)
+            {
+                ClearCart();
+                string saveFilePath = fileDialog.FileName;
+                var saveFileContents = File.ReadAllLines(saveFilePath).
                     Select(x => Product.FromCSV(x)).
                     OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
-                foreach (Product item in tmp)
+                foreach (Product product in saveFileContents)
                 {
-                    AddToCart(item);
+                    AddToCart(product);
                 }
             }
         }
