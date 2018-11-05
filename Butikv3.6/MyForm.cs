@@ -14,13 +14,13 @@ namespace Butikv3._6
         public Receipt(List<Product> ppp, double d)
         {
             Height= 500;
-            AutoScroll=true;
+            Dock = DockStyle.Fill;
             TableLayoutPanel ReceiptPanel = new TableLayoutPanel
             {
                 RowCount = 2,
-                AutoSize = true,
+                //AutoSize = true,
                 Dock = DockStyle.Fill,
-
+                AutoScroll = true,
             };
             Controls.Add(ReceiptPanel);
 
@@ -33,6 +33,7 @@ namespace Butikv3._6
                 ColumnCount = 3,
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0, 0, 0, 0),
+                AutoScroll = true,
             };
             ReceiptPanel.Controls.Add(panelProductsPrices);
 
