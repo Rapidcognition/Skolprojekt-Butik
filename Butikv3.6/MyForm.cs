@@ -14,13 +14,14 @@ namespace Butikv3._6
         public Receipt(List<Product> ppp, double d)
         {
             Height= 500;
+            MinimumSize = new Size(350, 500);
+
             Dock = DockStyle.Fill;
             TableLayoutPanel ReceiptPanel = new TableLayoutPanel
             {
                 RowCount = 2,
-                //AutoSize = true,
                 Dock = DockStyle.Fill,
-                AutoScroll = true,
+
             };
             Controls.Add(ReceiptPanel);
 
@@ -91,7 +92,7 @@ namespace Butikv3._6
             {
                 Label labelMoms = new Label
                 {
-                    Text = "         Moms: 25%         "+ d*0.25+
+                    Text = "Moms: 25%         "+ d*0.25+
                     "\nKEEP YOUR RECEIPT!",
                     TextAlign = ContentAlignment.BottomLeft,
                     Font = new Font("Arial", 9),
