@@ -19,95 +19,107 @@ namespace Butikv3._6
         public string imageLocation;
         public int nrOfProducts;
 
-        private void Product_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this.summary);
-        }
-
-        public Product GetProduct()
-        {
-            return this;
-        }
-
         public string ToCSV()
         {
             return $"{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";
         }
 
-        public static Product ToCSV(string CSVLine)
+        private static Product p;
+        /// <summary>
+        /// Abstracted away logic for how we sort items into our lists of products.
+        /// Class-method.
+        /// </summary>
+        /// <param name="CSVLine"></param>
+        /// <returns></returns>
+        public static Product FromCSV(string CSVLine)
         {
             string[] tmp = CSVLine.Split(',');
-            Product p = new Product
+            try
             {
-                price = int.Parse(tmp[0]),
-                name = tmp[1],
-                type = tmp[2],
-                summary = tmp[3],
-                imageLocation = tmp[4],
-                nrOfProducts = 1,
-            };
-            return p;
+                p = new Product
+                {
+                    price = int.Parse(tmp[0]),
+                    name = tmp[1],
+                    type = tmp[2],
+                    summary = tmp[3],
+                    imageLocation = tmp[4],
+                };
+                if(tmp.Length <= 5)
+                {
+                    p.nrOfProducts = 1;
+                }
+                else
+                {
+                    p.nrOfProducts = int.Parse(tmp[5]);
+                }
+                return p;
+            }
+            catch(Exception e)
+            {
+                // FormatException
+                MessageBox.Show("Problem med CSV-filens format.\n" + e.Message);
+                Environment.Exit(1);
+                return p;
+            }
         }
     }
 
     class StorePanel : ViewPanel
     {
-        #region properties used in storePanel and all functions
-        // Object that is constant, we use this reference
-        // to send objects from storePanel to cartPanel.
-        CartPanel cartPanelRef;
-
-        // Left panel and its child controls.
-        TableLayoutPanel leftPanel;
-        TableLayoutPanel searchControlerPanel;
         TextBox searchBox;
         Button searchButton;
-        Button typeButton;
-        FlowLayoutPanel typePanel;
-
-        FlowLayoutPanel itemPanel;
-        // Panel that we store all items in that is displayed in itemPanel.
-        TableLayoutPanel productPanel;
-        Label nameLabel;
-        Label priceLabel;
-        PictureBox pictureBox;
-        Button addToCartButton;
-        // The four controls listed above is used in storePanel,
-        // in method PopulateStore.
-        #endregion
-        
-        // Used when productpanel.Click to display
-        // a graphical change on clicked productPanel.
-        private TableLayoutPanel productPanelRef;
-
-        // Lists that contains our products and the type of our products
-        // when we populate typePanel and PopulateStore.
-        private List<Product> productList = new List<Product>();
+        FlowLayoutPanel PanelWithTypes;
+        // typeList is a database with every type of product.
         private List<string> typeList = new List<string>();
 
+        // Database of products.
+        private List<Product> productList = new List<Product>();
+        // Where we display our collection of products
+        FlowLayoutPanel PanelWithProducts;
+
+        /// <summary>
+        /// When an item is clicked in PanelWithProducts,
+        /// this variable is used as reference when the visual 
+        /// appearance of the controller changes.
+        /// </summary>
+        private TableLayoutPanel productPanelRef;
+
+        CartPanel cartPanelRef;
         public StorePanel(CartPanel reference)
         {
-            // So we always point to the same memory place when we add items to cartPanel.
             cartPanelRef = reference;
 
-            LeftPanel();
-            MiddlePanel();
             QueryFromCSVToList();
+
+            CreateTypePanel();
             PopulateTypePanel(typeList);
-            PopulateStore(productList);
+
+            CreateStorePanel();
+            PopulateStorePanel(productList);
+        }
+        /// <summary>
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
+        /// </summary>
+        private void QueryFromCSVToList()
+        {
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
+                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
+
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
 
-        #region Methods related to click events in LeftPanel.
+        #region Methods related to click events on LeftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(searchBox.Text == string.Empty)
             {
-                itemPanel.Controls.Clear();
-                PopulateStore(productList);
+                PanelWithProducts.Controls.Clear();
+                PopulateStorePanel(productList);
             }
             else
             {
-                itemPanel.Controls.Clear();
+                PanelWithProducts.Controls.Clear();
                 PopulateStoreByFilter(productList, searchBox.Text);
             }
         }
@@ -117,13 +129,13 @@ namespace Butikv3._6
             {
                 if(searchBox.Text == "")
                 {
-                    itemPanel.Controls.Clear();
-                    PopulateStore(productList);
+                    PanelWithProducts.Controls.Clear();
+                    PopulateStorePanel(productList);
                     e.SuppressKeyPress = true;
                 }
                 else
                 {
-                    itemPanel.Controls.Clear();
+                    PanelWithProducts.Controls.Clear();
                     PopulateStoreByFilter(productList, searchBox.Text);
                     e.SuppressKeyPress = true;
                 }
@@ -133,12 +145,101 @@ namespace Butikv3._6
         {
             Button b = (Button)sender;
             searchButton.Focus();
-            itemPanel.Controls.Clear();
+            PanelWithProducts.Controls.Clear();
             PopulateStoreByFilter(productList, b.Tag.ToString());
         }
         #endregion
+        private void CreateTypePanel()
+        {
+            TableLayoutPanel leftPanel = new TableLayoutPanel
+            {
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+            };
+            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+            this.SetRowSpan(leftPanel, 2);
+            this.Controls.Add(leftPanel, 0, 0);
 
-        #region Methods related to click events on MiddlePanel.
+            TableLayoutPanel searchPanel = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                Dock = DockStyle.Fill,
+                Height = 15,
+                Width = 55,
+            };
+            searchPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
+            searchPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
+            leftPanel.Controls.Add(searchPanel);
+
+            searchBox = new TextBox
+            {
+                Anchor = AnchorStyles.Top,
+                Margin = new Padding(-20, 1, -10, 0),
+                Width = 200,
+            };
+            searchPanel.Controls.Add(searchBox);
+            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
+            searchButton = new Button
+            {
+                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
+                BackgroundImageLayout = ImageLayout.Zoom,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 10),
+                Height = 25,
+            };
+            searchButton.Click += SearchButton_Click;
+            searchPanel.Controls.Add(searchButton);
+
+            // Only to create a small space between filterbox and typebuttons.
+            Label l = new Label
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+            };
+            leftPanel.Controls.Add(l);
+
+            PanelWithTypes = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                Width = 130,
+                Padding = new Padding(0),
+                AutoScroll = true,
+            };
+            leftPanel.Controls.Add(PanelWithTypes);
+        }
+        /// <summary>
+        /// Method to populate typePanel with the difference types of products in
+        /// (string)typeList.
+        /// </summary>
+        /// <param name="typeList"></param>
+        private void PopulateTypePanel(List<string> typeList)
+        {
+            foreach (var item in typeList)
+            {
+                Button typeButton = new Button
+                {
+                    Text = item,
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.DarkKhaki,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Top,
+                    Height = 30,
+                    Width = 112,
+                    Margin = new Padding(0, 5, 10, 0),
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
+                };
+                PanelWithTypes.Controls.Add(typeButton);
+                typeButton.Click += TypeButton_Click;
+                typeButton.Tag = item;
+            }
+        }
+
+        #region Methods related to click events on StorePanel.
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
@@ -177,18 +278,38 @@ namespace Butikv3._6
             }
         }
         #endregion
+        private void CreateStorePanel()
+        {
+            TableLayoutPanel MiddlePanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+            this.SetRowSpan(MiddlePanel, 2);
+            this.Controls.Add(MiddlePanel, 1, 0);
 
+            PanelWithProducts = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                BorderStyle = BorderStyle.Fixed3D,
+                Margin = new Padding(0, 4, 0, 0),
+            };
+            MiddlePanel.Controls.Add(PanelWithProducts);
 
+        }
         /// <summary>
-        /// Single method to deal with the logic as to how we display 
-        /// products in productPanel store.
+        /// Where populate store with products.
         /// </summary>
         /// <param name="productList"></param>
-        private void PopulateStore(List<Product> productList)
+        private void PopulateStorePanel(List<Product> productList)
         {
             foreach (Product item in productList)
             {
-                productPanel = new TableLayoutPanel
+                TableLayoutPanel itemPanel = new TableLayoutPanel
                 {
                     ColumnCount = 4,
                     RowCount = 1,
@@ -197,32 +318,40 @@ namespace Butikv3._6
                     Width = 300,
                     Margin = new Padding(0),
                 };
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                itemPanel.Controls.Add(productPanel);
+                #region itemPanel ColumnStyles
+                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
+                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+                itemPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                #endregion
+                PanelWithProducts.Controls.Add(itemPanel);
+                itemPanel.Click += ProductPanel_Click;
+                itemPanel.Tag = item;
 
-                pictureBox = new PictureBox
+                PictureBox itemPictureBox = new PictureBox
                 {
                     BorderStyle = BorderStyle.Fixed3D,
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Dock = DockStyle.Top,
                     Image = Image.FromFile(item.imageLocation),
                 };
-                productPanel.Controls.Add(pictureBox);
+                itemPanel.Controls.Add(itemPictureBox);
+                itemPictureBox.Click += ProductPanel_Click;
+                itemPictureBox.Tag = item;
 
-                nameLabel = new Label
+                Label itemNameLabel = new Label
                 {
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
                     Anchor = AnchorStyles.Left,
                     Font = new Font("Calibri", 10,FontStyle.Bold),
                 };
-                productPanel.Controls.Add(nameLabel);
+                itemPanel.Controls.Add(itemNameLabel);
+                itemNameLabel.Click += ProductPanel_Click;
+                itemNameLabel.Tag = item;
 
-                priceLabel = new Label
+                Label itemPriceLabel = new Label
                 {
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
@@ -230,9 +359,11 @@ namespace Butikv3._6
                     Font = new Font("Calibri", 9, FontStyle.Bold),
 
                 };
-                productPanel.Controls.Add(priceLabel);
+                itemPanel.Controls.Add(itemPriceLabel);
+                itemPriceLabel.Click += ProductPanel_Click;
+                itemPriceLabel.Tag = item;
 
-                addToCartButton = new Button
+                Button itemAddToCartButton = new Button
                 {
                     Text = "Lägg i kundvagn",
                     TextAlign = ContentAlignment.MiddleCenter,
@@ -243,185 +374,42 @@ namespace Butikv3._6
                     Width = 82,
                     Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
-                productPanel.Controls.Add(addToCartButton);
-                pictureBox.Click += ProductPanel_Click;
-                pictureBox.Tag = item;
-
-                productPanel.Click += ProductPanel_Click;
-                nameLabel.Click += ProductPanel_Click;
-                priceLabel.Click += ProductPanel_Click;
-                addToCartButton.Click += AddToCartButton_Click;
-
-                productPanel.Tag = item;
-                nameLabel.Tag = item;
-                priceLabel.Tag = item;
-                addToCartButton.Tag = item;
+                itemPanel.Controls.Add(itemAddToCartButton);
+                itemAddToCartButton.Click += AddToCartButton_Click;
+                itemAddToCartButton.Tag = item;
             }
         }
 
         /// <summary>
-        /// Method to populate typePanel with the difference types of products in
-        /// (string)typeList.
-        /// </summary>
-        /// <param name="typeList"></param>
-        private void PopulateTypePanel(List<string> typeList)
-        {
-            foreach (var item in typeList)
-            {
-                typeButton = new Button
-                {
-                    Text = item,
-                    FlatStyle = FlatStyle.Popup,
-                    BackColor = Color.DarkKhaki,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Top,
-                    Height = 30,
-                    Width = 112,
-                    Margin = new Padding(0,5,10,0),
-                    Font = new Font("Calibri", 10, FontStyle.Bold),
-                };
-                typePanel.Controls.Add(typeButton);
-                typeButton.Click += TypeButton_Click;
-                typeButton.Tag = item;
-            }
-        }
-
-        /// <summary>
-        /// This method is called upon when the search-function is used.
+        /// This method is called upon when the search-function, search-button and
+        /// when the typeButtons are used, to filter store.
         /// </summary>
         /// <param name="productList"></param>
         /// <param name="text"></param>
         private void PopulateStoreByFilter(List<Product> productList, string text)
         {
             text = text.Trim();
-            var rgx = new Regex(@"^[0-9]");
-
-            // 
             string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-            // Finds all occurances based on a condition, if its true, we find all occurances of p.name or p.type.
-            // if false, we find all occurances of the integer and down to lowest inclusively.
-            var foo = productList.Where(p => rgx.IsMatch(rgxtext) ? 
-                (int.Parse(text) >= p.price) :
-                (Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)))
-                .Distinct().ToList();
+            // A-Za-z for all english letters, \p{L} is for "non" english letters.
+            // \x20 is hexadecimal for space.
+            // So any trace of aforementioned will trigger the first condition.
+            var rgxstring = new Regex(@"[A-Z a-z \p{L} \x20]");
 
-            if (foo.Count != 0 && rgx.IsMatch(rgxtext))
+            if(rgxstring.IsMatch(rgxtext))
             {
-                foo = foo.OrderByDescending(p => p.price).ToList();
-                PopulateStore(foo);
+                var tmp = productList.
+                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
+                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
+                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
+
+                PopulateStorePanel(tmp);
             }
             else
             {
-                PopulateStore(foo);
+                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
+                PopulateStorePanel(tmp);
             }
-        }
-
-        /// <summary>
-        /// Abstracted away logic for left-side panel for readability.
-        /// </summary>
-        private void LeftPanel()
-        {
-            leftPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0),
-            };
-            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.SetRowSpan(leftPanel, 2);
-            this.Controls.Add(leftPanel, 0, 0);
-
-            searchControlerPanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                Dock = DockStyle.Fill,
-                Height = 15,
-                Width = 55,
-            };
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
-            searchControlerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25));
-            leftPanel.Controls.Add(searchControlerPanel);
-
-            searchBox = new TextBox
-            {
-                Anchor = AnchorStyles.Top,
-                Margin = new Padding(-20, 1, -10, 0),
-                Width = 200,
-            };
-            searchControlerPanel.Controls.Add(searchBox);
-            searchBox.KeyDown += new KeyEventHandler(SearchBox_Enter);
-            searchButton = new Button
-            {
-                BackgroundImage = Image.FromFile(@"Icons/searchButton.png"),
-                BackgroundImageLayout = ImageLayout.Zoom,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 10),
-                Height = 25,
-            };
-            searchButton.Click += SearchButton_Click;
-            searchControlerPanel.Controls.Add(searchButton);
-
-            // Only to create a small space between filterbox and typebuttons.
-            Label l = new Label
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-            };
-            leftPanel.Controls.Add(l);
-
-            typePanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Width = 130,
-                Padding = new Padding(0),
-                AutoScroll = true,
-            };
-
-            leftPanel.Controls.Add(typePanel);
-        }
-
-        /// <summary>
-        /// Abstracted away logic for the right-side panel for readability.
-        /// </summary>
-        private void MiddlePanel()
-        {
-            TableLayoutPanel rightPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 0),
-            };
-            this.SetRowSpan(rightPanel, 2);
-            this.Controls.Add(rightPanel, 1, 0);
-
-            itemPanel = new FlowLayoutPanel
-            {
-                FlowDirection = FlowDirection.LeftToRight,
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                BorderStyle = BorderStyle.Fixed3D,
-                Margin = new Padding(0, 4, 0, 0),
-            };
-            rightPanel.Controls.Add(itemPanel);
-
-        }
-        
-        /// <summary>
-        /// Method to ReadAllLines from database and store in (products)list,
-        /// also store all the different types in a (string)list.
-        /// </summary>
-        private void QueryFromCSVToList()
-        {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.ToCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
-
-            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
         }
     }
 }

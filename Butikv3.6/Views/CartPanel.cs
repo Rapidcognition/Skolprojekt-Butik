@@ -350,22 +350,13 @@ namespace Butikv3._6
             ClearCart();
             if (File.Exists(SaveFolder + "/" + TempSaveFile)) 
             {
-                string[][] path = File.ReadAllLines(SaveFolder + "/" + TempSaveFile).Select(x => x.Split(',')).
-                Where(x => x[0] != "" && x[1] != "" && x[2] != "" && x[3] != "" && x[4] != "" && x[5] != "").
-                ToArray();
+                var tmp = File.ReadAllLines(SaveFolder + "/" + TempSaveFile).
+                    Select(x => Product.FromCSV(x)).
+                    OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
-                for(int i = 0; i < path.Length; i++)
+                foreach (Product item in tmp)
                 {
-                    Product tmp = new Product
-                    {
-                        price = int.Parse(path[i][0]),
-                        name = path[i][1],
-                        type = path[i][2],
-                        summary = path[i][3],
-                        imageLocation = path[i][4],
-                        nrOfProducts = int.Parse(path[i][5]),
-                    };
-                    AddToCart(tmp);
+                    AddToCart(item);
                 }
             }
         }
