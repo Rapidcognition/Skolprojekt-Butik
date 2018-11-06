@@ -425,6 +425,4 @@ namespace Butikv3._6
         }
 
     }
-
-
 }
