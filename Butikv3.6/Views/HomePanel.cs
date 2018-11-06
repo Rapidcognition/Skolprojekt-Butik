@@ -44,7 +44,7 @@ namespace Butikv3._6
 
                     foreach (Product p in products)
                     {
-                        if(foo.type == p.type || !popularItems.Contains(foo) && counter < 3)
+                        if(foo.type == p.type && !popularItems.Contains(foo) && counter < 3)
                         {
                             popularItems.Add(p);
                             counter++;
