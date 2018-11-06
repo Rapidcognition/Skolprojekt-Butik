@@ -19,12 +19,23 @@ namespace Butikv3._6
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.ColumnCount = 3;
-            this.RowCount = 2;
+            this.RowCount = 3;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
+            Label topThree = new Label
+            {
+                Text = "Top three types and top three items of each type",
+                Font = new Font("Calibri", 13, FontStyle.Bold),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+
+            };
+            this.SetColumnSpan(topThree, 3);
+            this.Controls.Add(topThree);
             #endregion
 
             PopulateHomePanelList();
@@ -94,7 +105,7 @@ namespace Butikv3._6
                     Font = new Font("Calibri", 13, FontStyle.Bold),
                     TextAlign = ContentAlignment.MiddleRight,
                 };
-                this.Controls.Add(title, counter, 0);
+                this.Controls.Add(title, counter, 1);
                 FlowLayoutPanel panel = new FlowLayoutPanel
                 {
                     FlowDirection = FlowDirection.LeftToRight,
