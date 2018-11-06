@@ -23,10 +23,12 @@ namespace Butikv3._6
         private FlowLayoutPanel itemPanel;
 
         private List<Product> cartItems = new List<Product>();
-        private List<Product> productList;
+        private List<Product> productList = new List<Product>();
 
         public CartPanel()
         {
+            QueryFromCSVToList();
+
             #region left menu
             TableLayoutPanel leftMenuPanel = new TableLayoutPanel
             {
@@ -234,11 +236,35 @@ namespace Butikv3._6
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
+            List<string> lines = new List<string>();
+            
+            foreach (Product product in productList)
+            {
+                if(product.stage2)
+                {
+                    product.stage3 = true;
+                }
+                product.CalculateInterestPoints();
+                
+                
+                foreach(Product p in productList)
+                {
+                    lines.Add(p.ToDatabaseCSV());
+                }
+                
+            }
+
+
+            foreach(Product product in productList)
+            {
+                Console.WriteLine($"{product.name}: {product.stage1}, {product.stage2}, {product.stage3}");
+
+            }
+
             receiptForm = new Receipt(cartItems ,Sum);
             receiptForm.Show();
-
-            // TODO: loop through cartItems and set Stage 3 to true
-            // Add 
+            
+            //File.WriteAllLines("TextFile1.csv", lines);
         }
 
         public void AddToCart(Product product)
@@ -260,7 +286,6 @@ namespace Butikv3._6
             }
             else
             {
-                // TODO: set stage 2 to true
                 product.stage2 = true;
                 cartItems.Add(product);
                 TableLayoutPanel productPanel = new TableLayoutPanel
@@ -420,14 +445,12 @@ namespace Butikv3._6
         private void ProductCounter_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown productCounterRef = (NumericUpDown)sender;
+            
 
             if (productCounterRef.Value == 0)
             {
-                
                 // get the selected product from cart and remove it from cartItems
                 Product p = (Product)(productCounterRef.Parent as TableLayoutPanel).Tag;
-
-                // TODO: Set stage 2 back to false
                 p.stage2 = false;
                 cartItems.Remove(p);
 
