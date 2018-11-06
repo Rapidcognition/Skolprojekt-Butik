@@ -176,6 +176,10 @@ namespace Butikv3._6
             #endregion
         }
 
+        public List<Product> GetProductList()
+        {
+            return productList;
+        }
         /// <summary>
         /// Method to ReadAllLines from database and store in (products)list,
         /// also store all the different types in a (string)list.
