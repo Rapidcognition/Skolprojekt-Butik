@@ -423,7 +423,6 @@ namespace Butikv3._6
                 itemAddToCartButton.Tag = item;
             }
         }
-
         
         public List<Product> GetDataBaseRef()
         {
