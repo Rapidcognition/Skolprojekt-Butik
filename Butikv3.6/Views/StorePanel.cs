@@ -423,38 +423,6 @@ namespace Butikv3._6
                 itemAddToCartButton.Tag = item;
             }
         }
-
-        /// <summary>
-        /// This method is called upon when the search-function, search-button and
-        /// when the typeButtons are used, to filter store.
-        /// </summary>
-        /// <param name="productList"></param>
-        /// <param name="text"></param>
-        private void PopulateStoreByFilter(List<Product> productList, string text)
-        {
-            text = text.Trim();
-            string rgxtext = Regex.Escape(text).Replace("\\*", ".*").Replace("\\?", ".");
-            // A-Za-z for all english letters, \p{L} is for "non" english letters.
-            // \x20 is hexadecimal for space.
-            // So any trace of aforementioned will trigger the first condition.
-            var rgxstring = new Regex(@"[A-Z a-z \p{L} \x20]");
-
-            if(rgxstring.IsMatch(rgxtext))
-            {
-                var tmp = productList.
-                    Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
-                    || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
-                    OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
-                    || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
-
-                PopulateStorePanel(tmp);
-            }
-            else
-            {
-                var tmp = productList.Where(p => p.price <= int.Parse(rgxtext)).OrderByDescending(p => p.price).ToList();
-                PopulateStorePanel(tmp);
-            }
-        }
         
         public List<Product> GetDataBaseRef()
         {
