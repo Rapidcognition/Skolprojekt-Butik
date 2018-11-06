@@ -133,7 +133,6 @@ namespace Butikv3._6
         public MyForm()
         {
             this.MinimumSize = new Size(800, 500);
-            this.MaximumSize = new Size(1000, 700);
             this.Font = new Font("Calibri", 12);
 
             TableLayoutPanel mainPanel = new TableLayoutPanel
@@ -143,7 +142,7 @@ namespace Butikv3._6
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 Padding = new Padding(0),
             };
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));  
             mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             this.Controls.Add(mainPanel);
 
