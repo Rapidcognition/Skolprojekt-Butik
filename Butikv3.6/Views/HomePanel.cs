@@ -33,12 +33,12 @@ namespace Butikv3._6
             List<Product> products = cartPanelRef.GetProductList().OrderByDescending(x => x.interestPoints).ToList();
             Product tmp = new Product();
             int sum = 0;
-            List<Product> popularItems = new List<Product>();
             int outerCounter = 0;
             while(outerCounter < 3)
             {
                 foreach (Product item in products)
                 {
+                    List<Product> popularItems = new List<Product>();
                     int counter = 0;
                     Product foo = item;
 
@@ -50,12 +50,13 @@ namespace Butikv3._6
                             counter++;
                         }
                     }
-                }
-                // Suspicious line of code!
-                if(!mainProductList.Contains(popularItems))
-                    mainProductList.Add(popularItems);
+                    // Suspicious line of code!
+                    if(!mainProductList.Contains(popularItems))
+                        mainProductList.Add(popularItems);
 
-                outerCounter++;
+                    outerCounter++;
+                }
+
             }
 
 
