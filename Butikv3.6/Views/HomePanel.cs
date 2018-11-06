@@ -11,10 +11,11 @@ namespace Butikv3._6
     class HomePanel : TableLayoutPanel
     {
         CartPanel cartPanelRef;
-        List<Product> homePanelList;
+        List<List<Product>> mainProductList = new List<List<Product>>();
         public HomePanel(CartPanel reference)
         {
             cartPanelRef = reference;
+            PopulateHomePanelList();
             #region specs
             this.ColumnCount = 3;
             this.RowCount = 2;
@@ -26,48 +27,47 @@ namespace Butikv3._6
             #endregion
 
         }
-        public void PopulateHomePanel()
+        public void PopulateHomePanelList()
         {
-            List<List<Product>> mainProductList = new List<List<Product>>();
 
-            List<Product> products = cartPanelRef.GetProductList().OrderByDescending(x => x.interestPoints).ToList();
+            List<Product> products = cartPanelRef.GetProductList().
+                OrderByDescending(x => x.interestPoints).ToList();
             Product tmp = new Product();
-            int sum = 0;
             int outerCounter = 0;
             while(outerCounter < 3)
             {
-                foreach (Product item in products)
+                foreach (Product p in products)
                 {
                     List<Product> popularItems = new List<Product>();
-                    int counter = 0;
-                    Product foo = item;
-
-                    foreach (Product p in products)
+                    int innerCounter = 0;
+                    if (p.stage1 == true)
+                        continue;
+                    else
                     {
-                        if(foo.type == p.type && !popularItems.Contains(foo) && counter < 3)
+                        foreach (Product item in products)
                         {
-                            popularItems.Add(p);
-                            counter++;
+                            if (item.type == p.type && item.stage1 == false && innerCounter < 3 && item.stage2 == false)
+                            {
+                                popularItems.Add(item);
+                                item.stage1 = true;
+                                innerCounter++;
+                            }
+                            if (popularItems.Count != 3 || item.stage1 == true)
+                                continue;
+                            else
+                                break;
+
                         }
+                        if (popularItems.Count == 3)
+                        {
+                            mainProductList.Add(popularItems);
+                            outerCounter++;
+                        }
+                        else
+                            p.stage2 = true;
                     }
-                    // Suspicious line of code!
-                    if(!mainProductList.Contains(popularItems))
-                        mainProductList.Add(popularItems);
-
-                    outerCounter++;
-                }
-
-            }
-
-
-            foreach (Product item in products)
-            {
-                if(tmp.type == item.type)
-                {
-                    sum += item.interestPoints;
                 }
             }
-            popularItems.Add(tmp);
         }
     }
 }

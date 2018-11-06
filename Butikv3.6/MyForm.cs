@@ -178,6 +178,7 @@ namespace Butikv3._6
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BorderStyle = BorderStyle.Fixed3D,
             };
+            headerPicture.Click += HeaderPicture_Click;
             topPanel.Controls.Add(headerPicture);
 
             Button cartButton = new Button
@@ -197,7 +198,17 @@ namespace Butikv3._6
 
             mainPanel.Controls.Add(store, 0, 1);
             mainPanel.Controls.Add(cart, 0, 1);
+            mainPanel.Controls.Add(home, 0, 1);
             cart.Hide();
+            store.Hide();
+        }
+
+        private void HeaderPicture_Click(object sender, EventArgs e)
+        {
+            home.Show();
+            cart.Hide();
+            store.Hide();
+            ActiveControl = null;
         }
 
         private void ViewChangedButton_Click(object sender, EventArgs e)
@@ -205,13 +216,15 @@ namespace Butikv3._6
             if((sender as Button).Name == "Store")
             {
                 cart.Hide();
+                home.Hide();
                 store.Show();
                 ActiveControl = null;
             }
             else if((sender as Button).Name == "Cart")
             {
                 store.Hide();
-                cart.Show();
+                home.Hide();
+                    cart.Show();
                 ActiveControl = null;
             }
         }
