@@ -189,7 +189,7 @@ namespace Butikv3._6
         private void QueryFromCSVToList()
         {
             productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
+                OrderByDescending(x => x.interestPoints).ToList();
         }
 
         private void ClearText(object sender, EventArgs e)
@@ -246,25 +246,26 @@ namespace Butikv3._6
                 }
                 product.CalculateInterestPoints();
                 
-                
-                foreach(Product p in productList)
-                {
-                    lines.Add(p.ToDatabaseCSV());
-                }
-                
+                lines.Add(product.ToDatabaseCSV());
             }
 
-
-            foreach(Product product in productList)
+            foreach (Product product in productList)
             {
                 Console.WriteLine($"{product.name}: {product.stage1}, {product.stage2}, {product.stage3}");
-
             }
 
             receiptForm = new Receipt(cartItems ,Sum);
             receiptForm.Show();
             
-            //File.WriteAllLines("TextFile1.csv", lines);
+            try
+            {
+                File.WriteAllLines("TextFile1.csv", lines);
+            }
+            catch
+            {
+                // If the program decides to crash, or something.
+                File.WriteAllLines("TextFile1.csv", lines);
+            }
         }
 
         public void AddToCart(Product product)
