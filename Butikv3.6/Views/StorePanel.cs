@@ -429,6 +429,4 @@ namespace Butikv3._6
             return this.productList;
         }
     }
-
-
 }
