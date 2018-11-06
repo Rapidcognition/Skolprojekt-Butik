@@ -21,9 +21,9 @@ namespace Butikv3._6
         private const string TempSaveFile = "saveFile.csv";
 
         private FlowLayoutPanel itemPanel;
-        private List<Product> cartItems = new List<Product>();
-        private List<Product> productListRef;
 
+        private List<Product> cartItems = new List<Product>();
+        private List<Product> productList;
 
         public CartPanel()
         {
@@ -176,9 +176,14 @@ namespace Butikv3._6
             #endregion
         }
 
-        public void SetDataBaseReference(List<Product> productListRef)
+        /// <summary>
+        /// Method to ReadAllLines from database and store in (products)list,
+        /// also store all the different types in a (string)list.
+        /// </summary>
+        private void QueryFromCSVToList()
         {
-            this.productListRef = productListRef;
+            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
+                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
         }
 
         private void ClearText(object sender, EventArgs e)
@@ -225,8 +230,11 @@ namespace Butikv3._6
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
-            receiptForm = new Receipt(cartItems,Sum);
+            receiptForm = new Receipt(cartItems ,Sum);
             receiptForm.Show();
+
+            // TODO: loop through cartItems and set Stage 3 to true
+            // Add 
         }
 
         public void AddToCart(Product product)
@@ -248,6 +256,8 @@ namespace Butikv3._6
             }
             else
             {
+                // TODO: set stage 2 to true
+                product.stage2 = true;
                 cartItems.Add(product);
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
@@ -409,8 +419,12 @@ namespace Butikv3._6
 
             if (productCounterRef.Value == 0)
             {
+                
                 // get the selected product from cart and remove it from cartItems
                 Product p = (Product)(productCounterRef.Parent as TableLayoutPanel).Tag;
+
+                // TODO: Set stage 2 back to false
+                p.stage2 = false;
                 cartItems.Remove(p);
 
                 // dispose the parent container when the counter reaches 0
@@ -439,6 +453,11 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+
+                Console.WriteLine(productRef.stage1);
+                Console.WriteLine(productRef.stage2);
+                Console.WriteLine(productRef.stage3);
+
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
@@ -447,6 +466,10 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+
+                Console.WriteLine(productRef.stage1);
+                Console.WriteLine(productRef.stage2);
+                Console.WriteLine(productRef.stage3);
             }
             else if(sender.GetType() == typeof(Label))
             {
@@ -455,7 +478,12 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
+
+                Console.WriteLine(productRef.stage1);
+                Console.WriteLine(productRef.stage2);
+                Console.WriteLine(productRef.stage3);
             }
+            
         }
 
         /// <summary>

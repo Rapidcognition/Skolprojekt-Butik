@@ -95,7 +95,6 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
 
-            QueryFromCSVToList();
 
             CreateTypePanel();
             PopulateTypePanel(typeList);
@@ -103,17 +102,7 @@ namespace Butikv3._6
             CreateStorePanel();
             PopulateStorePanel(productList);
         }
-        /// <summary>
-        /// Method to ReadAllLines from database and store in (products)list,
-        /// also store all the different types in a (string)list.
-        /// </summary>
-        private void QueryFromCSVToList()
-        {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
-
-            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
-        }
+        
         /// <summary>
         /// This method is called upon when the search-function, search-button and
         /// when the typeButtons are used, to filter store.
