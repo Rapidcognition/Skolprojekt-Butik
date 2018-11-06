@@ -193,6 +193,7 @@ namespace Butikv3._6
 
             cart = new CartPanel();
             store = new StorePanel(cart);
+            cart.SetDataBaseReference(store.GetDataBaseRef());
             
 
             mainPanel.Controls.Add(store, 0, 1);

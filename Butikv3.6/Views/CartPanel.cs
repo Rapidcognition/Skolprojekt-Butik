@@ -22,6 +22,8 @@ namespace Butikv3._6
 
         private FlowLayoutPanel itemPanel;
         private List<Product> cartItems = new List<Product>();
+        private List<Product> productListRef;
+
 
         public CartPanel()
         {
@@ -172,6 +174,11 @@ namespace Butikv3._6
             };
             sumOfProductsPanel.Controls.Add(sumLabel);
             #endregion
+        }
+
+        public void SetDataBaseReference(List<Product> productListRef)
+        {
+            this.productListRef = productListRef;
         }
 
         private void ClearText(object sender, EventArgs e)

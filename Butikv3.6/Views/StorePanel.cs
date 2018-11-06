@@ -411,5 +411,12 @@ namespace Butikv3._6
                 PopulateStorePanel(tmp);
             }
         }
+        
+        public List<Product> GetDataBaseRef()
+        {
+            return this.productList;
+        }
     }
+
+
 }
