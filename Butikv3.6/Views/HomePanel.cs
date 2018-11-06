@@ -72,6 +72,15 @@ namespace Butikv3._6
                     }
                 }
             }
+
+            // To set all the "stages" of our products back to false,
+            // to prevent their interestPoints from being corrupted.
+            foreach (Product item in products)
+            {
+                item.stage1 = false;
+                item.stage2 = false;
+                item.stage3 = false;
+            }
         }
 
         public void PopulateHomePanel()
@@ -79,7 +88,12 @@ namespace Butikv3._6
             int counter = 0;
             foreach (List<Product> listItem in mainProductList)
             {
-                Label title = new Label { Text = listItem[counter].type};
+                Label title = new Label
+                {
+                    Text = listItem[counter].type,
+                    Font = new Font("Calibri", 13, FontStyle.Bold),
+                    TextAlign = ContentAlignment.MiddleRight,
+                };
                 this.Controls.Add(title, counter, 0);
                 FlowLayoutPanel panel = new FlowLayoutPanel
                 {
