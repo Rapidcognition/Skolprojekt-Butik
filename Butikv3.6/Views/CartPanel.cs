@@ -189,7 +189,8 @@ namespace Butikv3._6
         private void QueryFromCSVToList()
         {
             productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
-                OrderByDescending(x => x.interestPoints).ToList();
+                OrderByDescending(x => x.name).
+                OrderByDescending(x => x.interestPoints).ToList(); 
         }
 
         private void ClearText(object sender, EventArgs e)
