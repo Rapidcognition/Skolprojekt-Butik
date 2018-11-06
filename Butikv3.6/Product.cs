@@ -23,6 +23,16 @@ namespace Butikv3._6
         public bool stage2;
         public bool stage3;
 
+        public Product()
+        {
+            price = 0;
+            name = string.Empty;
+            type = string.Empty;
+            summary = string.Empty;
+            imageLocation = string.Empty;
+            nrOfProducts = 0;
+        }
+
         public string ToCSV()
         {
             return $"{interestPoints},{price},{name},{type},{summary},{imageLocation},{nrOfProducts}";

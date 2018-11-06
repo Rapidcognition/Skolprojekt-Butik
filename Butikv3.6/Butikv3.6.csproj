@@ -59,6 +59,9 @@
     <Compile Include="Views\CartPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\HomePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\StorePanel.cs" />
     <Compile Include="Views\ViewPanel.cs">
       <SubType>Component</SubType>
