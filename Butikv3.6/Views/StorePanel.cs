@@ -79,7 +79,6 @@ namespace Butikv3._6
         private List<string> typeList = new List<string>();
 
         // Database of products.
-        private List<Product> productList = new List<Product>();
         // Where we display our collection of products
         FlowLayoutPanel PanelWithProducts;
 
@@ -95,25 +94,15 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
 
-            QueryFromCSVToList();
-
+            CreateTypeList();
             CreateTypePanel();
             PopulateTypePanel(typeList);
 
             CreateStorePanel();
-            PopulateStorePanel(productList);
+            //TODO: implementera metod i cartPanel för GetProductList().
+            PopulateStorePanel(cartPanelRef.GetProductList());
         }
-        /// <summary>
-        /// Method to ReadAllLines from database and store in (products)list,
-        /// also store all the different types in a (string)list.
-        /// </summary>
-        private void QueryFromCSVToList()
-        {
-            productList = File.ReadAllLines(@"TextFile1.csv").Select(x => Product.FromCSV(x)).
-                OrderBy(x => x.name).OrderBy(x => x.type).ToList();
 
-            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
-        }
         /// <summary>
         /// This method is called upon when the search-function, search-button and
         /// when the typeButtons are used, to filter store.
@@ -145,11 +134,17 @@ namespace Butikv3._6
                 PopulateStorePanel(tmp);
             }
         }
+        private void CreateTypeList()
+        {
+            List<Product> productList = cartPanelRef.GetProductList();
+            typeList = productList.Select(x => x.type).Distinct().OrderBy(x => x).ToList();
+        }
 
         #region Methods related to click events on LeftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            if(searchBox.Text == string.Empty)
+            var productList = cartPanelRef.GetProductList();
+            if (searchBox.Text == string.Empty)
             {
                 PanelWithProducts.Controls.Clear();
                 PopulateStorePanel(productList);
@@ -162,7 +157,8 @@ namespace Butikv3._6
         }
         private void SearchBox_Enter(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            var productList = cartPanelRef.GetProductList();
+            if (e.KeyCode == Keys.Enter)
             {
                 if(searchBox.Text == "")
                 {
@@ -180,6 +176,7 @@ namespace Butikv3._6
         }
         private void TypeButton_Click(object sender, EventArgs e)
         {
+            var productList = cartPanelRef.GetProductList();
             Button b = (Button)sender;
             searchButton.Focus();
             PanelWithProducts.Controls.Clear();
@@ -422,11 +419,6 @@ namespace Butikv3._6
                 itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
             }
-        }
-        
-        public List<Product> GetDataBaseRef()
-        {
-            return this.productList;
         }
     }
 }
