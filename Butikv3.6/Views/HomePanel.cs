@@ -51,7 +51,10 @@ namespace Butikv3._6
                         }
                     }
                 }
-                mainProductList.Add(popularItems);
+                // Suspicious line of code!
+                if(!mainProductList.Contains(popularItems))
+                    mainProductList.Add(popularItems);
+
                 outerCounter++;
             }
 
