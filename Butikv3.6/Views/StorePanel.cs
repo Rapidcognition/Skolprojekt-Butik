@@ -39,7 +39,6 @@ namespace Butikv3._6
             PopulateTypePanel(typeList);
 
             CreateStorePanel();
-            //TODO: implementera metod i cartPanel för GetProductList().
             PopulateStorePanel(cartPanelRef.GetProductList());
         }
 
@@ -66,6 +65,8 @@ namespace Butikv3._6
                     OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
                     || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
 
+
+                tmp = tmp.OrderBy(x => x.name).ToList();
                 PopulateStorePanel(tmp);
             }
             else

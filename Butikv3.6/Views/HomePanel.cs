@@ -26,16 +26,15 @@ namespace Butikv3._6
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             Label topThree = new Label
             {
-                Text = "Topp tre sektioner och topp tre av deras produkter.",
+                Text = "Topp tre kategorier och deras populäraste produkter.",
                 Font = new Font("Calibri", 13, FontStyle.Bold),
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
-
             };
             this.SetColumnSpan(topThree, 3);
             this.Controls.Add(topThree);
@@ -43,56 +42,50 @@ namespace Butikv3._6
 
             PopulateHomePanelList();
             PopulateHomePanel();
-
         }
 
         public void PopulateHomePanelList()
         {
-
             List<Product> products = cartPanelRef.GetProductList().
                 OrderByDescending(x => x.interestPoints).ToList();
             int outerCounter = 0;
             var types = products.Select(x => x.type).Distinct().ToList();
 
-            while (mainProductList.Count != types.Count)
+            foreach(Product p in products)
             {
-                foreach(Product p in products)
+                Product tp = new Product();
+                List<Product> popularItems = new List<Product>();
+                int innerCounter = 0;
+                foreach (Product item in products)
                 {
-                    Product tp = new Product();
-                    List<Product> popularItems = new List<Product>();
-                    int innerCounter = 0;
-                    
-                    foreach (Product item in products)
+                    if (item.type == p.type && item.stage1 == false
+                        && innerCounter < 3 && item.stage2 == false)
                     {
-                        if (item.type == p.type && item.stage1 == false && innerCounter < 3
-                            && item.stage2 == false)
-                        {
-                            popularItems.Add(item);
-                            item.stage1 = true;
-                            innerCounter++;
-                            p.totalPoints += item.interestPoints;
-                        }
-                        else if (popularItems.Count != 3 || item.stage1 == true)
-                            continue;
+                        popularItems.Add(item);
+                        item.stage1 = true;
+                        innerCounter++;
+                        p.totalPoints += item.interestPoints;
                     }
-                    if (popularItems.Count == 3)
-                    {
-                        mainProductList.Add(popularItems);
-                        int foo = CalculateTotalInterestPoints(popularItems);
-                        popularItems[0].totalPoints = foo;
-                        outerCounter++;
-                    }
-                    else
-                    {
-                        outerCounter++;
-                        p.stage2 = true;
-                    }
+                    else if (popularItems.Count != 3 || item.stage1 == true)
+                        continue;
+                }
+                if (popularItems.Count == 3)
+                {
+                    mainProductList.Add(popularItems);
+                    int foo = CalculateTotalInterestPoints(popularItems);
+                    popularItems[0].totalPoints = foo;
+                    outerCounter++;
+                }
+                else
+                {
+                    outerCounter++;
+                    p.stage2 = true;
                 }
             }
 
-            for (int i = 0; i < types.Count - 1; i++)
+            for (int i = 0; i < mainProductList.Count - 1; i++)
             {
-                for (int k = 0; k < types.Count - 1; k++)
+                for (int k = 0; k < mainProductList.Count - 1; k++)
                 {
                     if (mainProductList[k][0].totalPoints < mainProductList[k + 1][0].totalPoints)
                     {
@@ -141,15 +134,17 @@ namespace Butikv3._6
                         TableLayoutPanel productPanel = new TableLayoutPanel
                         {
                             ColumnCount = 3,
+                            RowCount = 2,
                             Anchor = AnchorStyles.Top,
-                            Height = 60,
+                            Height = 70,
                             Width = 300,
                             Margin = new Padding(0),
                         };
                         productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
-                        productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
-                        productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
-                        productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                        productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
+                        productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37));
+                        productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                        productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
                         panel.Controls.Add(productPanel);
                         productPanel.Click += ProductPanel_Click;
                         productPanel.Tag = item;
@@ -158,9 +153,10 @@ namespace Butikv3._6
                         {
                             BorderStyle = BorderStyle.Fixed3D,
                             SizeMode = PictureBoxSizeMode.StretchImage,
-                            Dock = DockStyle.Top,
+                            Dock = DockStyle.Fill,
                             Image = Image.FromFile(item.imageLocation),
                         };
+                        productPanel.SetRowSpan(itemPictureBox, 2);
                         productPanel.Controls.Add(itemPictureBox);
                         itemPictureBox.Click += ProductPanel_Click;
                         itemPictureBox.Tag = item;
@@ -168,9 +164,9 @@ namespace Butikv3._6
                         Label itemNameLabel = new Label
                         {
                             Text = item.name,
-                            TextAlign = ContentAlignment.MiddleLeft,
-                            Anchor = AnchorStyles.Left,
-                            Font = new Font("Calibri", 10, FontStyle.Bold),
+                            TextAlign = ContentAlignment.TopLeft,
+                            Anchor = AnchorStyles.Top,
+                            Font = new Font("Calibri", 12, FontStyle.Bold),
                         };
                         productPanel.Controls.Add(itemNameLabel);
                         itemNameLabel.Click += ProductPanel_Click;
@@ -179,13 +175,25 @@ namespace Butikv3._6
                         Label itemPriceLabel = new Label
                         {
                             Text = item.price + "kr",
-                            TextAlign = ContentAlignment.MiddleLeft,
-                            Anchor = AnchorStyles.Left,
+                            TextAlign = ContentAlignment.TopLeft,
+                            Anchor = AnchorStyles.Top,
                             Font = new Font("Calibri", 9, FontStyle.Bold),
                         };
-                        productPanel.Controls.Add(itemPriceLabel);
+                        productPanel.Controls.Add(itemPriceLabel, 1,1);
                         itemPriceLabel.Click += ProductPanel_Click;
                         itemPriceLabel.Tag = item;
+
+                        Label itemPointLabel = new Label
+                        {
+                            Text = "Intresse-\npoäng:\n" + item.interestPoints,
+                            TextAlign = ContentAlignment.TopLeft,
+                            Dock = DockStyle.Fill,
+                            Font = new Font("Calibri", 10, FontStyle.Italic),
+                        };
+                        productPanel.SetRowSpan(itemPointLabel, 2);
+                        productPanel.Controls.Add(itemPointLabel);
+                        itemPointLabel.Click += ProductPanel_Click;
+                        itemPointLabel.Tag = item;
                     }
                     counter++;
                 }
