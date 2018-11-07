@@ -12,6 +12,7 @@ namespace Butikv3._6
     {
         CartPanel cartPanelRef;
         List<List<Product>> mainProductList = new List<List<Product>>();
+
         public HomePanel(CartPanel reference)
         {
             cartPanelRef = reference;
@@ -42,49 +43,64 @@ namespace Butikv3._6
             PopulateHomePanel();
 
         }
+
         public void PopulateHomePanelList()
         {
 
             List<Product> products = cartPanelRef.GetProductList().
                 OrderByDescending(x => x.interestPoints).ToList();
             int outerCounter = 0;
-            while(outerCounter < 3)
+            var types = products.Select(x => x.type).Distinct().ToList();
+
+            while (mainProductList.Count != types.Count)
             {
-                foreach (Product p in products)
+                foreach(Product p in products)
                 {
+                    Product tp = new Product();
                     List<Product> popularItems = new List<Product>();
                     int innerCounter = 0;
-                    if (p.stage1 == true)
-                        continue;
+                    
+                    foreach (Product item in products)
+                    {
+                        if (item.type == p.type && item.stage1 == false && innerCounter < 3
+                            && item.stage2 == false)
+                        {
+                            popularItems.Add(item);
+                            item.stage1 = true;
+                            innerCounter++;
+                            p.totalPoints += item.interestPoints;
+                        }
+                        else if (popularItems.Count != 3 || item.stage1 == true)
+                            continue;
+                    }
+                    if (popularItems.Count == 3)
+                    {
+                        mainProductList.Add(popularItems);
+                        int foo = CalculateTotalInterestPoints(popularItems);
+                        popularItems[0].totalPoints = foo;
+                        outerCounter++;
+                    }
                     else
                     {
-                        foreach (Product item in products)
-                        {
-                            if (item.type == p.type && item.stage1 == false && innerCounter < 3 
-                                && item.stage2 == false)
-                            {
-                                popularItems.Add(item);
-                                item.stage1 = true;
-                                innerCounter++;
-                                p.totalPoints += item.interestPoints;
-                            }
-                            else if (popularItems.Count != 3 || item.stage1 == true)
-                                continue;
-                            else
-                                break;
-                        }
-                        if (mainProductList.Count == 3)
-                            break;
-                        if (popularItems.Count == 3)
-                        {
-                            outerCounter++;
-                            mainProductList.Add(popularItems);
-                        }
-                        else
-                            p.stage2 = true;
+                        outerCounter++;
+                        p.stage2 = true;
                     }
                 }
             }
+
+            for (int i = 0; i < types.Count - 1; i++)
+            {
+                for (int k = 0; k < types.Count - 1; k++)
+                {
+                    if (mainProductList[k][0].totalPoints < mainProductList[k + 1][0].totalPoints)
+                    {
+                        var tmp = mainProductList[k + 1];
+                        mainProductList[k + 1] = mainProductList[k];
+                        mainProductList[k] = tmp;
+                    }
+                }
+            }
+
             // To set all the "stages" of our products back to false,
             // to prevent their interestPoints from being corrupted.
             foreach (Product item in products)
@@ -162,6 +178,13 @@ namespace Butikv3._6
                     counter++;
                 }
             }
+        }
+
+        public int CalculateTotalInterestPoints(List<Product> list)
+        {
+            int sum = 0;
+            sum = list.Select(x => x.interestPoints).Sum();
+            return sum;
         }
     }
 }

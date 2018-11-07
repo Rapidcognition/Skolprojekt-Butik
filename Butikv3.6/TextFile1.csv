@@ -1,12 +1,18 @@
 ﻿8,5,Äpple,Frukt,Smaskig frukt.,pictures/0.jpg
-5,10,Apelsin,Frukt,Smaskig orange frukt.,pictures/1.jpg
-6,9,Päron,Frukt,Roligt formad frukt.,pictures/2.jpg
-4,7,Banan,Frukt,Gul boomerang.,pictures/3.jpg
-17,99,Iphone4,Elektronik,Vikbar "Iphone".,pictures/4.jpg
+7,10,Apelsin,Frukt,Smaskig orange frukt.,pictures/1.jpg
+10,9,Päron,Frukt,Roligt formad frukt.,pictures/2.jpg
+0,7,Banan,Frukt,Gul boomerang.,pictures/3.jpg
+10,99,Iphone4,Elektronik,Vikbar "Iphone".,pictures/4.jpg
+12,99,Iphone2,Elektronik,Vikbar "Iphone".,pictures/4.jpg
 3,149,Soffa,Möbler,Schysst soffa.,pictures/5.jpg
+3,149,Soffa2,Möbler,Schysst soffa.,pictures/5.jpg
+3,149,Soffa3,Möbler,Schysst soffa.,pictures/5.jpg
 1,199,Dokkodo,Literattur,Intressant bok om way of life,pictures/6.jpg
+1,199,Dokkodo1,Literattur,Intressant bok om way of life,pictures/6.jpg
+1,199,Dokkodo2,Literattur,Intressant bok om way of life,pictures/6.jpg
 2,549999,Slott,Fastigheter,Schysst slott.,pictures/7.jpg
-7,649999,Svart hål,Övrigt,Potentialen att färdas till en annan dimension.,pictures/8.jpg
+2,549999,Slott1,Fastigheter,Schysst slott.,pictures/7.jpg
+11,649999,Svart hål,Övrigt,Potentialen att färdas till en annan dimension.,pictures/8.jpg
 9,999999,Galax,Övrigt,Köp ensamrätt till "Messier 16" aka "Eagle Nebula".,pictures/9.jpg
 0,499,Dammsugare,Elektronik,Nästa generations dammsugare.,pictures/10.jpg
 8,350000,Rymdskepp,Fordon,Rymdfarkost som kan färdas i ljusets hastighet.,pictures/11.jpg
@@ -14,10 +20,11 @@
 0,699,Dumbo-fisk,Djur,Söt fisk.,pictures/13.jpg
 11,459,Violsnäcka,Djur,Den normala längden på violsnäckan är mellan 5 och 8 cm- men den största uppmätta längden var 40 cm.,pictures/14.jpg
 0,299,Sköldpadda,Fordon,Väldigt snabbt fordon!,pictures/15.jpg
+0,299,Sköldpadda1,Fordon,Väldigt snabbt fordon!,pictures/15.jpg
 15,4999,Katt,Djur,Väldigt söt katt.,pictures/16.jpg
 12,799,Fågelkatt,Djur,Väldigt spännande fågel.,pictures/17.jpg
-20,299,Kattstatyer,Inredning,Fina statyer av katter.,pictures/18.jpg
-5,49,Kattmat,Övrigt,Smaskig mat till katten.,pictures/19.jpg
+9,299,Kattstatyer,Inredning,Fina statyer av katter.,pictures/18.jpg
+9,49,Kattmat,Övrigt,Smaskig mat till katten.,pictures/19.jpg
 0,79499,Katthund,Djur,En katthund.,pictures/20.jpg
-2,299,Kattstaty,Inredning,Fina statyer av katter.,pictures/18.jpg
-1,299,Kattstav,Inredning,Fina statyer av katter.,pictures/18.jpg
+9,299,Kattstaty,Inredning,Fina statyer av katter.,pictures/18.jpg
+9,299,Kattstav,Inredning,Fina statyer av katter.,pictures/18.jpg
