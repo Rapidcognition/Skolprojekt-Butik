@@ -12,10 +12,12 @@ namespace Butikv3._6
     {
         CartPanel cartPanelRef;
         List<List<Product>> mainProductList = new List<List<Product>>();
+        StorePanel storePanelRef;
 
-        public HomePanel(CartPanel reference)
+        public HomePanel(CartPanel reference, StorePanel storeRef)
         {
             cartPanelRef = reference;
+            storePanelRef = storeRef;
             #region specs
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
@@ -120,12 +122,12 @@ namespace Butikv3._6
                     break;
                 else
                 {
-
                     Label title = new Label
                     {
+                        Dock = DockStyle.Fill,
                         Text = (counter+1) + ": " + listItem[counter].type,
-                        Font = new Font("Calibri", 11, FontStyle.Bold),
-                        TextAlign = ContentAlignment.MiddleRight,
+                        Font = new Font("Calibri", 14, FontStyle.Bold),
+                        TextAlign = ContentAlignment.MiddleLeft,
                     };
                     this.Controls.Add(title, counter, 1);
                     FlowLayoutPanel panel = new FlowLayoutPanel
@@ -149,6 +151,8 @@ namespace Butikv3._6
                         productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
                         productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                         panel.Controls.Add(productPanel);
+                        productPanel.Click += ProductPanel_Click;
+                        productPanel.Tag = item;
 
                         PictureBox itemPictureBox = new PictureBox
                         {
@@ -158,6 +162,9 @@ namespace Butikv3._6
                             Image = Image.FromFile(item.imageLocation),
                         };
                         productPanel.Controls.Add(itemPictureBox);
+                        itemPictureBox.Click += ProductPanel_Click;
+                        itemPictureBox.Tag = item;
+
                         Label itemNameLabel = new Label
                         {
                             Text = item.name,
@@ -166,6 +173,9 @@ namespace Butikv3._6
                             Font = new Font("Calibri", 10, FontStyle.Bold),
                         };
                         productPanel.Controls.Add(itemNameLabel);
+                        itemNameLabel.Click += ProductPanel_Click;
+                        itemNameLabel.Tag = item;
+
                         Label itemPriceLabel = new Label
                         {
                             Text = item.price + "kr",
@@ -174,9 +184,43 @@ namespace Butikv3._6
                             Font = new Font("Calibri", 9, FontStyle.Bold),
                         };
                         productPanel.Controls.Add(itemPriceLabel);
+                        itemPriceLabel.Click += ProductPanel_Click;
+                        itemPriceLabel.Tag = item;
                     }
                     counter++;
                 }
+            }
+        }
+
+        // TODO, make storePanel display clicked product in homePanel.
+        private void ProductPanel_Click(object sender, EventArgs e)
+        {
+            TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
+            TableLayoutPanel productPanelRef;
+            Product productRef;
+
+            if (sender.GetType() == typeof(TableLayoutPanel))
+            {
+                productPanelRef = (TableLayoutPanel)sender;
+                productRef = (Product)productPanelRef.Tag;
+                this.Hide();
+                storePanelRef.Show();
+            }
+            else if (sender.GetType() == typeof(PictureBox))
+            {
+                PictureBox p = (PictureBox)sender;
+                productPanelRef = (TableLayoutPanel)p.Parent;
+                productRef = (Product)productPanelRef.Tag;
+                this.Hide();
+                storePanelRef.Show();
+            }
+            else if (sender.GetType() == typeof(Label))
+            {
+                Label l = (Label)sender;
+                productPanelRef = (TableLayoutPanel)l.Parent;
+                productRef = (Product)productPanelRef.Tag;
+                this.Hide();
+                storePanelRef.Show();
             }
         }
 

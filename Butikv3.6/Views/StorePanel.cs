@@ -360,5 +360,12 @@ namespace Butikv3._6
                 itemAddToCartButton.Tag = item;
             }
         }
+
+        // TODO connect with HomePanel on Click event.
+        public void OnClickedHomePanel(TableLayoutPanel panelRef, Product product)
+        {
+            this.UpdateDescriptionPanel(panelRef, product);
+            this.UpdateSelectedProduct(panelRef);
+        }
     }
 }

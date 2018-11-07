@@ -194,7 +194,10 @@ namespace Butikv3._6
 
             cart = new CartPanel();
             store = new StorePanel(cart);
-            home = new HomePanel(cart);
+
+            // Send store as parameter to homePanel to connect them so we
+            // can display clicked product in the descriptionPanel in storePanel.
+            home = new HomePanel(cart, store);
 
             mainPanel.Controls.Add(store, 0, 1);
             mainPanel.Controls.Add(cart, 0, 1);
@@ -227,11 +230,6 @@ namespace Butikv3._6
                     cart.Show();
                 ActiveControl = null;
             }
-        }
-
-        private void ItemButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Hej!");
         }
     }
 }
