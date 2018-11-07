@@ -19,6 +19,7 @@ namespace Butikv3._6
         public int nrOfProducts;
 
         public int interestPoints;
+        public int totalPoints;
         public bool stage1;
         public bool stage2;
         public bool stage3;

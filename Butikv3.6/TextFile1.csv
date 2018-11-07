@@ -1,11 +1,11 @@
-﻿0,5,Äpple,Frukt,Smaskig frukt.,pictures/0.jpg
+﻿8,5,Äpple,Frukt,Smaskig frukt.,pictures/0.jpg
 5,10,Apelsin,Frukt,Smaskig orange frukt.,pictures/1.jpg
 6,9,Päron,Frukt,Roligt formad frukt.,pictures/2.jpg
 4,7,Banan,Frukt,Gul boomerang.,pictures/3.jpg
-0,99,Iphone4,Elektronik,Vikbar "Iphone".,pictures/4.jpg
-0,149,Soffa,Möbler,Schysst soffa.,pictures/5.jpg
-0,199,Dokkodo,Literattur,Intressant bok om way of life,pictures/6.jpg
-0,549999,Slott,Fastigheter,Schysst slott.,pictures/7.jpg
+17,99,Iphone4,Elektronik,Vikbar "Iphone".,pictures/4.jpg
+3,149,Soffa,Möbler,Schysst soffa.,pictures/5.jpg
+1,199,Dokkodo,Literattur,Intressant bok om way of life,pictures/6.jpg
+2,549999,Slott,Fastigheter,Schysst slott.,pictures/7.jpg
 7,649999,Svart hål,Övrigt,Potentialen att färdas till en annan dimension.,pictures/8.jpg
 9,999999,Galax,Övrigt,Köp ensamrätt till "Messier 16" aka "Eagle Nebula".,pictures/9.jpg
 0,499,Dammsugare,Elektronik,Nästa generations dammsugare.,pictures/10.jpg
@@ -16,6 +16,8 @@
 0,299,Sköldpadda,Fordon,Väldigt snabbt fordon!,pictures/15.jpg
 15,4999,Katt,Djur,Väldigt söt katt.,pictures/16.jpg
 12,799,Fågelkatt,Djur,Väldigt spännande fågel.,pictures/17.jpg
-0,299,Kattstatyer,Inredning,Fina statyer av katter.,pictures/18.jpg
+20,299,Kattstatyer,Inredning,Fina statyer av katter.,pictures/18.jpg
 5,49,Kattmat,Övrigt,Smaskig mat till katten.,pictures/19.jpg
 0,79499,Katthund,Djur,En katthund.,pictures/20.jpg
+2,299,Kattstaty,Inredning,Fina statyer av katter.,pictures/18.jpg
+1,299,Kattstav,Inredning,Fina statyer av katter.,pictures/18.jpg
