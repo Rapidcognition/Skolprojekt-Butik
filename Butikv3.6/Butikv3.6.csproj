@@ -89,6 +89,9 @@
     <None Include="Icons\home-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="gimmeYourMoney.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\searchButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

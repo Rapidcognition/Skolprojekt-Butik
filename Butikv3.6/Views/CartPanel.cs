@@ -28,18 +28,62 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
+            PictureBox lmao = new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                ImageLocation = "gimmeYourMoney.gif",
+                SizeMode = PictureBoxSizeMode.Zoom,
+            };
+            leftPanel.SetRowSpan(lmao, 2);
+            leftPanel.Controls.Add(lmao);
+
+            Button saveCartButton = new Button
+            {
+                Text = "Save Cart",
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
+            };
+            saveCartButton.Click += SaveCartButton_Click;
+            leftPanel.Controls.Add(saveCartButton);
+
+            Button loadCartButton = new Button
+            {
+                Text = "Read cart from CSV",
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
+            };
+            loadCartButton.Click += LoadCartButton_Click;
+            leftPanel.Controls.Add(loadCartButton);
+
+            Button clearCartButton = new Button
+            {
+                Text = "Clear Cart",
+                Dock = DockStyle.Bottom,
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
+            };
+            clearCartButton.Click += ClearCartButton_Click;
+            leftPanel.Controls.Add(clearCartButton);
+
             Button checkoutButton = new Button
             {
                 Text = "Checkout",
                 Dock = DockStyle.Top,
-                Height = 45,
+                Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
 
             };
             checkoutButton.Click += CheckoutButton_Click;
-            leftPanel.SetRowSpan(checkoutButton, 2);
             leftPanel.Controls.Add(checkoutButton);
 
             Label DiscountCodeLable = new Label
@@ -47,7 +91,7 @@ namespace Butikv3._6
                 Text = "Discount Code here!",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
-                Height = 50,
+                Height = 25,
                 TextAlign = ContentAlignment.BottomCenter,
             };
             leftPanel.Controls.Add(DiscountCodeLable);
@@ -85,42 +129,7 @@ namespace Butikv3._6
                 TextAlign = ContentAlignment.MiddleCenter,
             };
             leftPanel.Controls.Add(sumAfterDis);
-
-            Button saveCartButton = new Button
-            {
-                Text = "Save Cart",
-                Dock = DockStyle.Bottom,
-                Height = 25,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            saveCartButton.Click += SaveCartButton_Click;
-            leftPanel.Controls.Add(saveCartButton);
-
-            Button loadCartButton = new Button
-            {
-                Text ="Read cart from CSV",
-                Dock = DockStyle.Bottom,
-                Height = 25,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            loadCartButton.Click += LoadCartButton_Click;
-            leftPanel.Controls.Add(loadCartButton);
-
-            Button clearCartButton = new Button
-            {
-                Text = "Clear Cart",
-                Dock = DockStyle.Bottom,
-                Height = 25,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            clearCartButton.Click += ClearCartButton_Click;
-            leftPanel.Controls.Add(clearCartButton);
+            
             #endregion
 
             #region Bottom panel
