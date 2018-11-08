@@ -263,19 +263,19 @@ namespace Butikv3._6
             {
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
-                    ColumnCount = 4,
-                    RowCount = 1,
+                    ColumnCount = 3,
+                    RowCount = 2,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 300,
-                    Margin = new Padding(0),
+                    Width = 280,
+                    Margin = new Padding(0,0,15,5),
                 };
                 #region productPanel ColumnStyles
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
                 #endregion
                 itemPanel.Controls.Add(productPanel);
                 productPanel.Click += ProductPanel_Click;
@@ -285,9 +285,10 @@ namespace Butikv3._6
                 {
                     BorderStyle = BorderStyle.Fixed3D,
                     SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Top,
+                    Dock = DockStyle.Fill,
                     Image = Image.FromFile(item.imageLocation),
                 };
+                productPanel.SetRowSpan(itemPictureBox, 2);
                 productPanel.Controls.Add(itemPictureBox);
                 itemPictureBox.Click += ProductPanel_Click;
                 itemPictureBox.Tag = item;
@@ -296,7 +297,7 @@ namespace Butikv3._6
                 {
                     Text = item.name,
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Anchor = AnchorStyles.Left,
+                    Dock = DockStyle.Fill,
                     Font = new Font("Calibri", 10,FontStyle.Bold),
                 };
                 productPanel.Controls.Add(itemNameLabel);
@@ -308,10 +309,9 @@ namespace Butikv3._6
                     Text = item.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
                     Anchor = AnchorStyles.Left,
-                    Font = new Font("Calibri", 9, FontStyle.Bold),
-
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
-                productPanel.Controls.Add(itemPriceLabel);
+                productPanel.Controls.Add(itemPriceLabel,1,1);
                 itemPriceLabel.Click += ProductPanel_Click;
                 itemPriceLabel.Tag = item;
 
@@ -321,11 +321,12 @@ namespace Butikv3._6
                     TextAlign = ContentAlignment.MiddleCenter,
                     FlatStyle = FlatStyle.Popup,
                     BackColor = Color.DarkKhaki,
-                    Anchor = AnchorStyles.Left,
-                    Height = 50,
+                    Dock = DockStyle.Top,
+                    Height = 52,
                     Width = 82,
                     Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
+                productPanel.SetRowSpan(itemAddToCartButton, 2);
                 productPanel.Controls.Add(itemAddToCartButton);
                 itemAddToCartButton.Click += ProductPanel_Click;
                 itemAddToCartButton.Click += AddToCartButton_Click;
