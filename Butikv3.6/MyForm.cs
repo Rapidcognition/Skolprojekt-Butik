@@ -68,7 +68,7 @@ namespace Butikv3._6
             Button cartButton = new Button
             {
                 Name = "Cart",
-                BackgroundImage = Image.FromFile("Icons/cart.png"),
+                BackgroundImage = Image.FromFile("Icons/cart-empty.png"),
                 BackgroundImageLayout = ImageLayout.Zoom,
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0)

@@ -92,6 +92,9 @@
     <Content Include="gimmeYourMoney.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\cart-empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\searchButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
