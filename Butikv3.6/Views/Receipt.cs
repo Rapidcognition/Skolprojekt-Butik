@@ -11,24 +11,25 @@ namespace Butikv3._6
 {
     class Receipt : Form
     {
+        private TableLayoutPanel panelProductsPrices;
+        private TableLayoutPanel panelTotlpINfo;
         public Receipt(List<Product> ppp, double d)
         {
-            Height = 500;
-            MinimumSize = new Size(350, 500);
-
-            Dock = DockStyle.Fill;
+            this.Height = 500;
+            this.MinimumSize = new Size(350, 500);
+            this.Dock = DockStyle.Fill;
+            
+            #region Graphical details as to how the form should look.
             TableLayoutPanel ReceiptPanel = new TableLayoutPanel
             {
                 RowCount = 2,
                 Dock = DockStyle.Fill,
-
             };
-            Controls.Add(ReceiptPanel);
-
             ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
             ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            Controls.Add(ReceiptPanel);
 
-            TableLayoutPanel panelProductsPrices = new TableLayoutPanel
+            panelProductsPrices = new TableLayoutPanel
             {
                 AutoSize = true,
                 ColumnCount = 3,
@@ -38,7 +39,7 @@ namespace Butikv3._6
             };
             ReceiptPanel.Controls.Add(panelProductsPrices);
 
-            TableLayoutPanel panelTotlpINfo = new TableLayoutPanel
+            panelTotlpINfo = new TableLayoutPanel
             {
                 AutoSize = true,
                 Dock = DockStyle.Fill,
@@ -48,7 +49,7 @@ namespace Butikv3._6
             Label labelTime = new Label
             {
                 Text = "LAGERHUS \n" +
-                "Date \t :   " + DateTime.Now,
+                "Datum \t :   " + DateTime.Now,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9, FontStyle.Bold),
                 Dock = DockStyle.Top,
@@ -57,7 +58,13 @@ namespace Butikv3._6
             };
             panelProductsPrices.Controls.Add(labelTime);
             panelProductsPrices.SetColumnSpan(labelTime, 3);
+            #endregion
 
+            CreateReceipt(ppp, d);
+        }
+
+        public void CreateReceipt(List<Product> ppp, double d)
+        {
             foreach (Product item in ppp)
             {
                 Label labelName = new Label
@@ -84,7 +91,6 @@ namespace Butikv3._6
                     Dock = DockStyle.Top,
                 };
                 panelProductsPrices.Controls.Add(labelProductTotPrice);
-
             }
 
             if (d != 0)
@@ -92,7 +98,7 @@ namespace Butikv3._6
                 Label labelMoms = new Label
                 {
                     Text = "Moms: 25%         " + d * 0.25 +
-                    "\nKEEP YOUR RECEIPT!",
+                    "\nBehåll kvittot!",
                     TextAlign = ContentAlignment.BottomLeft,
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Bottom,
@@ -104,7 +110,7 @@ namespace Butikv3._6
 
             Label labelTotalSum = new Label
             {
-                Text = "The total amount is: " + d + "kr",
+                Text = "Totala kostnaden är: " + d + "kr",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Fill,
@@ -115,7 +121,7 @@ namespace Butikv3._6
 
             Label labelInfo = new Label
             {
-                Text = "30 days to return without useing the produkts!",
+                Text = "30 dagar öppet köp!",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Fill,
