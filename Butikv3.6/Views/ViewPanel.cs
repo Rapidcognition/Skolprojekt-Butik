@@ -33,7 +33,6 @@ namespace Butikv3._6
                 BackColor = Color.Transparent,
                 Margin = new Padding(0),
             };
-            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
@@ -77,7 +76,7 @@ namespace Butikv3._6
             Label descriptionProductName = new Label
             {
                 Name = "descriptionProductName",
-                Text = "No product selected",
+                Text = "Ingen produkt vald.",
                 Dock = DockStyle.Fill,
                 Font = new Font("Calibri", 12, FontStyle.Bold),
                 TextAlign = ContentAlignment.TopLeft,

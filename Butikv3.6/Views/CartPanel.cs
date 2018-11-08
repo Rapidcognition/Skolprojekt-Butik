@@ -27,53 +27,70 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
+            base.leftPanel.RowStyles.Clear();
+            base.leftPanel.RowCount = 2;
+            base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
+            base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
+
+            TableLayoutPanel discountPanel = new TableLayoutPanel
+            {
+                Name = "discountPanel",
+                RowCount = 5,
+                Dock = DockStyle.Fill,
+                Width = 10,
+            };
+            discountPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            discountPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            discountPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            discountPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
+            discountPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 45));
+            base.leftPanel.Controls.Add(discountPanel);
+
             Button checkoutButton = new Button
             {
-                Text = "Checkout",
+                Text = "Gå till kassa",
                 Dock = DockStyle.Top,
                 Height = 40,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
-
             };
             checkoutButton.Click += CheckoutButton_Click;
-            base.leftPanel.SetRowSpan(checkoutButton, 2);
-            base.leftPanel.Controls.Add(checkoutButton);
+            discountPanel.Controls.Add(checkoutButton);
 
             Label DiscountCodeLable = new Label
             {
-                Text = "Discount Code here!",
+                Text = "Ange din rabatt kod!",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
                 Height = 25,
                 TextAlign = ContentAlignment.BottomCenter,
             };
-            base.leftPanel.Controls.Add(DiscountCodeLable);
-
+            discountPanel.Controls.Add(DiscountCodeLable);
+            
             TextBox DiscountCodeBox = new TextBox
             {
                 Name = "discountCodeBox",
-                Text = "Discount code",
+                Text = "Rabatt kod",
                 Dock = DockStyle.Top,
                 Font = new Font("Arial", 10),
                 AutoSize = true,
                 TextAlign = HorizontalAlignment.Center,
                 BackColor = Color.White,
             };
-            base.leftPanel.Controls.Add(DiscountCodeBox);
+            discountPanel.Controls.Add(DiscountCodeBox);
             DiscountCodeBox.GotFocus += ClearText;
             DiscountCodeBox.KeyPress += CheckCode;
 
             sumBeforDis = new Label
             {
-                Text = "Total kostnadn\nföre rabatt: " + GetSumOfProducts() + " kr",
+                Text = "Total kostnad\nföre rabatt: " + GetSumOfProducts() + " kr",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
                 Height = 55,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            base.leftPanel.Controls.Add(sumBeforDis);
+            discountPanel.Controls.Add(sumBeforDis);
 
             sumAfterDis = new Label
             {
@@ -83,43 +100,54 @@ namespace Butikv3._6
                 Height = 50,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            base.leftPanel.Controls.Add(sumAfterDis);
+            discountPanel.Controls.Add(sumAfterDis);
+
+            TableLayoutPanel buttonPanel = new TableLayoutPanel
+            {
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                Width = 10,
+            };
+            buttonPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+            buttonPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+            buttonPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+            base.leftPanel.Controls.Add(buttonPanel);
 
             Button saveCartButton = new Button
             {
-                Text = "Save Cart",
-                Dock = DockStyle.Fill,
+                Text = "Spara varukorg",
+                Dock = DockStyle.Bottom,
                 Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             saveCartButton.Click += SaveCartButton_Click;
-            leftPanel.Controls.Add(saveCartButton);
+            buttonPanel.Controls.Add(saveCartButton);
 
             Button loadCartButton = new Button
             {
-                Text = "Read cart from CSV",
-                Dock = DockStyle.Fill,
+                Text = "Hämta varukorg",
+                Dock = DockStyle.Bottom,
                 Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             loadCartButton.Click += LoadCartButton_Click;
-            leftPanel.Controls.Add(loadCartButton);
+            buttonPanel.Controls.Add(loadCartButton);
 
             Button clearCartButton = new Button
             {
-                Text = "Clear Cart",
-                Dock = DockStyle.Fill,
+                Text = "Töm varukorg",
+                Dock = DockStyle.Bottom,
                 Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             clearCartButton.Click += ClearCartButton_Click;
-            leftPanel.Controls.Add(clearCartButton);
+            buttonPanel.Controls.Add(clearCartButton);
             #endregion
         }
 
@@ -174,7 +202,6 @@ namespace Butikv3._6
                 txtbcode.Enabled = false;
             }
         }
-
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
@@ -296,12 +323,18 @@ namespace Butikv3._6
             cartItems.Clear();
             UpdateSummaryPanel();
 
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Enabled = true;
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Text = "Discount Code";
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].BackColor = Color.White;
+
+            (base.leftPanel.Controls["discountPanel"] as TableLayoutPanel).
+                Controls["discountCodeBox"].Enabled = true;
+
+            (base.leftPanel.Controls["discountPanel"] as TableLayoutPanel).
+                Controls["discountCodeBox"].Text = "Discount Code";
+
+            (base.leftPanel.Controls["discountPanel"] as TableLayoutPanel).
+                Controls["discountCodeBox"].BackColor = Color.White;
+
             codeActive = false;
         }
-
 
         public void AddToCart(Product product)
         {
