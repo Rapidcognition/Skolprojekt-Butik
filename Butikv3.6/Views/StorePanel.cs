@@ -332,11 +332,10 @@ namespace Butikv3._6
                 itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
 
-                if(GetItemPanelCount() == 1)
+                if(preventAddToCart == true)
                 {
-                    preventAddToCart = true;
                     itemAddToCartButton.PerformClick();
-                    break;
+                    preventAddToCart = false;
                 }
             }
         }
@@ -354,6 +353,7 @@ namespace Butikv3._6
         {
             List<Product> tmp = cartPanelRef.GetProductList();
             var foo = tmp.Where(x => x.name == text).ToList();
+            preventAddToCart = true;
             PopulateStorePanel(foo);
         }
         public void ClearItemPanel()
