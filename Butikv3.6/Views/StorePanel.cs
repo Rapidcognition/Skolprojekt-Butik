@@ -261,7 +261,6 @@ namespace Butikv3._6
         {
             foreach (Product item in productList)
             {
-                preventAddToCart = false;
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
                     ColumnCount = 4,

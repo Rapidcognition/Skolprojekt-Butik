@@ -126,6 +126,7 @@ namespace Butikv3._6
                     {
                         FlowDirection = FlowDirection.LeftToRight,
                         Dock = DockStyle.Fill,
+                        Width = 320,
                     };
                     this.Controls.Add(panel);
                     foreach (Product item in listItem)
