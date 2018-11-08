@@ -35,8 +35,6 @@ namespace Butikv3._6
             CreateTypePanel();
             PopulateTypePanel(typeList);
 
-            //(this.Parent as TableLayoutPanel).Name;
-
             PopulateStorePanel(cartPanelRef.GetProductList());
         }
 

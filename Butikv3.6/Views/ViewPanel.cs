@@ -18,14 +18,11 @@ namespace Butikv3._6
         public ViewPanel()
         {
             this.ColumnCount = 3;
-            this.RowCount = 2;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 92));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 8));
 
             #region Left Panel
             leftPanel = new TableLayoutPanel
@@ -40,7 +37,6 @@ namespace Butikv3._6
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
             leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.SetRowSpan(leftPanel, 2);
             this.Controls.Add(leftPanel, 0, 0);
             #endregion
 
@@ -67,7 +63,6 @@ namespace Butikv3._6
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 210));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
-            this.SetRowSpan(descriptionPanel, 2);
             this.Controls.Add(descriptionPanel, 2, 0);
 
             PictureBox descriptionPicture = new PictureBox

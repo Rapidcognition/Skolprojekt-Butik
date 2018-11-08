@@ -28,63 +28,19 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
-            PictureBox lmao = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                ImageLocation = "gimmeYourMoney.gif",
-                SizeMode = PictureBoxSizeMode.Zoom,
-            };
-            leftPanel.SetRowSpan(lmao, 2);
-            leftPanel.Controls.Add(lmao);
-
-            Button saveCartButton = new Button
-            {
-                Text = "Save Cart",
-                Dock = DockStyle.Top,
-                Height = 30,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            saveCartButton.Click += SaveCartButton_Click;
-            leftPanel.Controls.Add(saveCartButton);
-
-            Button loadCartButton = new Button
-            {
-                Text = "Read cart from CSV",
-                Dock = DockStyle.Top,
-                Height = 30,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            loadCartButton.Click += LoadCartButton_Click;
-            leftPanel.Controls.Add(loadCartButton);
-
-            Button clearCartButton = new Button
-            {
-                Text = "Clear Cart",
-                Dock = DockStyle.Bottom,
-                Height = 30,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-            };
-            clearCartButton.Click += ClearCartButton_Click;
-            leftPanel.Controls.Add(clearCartButton);
-
             Button checkoutButton = new Button
             {
                 Text = "Checkout",
                 Dock = DockStyle.Top,
-                Height = 30,
+                Height = 40,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
 
             };
             checkoutButton.Click += CheckoutButton_Click;
-            leftPanel.Controls.Add(checkoutButton);
+            base.leftPanel.SetRowSpan(checkoutButton, 2);
+            base.leftPanel.Controls.Add(checkoutButton);
 
             Label DiscountCodeLable = new Label
             {
@@ -94,7 +50,7 @@ namespace Butikv3._6
                 Height = 25,
                 TextAlign = ContentAlignment.BottomCenter,
             };
-            leftPanel.Controls.Add(DiscountCodeLable);
+            base.leftPanel.Controls.Add(DiscountCodeLable);
 
             TextBox DiscountCodeBox = new TextBox
             {
@@ -106,7 +62,7 @@ namespace Butikv3._6
                 TextAlign = HorizontalAlignment.Center,
                 BackColor = Color.White,
             };
-            leftPanel.Controls.Add(DiscountCodeBox);
+            base.leftPanel.Controls.Add(DiscountCodeBox);
             DiscountCodeBox.GotFocus += ClearText;
             DiscountCodeBox.KeyPress += CheckCode;
 
@@ -118,7 +74,7 @@ namespace Butikv3._6
                 Height = 55,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            leftPanel.Controls.Add(sumBeforDis);
+            base.leftPanel.Controls.Add(sumBeforDis);
 
             sumAfterDis = new Label
             {
@@ -128,42 +84,43 @@ namespace Butikv3._6
                 Height = 50,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            leftPanel.Controls.Add(sumAfterDis);
-            
-            #endregion
+            base.leftPanel.Controls.Add(sumAfterDis);
 
-            #region Bottom panel
-            TableLayoutPanel sumOfProductsPanel = new TableLayoutPanel
+            Button saveCartButton = new Button
             {
-                Name = "sumOfProductsPanel",
-                ColumnCount = 2,
+                Text = "Save Cart",
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 2),
-                BorderStyle = BorderStyle.Fixed3D,
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
-            sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            saveCartButton.Click += SaveCartButton_Click;
+            leftPanel.Controls.Add(saveCartButton);
 
-            this.Controls.Add(sumOfProductsPanel, 1, 1);
-
-            Label nrOfProductsLabel = new Label
+            Button loadCartButton = new Button
             {
-                Name = "nrOfProductsLabel",
+                Text = "Read cart from CSV",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Text = "Number of Products: " + GetNrOfProducts(),
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
-            sumOfProductsPanel.Controls.Add(nrOfProductsLabel);
+            loadCartButton.Click += LoadCartButton_Click;
+            leftPanel.Controls.Add(loadCartButton);
 
-            sumLabel = new Label
+            Button clearCartButton = new Button
             {
-                Name = "sumLabel",
+                Text = "Clear Cart",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleRight,
-                Text = "Sum: " + GetSumOfProducts() + " kr",
-
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
             };
-            sumOfProductsPanel.Controls.Add(sumLabel);
+            clearCartButton.Click += ClearCartButton_Click;
+            leftPanel.Controls.Add(clearCartButton);
             #endregion
         }
 
@@ -506,23 +463,11 @@ namespace Butikv3._6
         {
             if(codeActive)
             {
-                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                    Text = "Antal produkter: " + GetNrOfProducts();
-
-                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                    Text = "Summan: " + GetSumOfProductsAfterDis() + " kr";
-
                 sumBeforDis.Text = "Kostnad före rabattkod: " + GetSumOfProducts() + " kr";
                 sumAfterDis.Text = "Kostnad efter rabattkod:\n" + GetSumOfProductsAfterDis() + " kr";
             }
             else
             {
-                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                    Text = "Antal produkter: " + GetNrOfProducts();
-
-                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                    Text = "Summan: " + GetSumOfProducts() + " kr";
-
                 sumBeforDis.Text = "Kostnad före rabattkod: " + GetSumOfProducts() + " kr";
                 sumAfterDis.Text = "Kostnad efter rabattkod:\n" + GetSumOfProducts() + " kr";
             }
