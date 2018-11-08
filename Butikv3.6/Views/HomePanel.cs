@@ -216,7 +216,7 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(PictureBox))
             {
@@ -226,7 +226,7 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(Label))
             {
@@ -236,7 +236,7 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
         }
 

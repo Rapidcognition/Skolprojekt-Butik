@@ -195,8 +195,7 @@ namespace Butikv3._6
                 {
                     DisCodList.Remove(item);
                     txtbcode.BackColor = Color.LightGreen;
-                    sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
-                    sumLabel.Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
+                    sumAfterDis.Text = "Kostnad efter rabatt: " + GetSumOfProductsAfterDis() + " kr";
                     codeActive = true;
                     break;
                 }
@@ -499,24 +498,24 @@ namespace Butikv3._6
             if(codeActive)
             {
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                    Text = "Number of Products: " + GetNrOfProducts();
+                    Text = "Antal produkter: " + GetNrOfProducts();
 
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                    Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
+                    Text = "Summan: " + GetSumOfProductsAfterDis() + " kr";
 
-                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
-                sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
+                sumBeforDis.Text = "Kostnad före rabattkod: " + GetSumOfProducts() + " kr";
+                sumAfterDis.Text = "Kostnad efter rabattkod:\n" + GetSumOfProductsAfterDis() + " kr";
             }
             else
             {
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                    Text = "Number of Products: " + GetNrOfProducts();
+                    Text = "Antal produkter: " + GetNrOfProducts();
 
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                    Text = "Sum: " + GetSumOfProducts() + " kr";
+                    Text = "Summan: " + GetSumOfProducts() + " kr";
 
-                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
-                sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProducts() + " kr";
+                sumBeforDis.Text = "Kostnad före rabattkod: " + GetSumOfProducts() + " kr";
+                sumAfterDis.Text = "Kostnad efter rabattkod:\n" + GetSumOfProducts() + " kr";
             }
 
         }
