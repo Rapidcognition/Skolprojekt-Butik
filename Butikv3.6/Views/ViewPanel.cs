@@ -10,6 +10,9 @@ namespace Butikv3._6
 {
     class ViewPanel : TableLayoutPanel
     {
+        public TableLayoutPanel leftPanel;
+        public FlowLayoutPanel itemPanel;
+        public TableLayoutPanel descriptionPanel;
         private TableLayoutPanel selectedProductPanel;
 
         public ViewPanel()
@@ -24,8 +27,37 @@ namespace Butikv3._6
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 92));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 8));
 
+            #region Left Panel
+            leftPanel = new TableLayoutPanel
+            {
+                Name = "leftMenuPanel",
+                RowCount = 3,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+            };
+            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+            this.SetRowSpan(leftPanel, 2);
+            this.Controls.Add(leftPanel, 0, 0);
+            #endregion
+
+            #region Product Panel
+            itemPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.Fixed3D,
+                Margin = new Padding(0, 4, 0, 0),
+            };
+            this.Controls.Add(itemPanel, 1, 0);
+            #endregion
+
             #region Description panel
-            TableLayoutPanel descriptionPanel = new TableLayoutPanel
+            descriptionPanel = new TableLayoutPanel
             {
                 Name = "descriptionPanel",
                 Dock = DockStyle.Fill,
@@ -34,6 +66,7 @@ namespace Butikv3._6
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 210));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             descriptionPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+            this.SetRowSpan(descriptionPanel, 2);
             this.Controls.Add(descriptionPanel, 2, 0);
 
             PictureBox descriptionPicture = new PictureBox

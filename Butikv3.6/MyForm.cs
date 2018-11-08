@@ -125,6 +125,7 @@ namespace Butikv3._6
             panelTotlpINfo.Controls.Add(labelInfo);
         }
     }
+
     class MyForm : Form
     {
         CartPanel cart;

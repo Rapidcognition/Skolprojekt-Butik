@@ -20,8 +20,6 @@ namespace Butikv3._6
         private const string SaveFolder = "saveFolder";
         private const string TempSaveFile = "saveFile.csv";
 
-        private FlowLayoutPanel itemPanel;
-
         private List<Product> cartItems = new List<Product>();
         private List<Product> productList = new List<Product>();
 
@@ -30,63 +28,54 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
-            TableLayoutPanel leftMenuPanel = new TableLayoutPanel
-            {
-                Name = "leftMenuPanel",
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0),
-            };
-            this.SetRowSpan(leftMenuPanel, 2);
-            this.Controls.Add(leftMenuPanel, 0, 0);
-
             Button checkoutButton = new Button
             {
                 Text = "Checkout",
                 Dock = DockStyle.Top,
-                Height = 30,
+                Height = 25,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
 
             };
             checkoutButton.Click += CheckoutButton_Click;
-            leftMenuPanel.Controls.Add(checkoutButton);
+            leftPanel.Controls.Add(checkoutButton);
 
             Button saveCartButton = new Button
             {
                 Text = "Save Cart",
                 Dock = DockStyle.Top,
-                Height = 30,
+                Height = 25,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             saveCartButton.Click += SaveCartButton_Click;
-            leftMenuPanel.Controls.Add(saveCartButton);
+            leftPanel.Controls.Add(saveCartButton);
 
             Button loadCartButton = new Button
             {
                 Text ="Read cart from CSV",
                 Dock = DockStyle.Top,
-                Height = 30,
+                Height = 25,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             loadCartButton.Click += LoadCartButton_Click;
-            leftMenuPanel.Controls.Add(loadCartButton);
+            leftPanel.Controls.Add(loadCartButton);
 
             Button clearCartButton = new Button
             {
                 Text = "Clear Cart",
                 Dock = DockStyle.Top,
-                Height = 30,
+                Height = 25,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
             };
             clearCartButton.Click += ClearCartButton_Click;
-            leftMenuPanel.Controls.Add(clearCartButton);
+            leftPanel.Controls.Add(clearCartButton);
 
             Label DiscountCodeLable = new Label
             {
@@ -96,7 +85,7 @@ namespace Butikv3._6
                 Height = 50,
                 TextAlign = ContentAlignment.BottomCenter,
             };
-            leftMenuPanel.Controls.Add(DiscountCodeLable);
+            leftPanel.Controls.Add(DiscountCodeLable);
 
             TextBox DiscountCodeBox = new TextBox
             {
@@ -108,7 +97,7 @@ namespace Butikv3._6
                 TextAlign= HorizontalAlignment.Center,
                 BackColor = Color.White,
             };
-            leftMenuPanel.Controls.Add(DiscountCodeBox);
+            leftPanel.Controls.Add(DiscountCodeBox);
             DiscountCodeBox.GotFocus += ClearText;
             DiscountCodeBox.KeyPress += ChackCode;
 
@@ -120,7 +109,7 @@ namespace Butikv3._6
                 Height=55,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            leftMenuPanel.Controls.Add(sumBeforDis);
+            leftPanel.Controls.Add(sumBeforDis);
 
             sumAfterDis = new Label
             {
@@ -130,20 +119,10 @@ namespace Butikv3._6
                 Height=50,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
-            leftMenuPanel.Controls.Add(sumAfterDis);
+            leftPanel.Controls.Add(sumAfterDis);
             #endregion
 
-            #region Product panel
-            itemPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(6),
-                AutoScroll = true,
-                FlowDirection = FlowDirection.LeftToRight,
-                BorderStyle = BorderStyle.Fixed3D,
-            };
-            this.Controls.Add(itemPanel, 1, 0);
-
+            #region Bottom panel
             TableLayoutPanel sumOfProductsPanel = new TableLayoutPanel
             {
                 Name = "sumOfProductsPanel",
@@ -171,8 +150,8 @@ namespace Butikv3._6
                 Name = "sumLabel",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleRight,
-                Text = "Sum: " + GetSumOfProducts()+" kr",
-                
+                Text = "Sum: " + GetSumOfProducts() + " kr",
+
             };
             sumOfProductsPanel.Controls.Add(sumLabel);
             #endregion
@@ -182,6 +161,7 @@ namespace Butikv3._6
         {
             return productList;
         }
+
         /// <summary>
         /// Method to ReadAllLines from database and store in (products)list,
         /// also store all the different types in a (string)list.
@@ -204,8 +184,6 @@ namespace Butikv3._6
             }
             else
                 textB.AcceptsReturn = false;
-
-            
         }
 
         private void ChackCode(object sender, EventArgs e)
@@ -279,12 +257,7 @@ namespace Butikv3._6
                 Product productRef = (Product)productPanelRef.Tag;
 
                 productCounterRef.Value++;
-
-                // Temp bug fix
-                // Tidy up
-                //
-
-                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
+                priceLabelRef.Text = productRef.price + "kr";
             }
             else
             {
@@ -297,12 +270,14 @@ namespace Butikv3._6
                     RowCount = 1,
                     Anchor = AnchorStyles.Top,
                     Height = 60,
-                    Width = 397,
+                    Width = 300,
+                    Margin = new Padding(0),
                 };
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                 productPanel.Click += ProductPanel_Click;
                 this.itemPanel.Controls.Add(productPanel);
 
@@ -320,7 +295,8 @@ namespace Butikv3._6
                 {
                     Text = product.name,
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Anchor = AnchorStyles.Left
+                    Anchor = AnchorStyles.Left,
+                    Font = new Font("Calibri", 10, FontStyle.Bold),
                 };
                 productLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(productLabel);
@@ -328,9 +304,10 @@ namespace Butikv3._6
                 Label priceLabel = new Label
                 {
                     Name = "priceLabel",
-                    Text = (product.price * product.nrOfProducts) + "kr",
+                    Text = product.price + "kr",
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Anchor = AnchorStyles.Right,
+                    Anchor = AnchorStyles.Left,
+                    Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
                 priceLabel.Click += ProductPanel_Click;
                 productPanel.Controls.Add(priceLabel);
@@ -340,8 +317,8 @@ namespace Butikv3._6
                     Name = "productCounter",
                     Dock = DockStyle.Left,
                     Anchor = AnchorStyles.Left,
-                    //AutoSize = true,
                     Value = product.nrOfProducts,
+                    Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
                 productPanel.Controls.Add(productCounter);
@@ -464,7 +441,7 @@ namespace Butikv3._6
                 TableLayoutPanel productPanelRef = (TableLayoutPanel)productCounterRef.Parent;
                 Product productRef = (Product)productPanelRef.Tag;
                 Label priceLabelRef = (Label)productPanelRef.Controls["priceLabel"];
-                priceLabelRef.Text = (productRef.price * productCounterRef.Value) + "kr";
+                priceLabelRef.Text = productRef.price + "kr";
                 productRef.nrOfProducts = (int)productCounterRef.Value;
             }
             UpdateSummaryPanel();
@@ -522,24 +499,24 @@ namespace Butikv3._6
         {
             if(codeActive)
             {
-            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                Text = "Number of Products: " + GetNrOfProducts();
+                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
+                    Text = "Number of Products: " + GetNrOfProducts();
 
-            ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
-                Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
-            sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
+                ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
+                    Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
 
-            sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
+                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
+                sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
             }
             else
             {
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["nrOfProductsLabel"] as Label).
-                Text = "Number of Products: " + GetNrOfProducts();
+                    Text = "Number of Products: " + GetNrOfProducts();
 
                 ((this.Controls["sumOfProductsPanel"] as TableLayoutPanel).Controls["sumLabel"] as Label).
                     Text = "Sum: " + GetSumOfProducts() + " kr";
-                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
 
+                sumBeforDis.Text = "Your amout befor discount: " + GetSumOfProducts() + " kr";
                 sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProducts() + " kr";
             }
 
