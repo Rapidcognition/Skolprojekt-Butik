@@ -99,7 +99,7 @@ namespace Butikv3._6
             };
             leftPanel.Controls.Add(DiscountCodeBox);
             DiscountCodeBox.GotFocus += ClearText;
-            DiscountCodeBox.KeyPress += ChackCode;
+            DiscountCodeBox.KeyPress += CheckCode;
 
             sumBeforDis = new Label
             {
@@ -180,13 +180,12 @@ namespace Butikv3._6
             {
                 textB.Clear();
                 textB.BackColor = Color.White;
-                //textB.Hide();
             }
             else
                 textB.AcceptsReturn = false;
         }
 
-        private void ChackCode(object sender, EventArgs e)
+        private void CheckCode(object sender, EventArgs e)
         {
             TextBox txtbcode = (TextBox)sender;
             List<string> DisCodList = File.ReadAllLines(@"RabatCoder.csv").ToList();
@@ -212,6 +211,7 @@ namespace Butikv3._6
                 txtbcode.Enabled = false;
             }
         }
+
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
@@ -246,6 +246,99 @@ namespace Butikv3._6
                 File.WriteAllLines("TextFile1.csv", lines);
             }
         }
+
+        private void SaveCartButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(SaveFolder))
+            {
+                Directory.CreateDirectory(SaveFolder);
+            }
+
+            if (cartItems.Count == 0)
+            {
+                MessageBox.Show("Cannot save an empty cart.", "༼つಠ益ಠ༽つ", MessageBoxButtons.OK);
+            }
+            else
+            {
+                SaveFileDialog fileDialog = new SaveFileDialog();
+                fileDialog.Filter = "Csv file|*.csv";
+                fileDialog.Title = "Save shopping cart";
+                fileDialog.InitialDirectory = SaveFolder;
+
+                DialogResult result = fileDialog.ShowDialog();
+                string saveFilePath = fileDialog.FileName;
+
+                if (result == DialogResult.Cancel)
+                {
+                    MessageBox.Show("Shopping cart was not saved.", "☉ ‿ ⚆", MessageBoxButtons.OK);
+                }
+                else if (result == DialogResult.OK)
+                {
+                    string[] lines = new string[cartItems.Count];
+
+                    for (int i = 0; i < cartItems.Count; i++)
+                    {
+                        lines[i] = cartItems[i].ToCSV();
+                    }
+
+                    File.WriteAllLines(saveFilePath, lines);
+                }
+            }
+        }
+
+        private void LoadCartButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(SaveFolder))
+            {
+                Directory.CreateDirectory(SaveFolder);
+            }
+
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Csv file|*.csv";
+            fileDialog.Title = "Read from save file";
+            fileDialog.InitialDirectory = SaveFolder;
+
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.Cancel)
+            {
+                MessageBox.Show("No save file selected.", @"¯\_(ツ)_/¯", MessageBoxButtons.OK);
+            }
+            else if (result == DialogResult.OK)
+            {
+                ClearCart();
+                string saveFilePath = fileDialog.FileName;
+                var saveFileContents = File.ReadAllLines(saveFilePath).
+                    Select(x => Product.FromCSV(x)).
+                    OrderBy(x => x.name).OrderBy(x => x.type).ToList();
+
+                foreach (Product product in saveFileContents)
+                {
+                    AddToCart(product);
+                }
+            }
+        }
+
+        private void ClearCartButton_Click(object sender, EventArgs e)
+        {
+            ClearCart();
+        }
+
+        private void ClearCart()
+        {
+            itemPanel.Controls.Clear();
+            foreach (Product p in cartItems)
+            {
+                p.nrOfProducts = 1;
+            }
+            cartItems.Clear();
+            UpdateSummaryPanel();
+
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Enabled = true;
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Text = "Discount Code";
+            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].BackColor = Color.White;
+            codeActive = false;
+        }
+
 
         public void AddToCart(Product product)
         {
@@ -327,98 +420,6 @@ namespace Butikv3._6
                 productPanel.Tag = product;
             }
             UpdateSummaryPanel();
-        }
-
-        private void ClearCart()
-        {
-            itemPanel.Controls.Clear();
-            foreach (Product p in cartItems)
-            {
-                p.nrOfProducts = 1;
-            }
-            cartItems.Clear();
-            UpdateSummaryPanel();
-
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Enabled = true;
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].Text = "Discount Code";
-            this.Controls["leftMenuPanel"].Controls["discountCodeBox"].BackColor = Color.White;
-            codeActive = false;
-        }
-
-        private void SaveCartButton_Click(object sender, EventArgs e)
-        {
-            if (!Directory.Exists(SaveFolder))
-            {
-                Directory.CreateDirectory(SaveFolder);
-            }
-
-            if (cartItems.Count == 0)
-            {
-                MessageBox.Show("Cannot save an empty cart.", "༼つಠ益ಠ༽つ", MessageBoxButtons.OK);
-            }
-            else
-            {
-                SaveFileDialog fileDialog = new SaveFileDialog();
-                fileDialog.Filter = "Csv file|*.csv";
-                fileDialog.Title = "Save shopping cart";
-                fileDialog.InitialDirectory = SaveFolder;
-
-                DialogResult result = fileDialog.ShowDialog();
-                string saveFilePath = fileDialog.FileName;
-
-                if (result == DialogResult.Cancel)
-                {
-                    MessageBox.Show("Shopping cart was not saved.", "☉ ‿ ⚆", MessageBoxButtons.OK);
-                }
-                else if (result == DialogResult.OK)
-                {
-                    string[] lines = new string[cartItems.Count];
-
-                    for (int i = 0; i < cartItems.Count; i++)
-                    {
-                        lines[i] = cartItems[i].ToCSV();
-                    }
-
-                    File.WriteAllLines(saveFilePath, lines);
-                }
-            }
-        }
-
-        private void LoadCartButton_Click(object sender, EventArgs e)
-        {
-            if (!Directory.Exists(SaveFolder))
-            {
-                Directory.CreateDirectory(SaveFolder);
-            }
-
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Csv file|*.csv";
-            fileDialog.Title = "Read from save file";
-            fileDialog.InitialDirectory = SaveFolder;
-
-            DialogResult result = fileDialog.ShowDialog();
-            if (result == DialogResult.Cancel)
-            {
-                MessageBox.Show("No save file selected.", @"¯\_(ツ)_/¯", MessageBoxButtons.OK);
-            }
-            else if (result == DialogResult.OK)
-            {
-                ClearCart();
-                string saveFilePath = fileDialog.FileName;
-                var saveFileContents = File.ReadAllLines(saveFilePath).
-                    Select(x => Product.FromCSV(x)).
-                    OrderBy(x => x.name).OrderBy(x => x.type).ToList();
-
-                foreach (Product product in saveFileContents)
-                {
-                    AddToCart(product);
-                }
-            }
-        }
-
-        private void ClearCartButton_Click(object sender, EventArgs e)
-        {
-            ClearCart();
         }
 
         private void ProductCounter_ValueChanged(object sender, EventArgs e)
@@ -528,10 +529,7 @@ namespace Butikv3._6
         private string GetNrOfProducts()
         {
             int nrOfProducts = 0;
-            foreach (Product product in cartItems)
-            {
-                nrOfProducts += product.nrOfProducts;
-            }
+            nrOfProducts = cartItems.Select(x => x.nrOfProducts).Sum();
             return nrOfProducts.ToString();
         }
 
@@ -540,21 +538,13 @@ namespace Butikv3._6
         /// </summary>
         private double GetSumOfProducts()
         {
-            Sum = 0;
-            foreach (Product product in cartItems)
-            {
-                Sum += (product.price * product.nrOfProducts);
-            }
+            Sum = cartItems.Select(x => x.price * x.nrOfProducts).Sum();
             return Sum;
         }
 
         private double GetSumOfProductsAfterDis()
         {
-            Sum = 0;
-            foreach (Product product in cartItems)
-            {
-                Sum += (product.price * product.nrOfProducts);
-            }
+            Sum = cartItems.Select(x => x.price * x.nrOfProducts).Sum();
             Sum -= Math.Round(Sum * 15, 2)/100;
             return Sum;
         }
