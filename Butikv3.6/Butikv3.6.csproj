@@ -62,6 +62,10 @@
     <Compile Include="Views\HomePanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\Receipt.cs">
+      <SubType>Form</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Views\StorePanel.cs" />
     <Compile Include="Views\ViewPanel.cs">
       <SubType>Component</SubType>

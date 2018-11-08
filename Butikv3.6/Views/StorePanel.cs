@@ -12,15 +12,15 @@ namespace Butikv3._6
 {
     class StorePanel : ViewPanel
     {
-        TextBox searchBox;
-        Button searchButton;
-        FlowLayoutPanel PanelWithTypes;
+        private TextBox searchBox;
+        private Button searchButton;
+        private FlowLayoutPanel PanelWithTypes;
         // typeList is a database with every type of product.
         private List<string> typeList = new List<string>();
 
         // Database of products.
         // Where we display our collection of products
-        FlowLayoutPanel PanelWithProducts;
+        private FlowLayoutPanel PanelWithProducts;
 
         /// <summary>
         /// When an item is clicked in PanelWithProducts,
@@ -29,7 +29,7 @@ namespace Butikv3._6
         /// </summary>
         private TableLayoutPanel productPanelRef;
 
-        CartPanel cartPanelRef;
+        private CartPanel cartPanelRef;
         public StorePanel(CartPanel reference)
         {
             cartPanelRef = reference;
@@ -220,7 +220,6 @@ namespace Butikv3._6
             Button b = (Button)sender;
             cartPanelRef.AddToCart((Product)b.Tag);
             productPanelRef = (TableLayoutPanel)b.Parent;
-            UpdateSelectedProduct(productPanelRef);
 
             Product productRef = (Product)b.Tag;
             productRef.stage1 = true;
@@ -253,6 +252,15 @@ namespace Butikv3._6
             {
                 Label l = (Label)sender;
                 productPanelRef = (TableLayoutPanel)l.Parent;
+                productRef = (Product)productPanelRef.Tag;
+                UpdateDescriptionPanel(descriptionPanelRef, productRef);
+                UpdateSelectedProduct(productPanelRef);
+                productRef.stage1 = true;
+            }
+            else
+            {
+                Button b = (Button)sender;
+                productPanelRef = (TableLayoutPanel)b.Parent;
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
@@ -357,15 +365,18 @@ namespace Butikv3._6
                     Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
                 itemPanel.Controls.Add(itemAddToCartButton);
+                itemAddToCartButton.Click += ProductPanel_Click;
                 itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
             }
         }
 
-        // TODO connect with HomePanel on Click event.
-        public void OnClickedHomePanel(TableLayoutPanel panelRef, Product product)
+        public void OnClickedHomePanelProduct(TableLayoutPanel panelRef, Product product)
         {
-            this.UpdateDescriptionPanel(panelRef, product);
+            TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
+            product.stage1 = true;
+            productPanelRef = panelRef;
+            this.UpdateDescriptionPanel(descriptionPanelRef, product);
             this.UpdateSelectedProduct(panelRef);
         }
     }
