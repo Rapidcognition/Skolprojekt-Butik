@@ -18,7 +18,9 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
             storePanelRef = storeRef;
-            #region specs
+            
+            // Create this.tablelayoutpanel with three rows and three columns.
+            #region HomePanels details about rows, columns etc.
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.ColumnCount = 3;
@@ -197,6 +199,11 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// On Product_Panel.Click display the selected item in StorePanels descriptionPanel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ProductPanel_Click(object sender, EventArgs e)
         {
             TableLayoutPanel productPanelRef;
@@ -209,7 +216,7 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
+                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(PictureBox))
             {
@@ -219,7 +226,7 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
+                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(Label))
             {
@@ -229,16 +236,27 @@ namespace Butikv3._6
                 this.Hide();
                 storePanelRef.Show();
                 storePanelRef.Focus();
-                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
+                storePanelRef.UpdateDescriptionPanel(productPanelRef, productRef);
             }
         }
 
+        /// <summary>
+        /// Logic behind which categories and respective products that
+        /// we display in HomePanel.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public int CalculateTotalInterestPoints(List<Product> list)
         {
             int sum = 0;
             sum = list.Select(x => x.interestPoints).Sum();
             return sum;
         }
+        /// <summary>
+        /// Logic for sorting the categories based on the top three products'
+        /// combined interestPoints.
+        /// </summary>
+        /// <param name="mainProductList"></param>
         public void BubbleSort(List<List<Product>> mainProductList)
         {
             for (int i = 0; i < mainProductList.Count - 1; i++)
