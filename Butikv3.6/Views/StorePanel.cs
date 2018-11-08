@@ -12,15 +12,15 @@ namespace Butikv3._6
 {
     class StorePanel : ViewPanel
     {
-        TextBox searchBox;
-        Button searchButton;
-        FlowLayoutPanel PanelWithTypes;
+        private TextBox searchBox;
+        private Button searchButton;
+        private FlowLayoutPanel PanelWithTypes;
         // typeList is a database with every type of product.
         private List<string> typeList = new List<string>();
 
         // Database of products.
         // Where we display our collection of products
-        FlowLayoutPanel PanelWithProducts;
+        private FlowLayoutPanel PanelWithProducts;
 
         /// <summary>
         /// When an item is clicked in PanelWithProducts,
@@ -29,7 +29,7 @@ namespace Butikv3._6
         /// </summary>
         private TableLayoutPanel productPanelRef;
 
-        CartPanel cartPanelRef;
+        private CartPanel cartPanelRef;
         public StorePanel(CartPanel reference)
         {
             cartPanelRef = reference;

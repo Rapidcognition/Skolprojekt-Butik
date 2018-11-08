@@ -10,9 +10,9 @@ namespace Butikv3._6
 {
     class HomePanel : TableLayoutPanel
     {
-        CartPanel cartPanelRef;
-        List<List<Product>> mainProductList = new List<List<Product>>();
-        StorePanel storePanelRef;
+        private CartPanel cartPanelRef;
+        private List<List<Product>> mainProductList = new List<List<Product>>();
+        private StorePanel storePanelRef;
 
         public HomePanel(CartPanel reference, StorePanel storeRef)
         {
@@ -43,7 +43,11 @@ namespace Butikv3._6
             PopulateHomePanelList();
             PopulateHomePanel();
         }
-
+        /// <summary>
+        /// Populate homePanelList with the most popular
+        /// items, afterwards we call BubbelSort to put them in 
+        /// the right order.
+        /// </summary>
         public void PopulateHomePanelList()
         {
             List<Product> products = cartPanelRef.GetProductList().
@@ -95,6 +99,10 @@ namespace Butikv3._6
             }
         }
 
+        /// <summary>
+        /// Fill our homePanel with the most popular categories,
+        /// and their three most popular items.
+        /// </summary>
         public void PopulateHomePanel()
         {
             int counter = 0;
@@ -231,7 +239,6 @@ namespace Butikv3._6
             sum = list.Select(x => x.interestPoints).Sum();
             return sum;
         }
-
         public void BubbleSort(List<List<Product>> mainProductList)
         {
             for (int i = 0; i < mainProductList.Count - 1; i++)
