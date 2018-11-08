@@ -28,24 +28,20 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
-            Button checkoutButton = new Button
+            PictureBox lmao = new PictureBox
             {
-                Text = "Checkout",
-                Dock = DockStyle.Top,
-                Height = 25,
-                Font = new Font("Calibri", 10, FontStyle.Bold),
-                BackColor = Color.DarkKhaki,
-                FlatStyle = FlatStyle.Popup,
-
+                Dock = DockStyle.Fill,
+                ImageLocation = "gimmeYourMoney.gif",
+                SizeMode = PictureBoxSizeMode.Zoom,
             };
-            checkoutButton.Click += CheckoutButton_Click;
-            leftPanel.Controls.Add(checkoutButton);
+            leftPanel.SetRowSpan(lmao, 2);
+            leftPanel.Controls.Add(lmao);
 
             Button saveCartButton = new Button
             {
                 Text = "Save Cart",
                 Dock = DockStyle.Top,
-                Height = 25,
+                Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
@@ -55,9 +51,9 @@ namespace Butikv3._6
 
             Button loadCartButton = new Button
             {
-                Text ="Read cart from CSV",
+                Text = "Read cart from CSV",
                 Dock = DockStyle.Top,
-                Height = 25,
+                Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
@@ -68,8 +64,8 @@ namespace Butikv3._6
             Button clearCartButton = new Button
             {
                 Text = "Clear Cart",
-                Dock = DockStyle.Top,
-                Height = 25,
+                Dock = DockStyle.Bottom,
+                Height = 30,
                 Font = new Font("Calibri", 10, FontStyle.Bold),
                 BackColor = Color.DarkKhaki,
                 FlatStyle = FlatStyle.Popup,
@@ -77,12 +73,25 @@ namespace Butikv3._6
             clearCartButton.Click += ClearCartButton_Click;
             leftPanel.Controls.Add(clearCartButton);
 
+            Button checkoutButton = new Button
+            {
+                Text = "Checkout",
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Calibri", 10, FontStyle.Bold),
+                BackColor = Color.DarkKhaki,
+                FlatStyle = FlatStyle.Popup,
+
+            };
+            checkoutButton.Click += CheckoutButton_Click;
+            leftPanel.Controls.Add(checkoutButton);
+
             Label DiscountCodeLable = new Label
             {
                 Text = "Discount Code here!",
-                Font = new Font("Arial",9),
+                Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
-                Height = 50,
+                Height = 25,
                 TextAlign = ContentAlignment.BottomCenter,
             };
             leftPanel.Controls.Add(DiscountCodeLable);
@@ -91,10 +100,10 @@ namespace Butikv3._6
             {
                 Name = "discountCodeBox",
                 Text = "Discount code",
-                Dock= DockStyle.Top,
+                Dock = DockStyle.Top,
                 Font = new Font("Arial", 10),
                 AutoSize = true,
-                TextAlign= HorizontalAlignment.Center,
+                TextAlign = HorizontalAlignment.Center,
                 BackColor = Color.White,
             };
             leftPanel.Controls.Add(DiscountCodeBox);
@@ -103,10 +112,10 @@ namespace Butikv3._6
 
             sumBeforDis = new Label
             {
-                Text = "Your amout befor discount:"+ GetSumOfProducts() + " kr",
+                Text = "Your amout befor discount:" + GetSumOfProducts() + " kr",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
-                Height=55,
+                Height = 55,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
             leftPanel.Controls.Add(sumBeforDis);
@@ -116,10 +125,11 @@ namespace Butikv3._6
                 Text = "Your amout After discount:" + GetSumOfProducts() + " kr",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
-                Height=50,
+                Height = 50,
                 TextAlign = ContentAlignment.MiddleCenter,
             };
             leftPanel.Controls.Add(sumAfterDis);
+            
             #endregion
 
             #region Bottom panel
@@ -128,7 +138,7 @@ namespace Butikv3._6
                 Name = "sumOfProductsPanel",
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                Margin = new Padding(6, 0, 6, 2),
+                Margin = new Padding(0, 0, 0, 2),
                 BorderStyle = BorderStyle.Fixed3D,
             };
             sumOfProductsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -412,8 +422,7 @@ namespace Butikv3._6
                 };
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
                 productPanel.Controls.Add(productCounter);
-
-                //
+                
                 productPanel.Tag = product;
             }
             UpdateSummaryPanel();
