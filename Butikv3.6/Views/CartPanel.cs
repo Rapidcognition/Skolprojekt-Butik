@@ -199,11 +199,9 @@ namespace Butikv3._6
                     sumAfterDis.Text = "Your amout After discount:\n" + GetSumOfProductsAfterDis() + " kr";
                     sumLabel.Text = "Sum: " + GetSumOfProductsAfterDis() + " kr";
                     codeActive = true;
+                    break;
                 }
-                break;
             }
-            //File.Delete(@"RabatCoder.csv");
-            //File.Create(@"RabatCoder.csv");
             File.WriteAllText(@"RabatCoder.csv", string.Empty);
             File.WriteAllLines(@"RabatCoder.csv", DisCodList);
 
