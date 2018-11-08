@@ -215,7 +215,6 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
-                storePanelRef.Focus();
                 storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(PictureBox))
@@ -225,7 +224,6 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
-                storePanelRef.Focus();
                 storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(Label))
@@ -235,7 +233,6 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
-                storePanelRef.Focus();
                 storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
         }

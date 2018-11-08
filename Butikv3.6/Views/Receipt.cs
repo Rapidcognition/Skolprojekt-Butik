@@ -22,29 +22,13 @@ namespace Butikv3._6
             #region Graphical details as to how the form should look.
             TableLayoutPanel ReceiptPanel = new TableLayoutPanel
             {
-                RowCount = 2,
+                RowCount = 3,
                 Dock = DockStyle.Fill,
             };
-            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75));
-            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 65));
+            ReceiptPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             Controls.Add(ReceiptPanel);
-
-            panelProductsPrices = new TableLayoutPanel
-            {
-                AutoSize = true,
-                ColumnCount = 3,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 0, 0),
-                AutoScroll = true,
-            };
-            ReceiptPanel.Controls.Add(panelProductsPrices);
-
-            panelTotlpINfo = new TableLayoutPanel
-            {
-                AutoSize = true,
-                Dock = DockStyle.Fill,
-            };
-            ReceiptPanel.Controls.Add(panelTotlpINfo);
 
             Label labelTime = new Label
             {
@@ -56,8 +40,28 @@ namespace Butikv3._6
                 Height = 50,
                 Margin = new Padding(0, 0, 0, 0),
             };
-            panelProductsPrices.Controls.Add(labelTime);
-            panelProductsPrices.SetColumnSpan(labelTime, 3);
+            ReceiptPanel.Controls.Add(labelTime);
+            ReceiptPanel.SetColumnSpan(labelTime, 3);
+
+            panelProductsPrices = new TableLayoutPanel
+            {
+                AutoSize = true,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0),
+                AutoScroll = true,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+            };
+            ReceiptPanel.Controls.Add(panelProductsPrices);
+
+            panelTotlpINfo = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                AutoSize = true,
+                Dock = DockStyle.Fill,
+            };
+            panelTotlpINfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            panelTotlpINfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            ReceiptPanel.Controls.Add(panelTotlpINfo);
             #endregion
 
             CreateReceipt(ppp, d);
@@ -65,8 +69,19 @@ namespace Butikv3._6
 
         public void CreateReceipt(List<Product> ppp, double d)
         {
+            int amount = 0;
             foreach (Product item in ppp)
             {
+                amount += item.nrOfProducts;
+
+                TableLayoutPanel itemPanel = new TableLayoutPanel
+                {
+                    ColumnCount = 3,
+                    Dock = DockStyle.Fill,
+                    Height = 20,
+                };
+                panelProductsPrices.Controls.Add(itemPanel);
+
                 Label labelName = new Label
                 {
                     Text = item.name,
@@ -74,38 +89,44 @@ namespace Butikv3._6
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Top,
                 };
-                panelProductsPrices.Controls.Add(labelName);
+                itemPanel.Controls.Add(labelName);
                 Label labelProductsAmount = new Label
                 {
-                    Text = item.price.ToString(),
+                    Text = item.price.ToString() + "kr",
                     TextAlign = ContentAlignment.MiddleCenter,
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Top,
                 };
-                panelProductsPrices.Controls.Add(labelProductsAmount);
+                itemPanel.Controls.Add(labelProductsAmount);
                 Label labelProductTotPrice = new Label
                 {
-                    Text = item.nrOfProducts.ToString(),
+                    Text = item.nrOfProducts.ToString() + "st",
                     TextAlign = ContentAlignment.MiddleCenter,
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Top,
                 };
-                panelProductsPrices.Controls.Add(labelProductTotPrice);
+                itemPanel.Controls.Add(labelProductTotPrice);
             }
 
             if (d != 0)
             {
                 Label labelMoms = new Label
                 {
-                    Text = "Moms: 25%         " + d * 0.25 +
-                    "\nBehåll kvittot!",
-                    TextAlign = ContentAlignment.BottomLeft,
+                    Text = "Moms 25%: " + d * 0.25 +
+                    "kr",
+                    TextAlign = ContentAlignment.MiddleLeft,
                     Font = new Font("Arial", 9),
-                    Dock = DockStyle.Bottom,
-                    Height = 35,
+                    Dock = DockStyle.Fill,
                 };
-                panelProductsPrices.Controls.Add(labelMoms);
-                panelProductsPrices.SetColumnSpan(labelMoms, 3);
+                panelTotlpINfo.Controls.Add(labelMoms);
+                Label labelSum = new Label
+                {
+                    Text = "Antal produkter: " + amount + "st",
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Font = new Font("Arial", 9),
+                    Dock = DockStyle.Fill,
+                };
+                panelTotlpINfo.Controls.Add(labelSum);
             }
 
             Label labelTotalSum = new Label
@@ -115,18 +136,22 @@ namespace Butikv3._6
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.FixedSingle,
+                Height = 40,
                 //Margin = new Padding(0, 0, 0, 0),
             };
+            panelTotlpINfo.SetColumnSpan(labelTotalSum, 3);
             panelTotlpINfo.Controls.Add(labelTotalSum);
+
 
             Label labelInfo = new Label
             {
-                Text = "30 dagar öppet köp!",
+                Text = "Behåll kvittot, 30 dagar öppet köp.",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Fill,
                 // Margin = new Padding(0, 0, 0, 0),
             };
+            panelTotlpINfo.SetColumnSpan(labelInfo, 3);
             panelTotlpINfo.Controls.Add(labelInfo);
         }
     }

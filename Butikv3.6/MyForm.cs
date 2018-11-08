@@ -106,12 +106,17 @@ namespace Butikv3._6
                 home.Hide();
                 store.Show();
                 ActiveControl = null;
+                if(store.GetItemPanelCount() != 21)
+                {
+                    store.ClearItemPanel();
+                    store.PopulateStorePanel(cart.GetProductList());
+                }
             }
             else if((sender as Button).Name == "Cart")
             {
                 store.Hide();
                 home.Hide();
-                    cart.Show();
+                cart.Show();
                 ActiveControl = null;
             }
         }

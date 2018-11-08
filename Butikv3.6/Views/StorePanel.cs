@@ -27,6 +27,8 @@ namespace Butikv3._6
         private TableLayoutPanel productPanelRef;
 
         private CartPanel cartPanelRef;
+
+        private bool preventAddToCart;
         public StorePanel(CartPanel reference)
         {
             cartPanelRef = reference;
@@ -34,8 +36,6 @@ namespace Butikv3._6
             CreateTypeList();
             CreateTypePanel();
             PopulateTypePanel(typeList);
-
-            PopulateStorePanel(cartPanelRef.GetProductList());
         }
 
         /// <summary>
@@ -201,12 +201,14 @@ namespace Butikv3._6
         private void AddToCartButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            cartPanelRef.AddToCart((Product)b.Tag);
-            productPanelRef = (TableLayoutPanel)b.Parent;
-
             Product productRef = (Product)b.Tag;
+            if(preventAddToCart == false)
+            {
+                cartPanelRef.AddToCart((Product)b.Tag);
+                productPanelRef = (TableLayoutPanel)b.Parent;
+                productRef.stage2 = true;
+            }
             productRef.stage1 = true;
-            productRef.stage2 = true;
         }
         private void ProductPanel_Click(object sender, EventArgs e)
         {
@@ -251,15 +253,15 @@ namespace Butikv3._6
             }
         }
         #endregion
-
         /// <summary>
         /// Where populate store with products.
         /// </summary>
         /// <param name="productList"></param>
-        private void PopulateStorePanel(List<Product> productList)
+        public void PopulateStorePanel(List<Product> productList)
         {
             foreach (Product item in productList)
             {
+                preventAddToCart = false;
                 TableLayoutPanel productPanel = new TableLayoutPanel
                 {
                     ColumnCount = 4,
@@ -269,7 +271,7 @@ namespace Butikv3._6
                     Width = 300,
                     Margin = new Padding(0),
                 };
-                #region itemPanel ColumnStyles
+                #region productPanel ColumnStyles
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
@@ -329,6 +331,13 @@ namespace Butikv3._6
                 itemAddToCartButton.Click += ProductPanel_Click;
                 itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
+
+                if(GetItemPanelCount() == 1)
+                {
+                    preventAddToCart = true;
+                    itemAddToCartButton.PerformClick();
+                    break;
+                }
             }
         }
 
@@ -337,8 +346,23 @@ namespace Butikv3._6
             TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
             product.stage1 = true;
             productPanelRef = panelRef;
+            itemPanel.Controls.Clear();
             this.UpdateDescriptionPanel(descriptionPanelRef, product);
-            this.UpdateSelectedProduct(panelRef);
+            PopulateStoreOnHomePanelClick(product.name);
+        }
+        public void PopulateStoreOnHomePanelClick(string text)
+        {
+            List<Product> tmp = cartPanelRef.GetProductList();
+            var foo = tmp.Where(x => x.name == text).ToList();
+            PopulateStorePanel(foo);
+        }
+        public void ClearItemPanel()
+        {
+            itemPanel.Controls.Clear();
+        }
+        public int GetItemPanelCount()
+        {
+            return itemPanel.Controls.Count;
         }
     }
 }

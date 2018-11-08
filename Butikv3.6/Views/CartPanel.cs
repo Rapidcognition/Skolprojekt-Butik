@@ -15,7 +15,6 @@ namespace Butikv3._6
         static double Sum { get; set; }
         private Label sumBeforDis;
         private Label sumAfterDis;
-        private Label sumLabel;
         private bool codeActive = false;
         private const string SaveFolder = "saveFolder";
         private const string TempSaveFile = "saveFile.csv";
