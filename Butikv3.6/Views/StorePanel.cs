@@ -80,35 +80,45 @@ namespace Butikv3._6
         #region Methods related to click events on LeftPanel.
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            var productList = cartPanelRef.GetProductList();
-            if (searchBox.Text == string.Empty)
+            if(GetItemPanelCount() != cartPanelRef.GetProductList().Count)
             {
-                itemPanel.Controls.Clear();
-                PopulateStorePanel(productList);
-            }
-            else
-            {
-                itemPanel.Controls.Clear();
-                PopulateStoreByFilter(productList, searchBox.Text);
-            }
-        }
-        private void SearchBox_Enter(object sender, KeyEventArgs e)
-        {
-            var productList = cartPanelRef.GetProductList();
-            if (e.KeyCode == Keys.Enter)
-            {
-                if(searchBox.Text == "")
+                var productList = cartPanelRef.GetProductList();
+                if (searchBox.Text == string.Empty)
                 {
                     itemPanel.Controls.Clear();
                     PopulateStorePanel(productList);
-                    e.SuppressKeyPress = true;
                 }
                 else
                 {
                     itemPanel.Controls.Clear();
                     PopulateStoreByFilter(productList, searchBox.Text);
-                    e.SuppressKeyPress = true;
                 }
+            }
+        }
+        private void SearchBox_Enter(object sender, KeyEventArgs e)
+        {
+            if(searchBox.Text == string.Empty && GetItemPanelCount() != cartPanelRef.GetProductList().Count)
+            {
+                var productList = cartPanelRef.GetProductList();
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if(searchBox.Text == "")
+                    {
+                        itemPanel.Controls.Clear();
+                        PopulateStorePanel(productList);
+                        e.SuppressKeyPress = true;
+                    }
+                    else
+                    {
+                        itemPanel.Controls.Clear();
+                        PopulateStoreByFilter(productList, searchBox.Text);
+                        e.SuppressKeyPress = true;
+                    }
+                }
+            }
+            else
+            {
+                e.SuppressKeyPress = true;
             }
         }
         private void TypeButton_Click(object sender, EventArgs e)

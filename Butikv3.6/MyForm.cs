@@ -106,7 +106,7 @@ namespace Butikv3._6
                 home.Hide();
                 store.Show();
                 ActiveControl = null;
-                if(store.GetItemPanelCount() != 21)
+                if(store.GetItemPanelCount() != cart.GetProductList().Count)
                 {
                     store.ClearItemPanel();
                     store.PopulateStorePanel(cart.GetProductList());
