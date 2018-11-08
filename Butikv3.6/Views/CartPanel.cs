@@ -112,7 +112,7 @@ namespace Butikv3._6
 
             sumBeforDis = new Label
             {
-                Text = "Your amout befor discount:" + GetSumOfProducts() + " kr",
+                Text = "Total kostnadn\nföre rabatt: " + GetSumOfProducts() + " kr",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
                 Height = 55,
@@ -122,7 +122,7 @@ namespace Butikv3._6
 
             sumAfterDis = new Label
             {
-                Text = "Your amout After discount:" + GetSumOfProducts() + " kr",
+                Text = "Total kostnad\nefter rabatt: " + GetSumOfProducts() + " kr",
                 Font = new Font("Arial", 9),
                 Dock = DockStyle.Top,
                 Height = 50,
@@ -198,7 +198,7 @@ namespace Butikv3._6
         private void CheckCode(object sender, EventArgs e)
         {
             TextBox txtbcode = (TextBox)sender;
-            List<string> DisCodList = File.ReadAllLines(@"RabatCoder.csv").ToList();
+            List<string> DisCodList = File.ReadAllLines(@"Rabattkoder.csv").ToList();
             foreach (string item in DisCodList)
             {
                 if (txtbcode.Text == item)
@@ -210,8 +210,8 @@ namespace Butikv3._6
                     break;
                 }
             }
-            File.WriteAllText(@"RabatCoder.csv", string.Empty);
-            File.WriteAllLines(@"RabatCoder.csv", DisCodList);
+            File.WriteAllText(@"Rabattkoder.csv", string.Empty);
+            File.WriteAllLines(@"Rabattkoder.csv", DisCodList);
 
             if(codeActive)
             {
