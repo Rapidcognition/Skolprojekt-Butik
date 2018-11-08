@@ -15,12 +15,9 @@ namespace Butikv3._6
         private TextBox searchBox;
         private Button searchButton;
         private FlowLayoutPanel PanelWithTypes;
+
         // typeList is a database with every type of product.
         private List<string> typeList = new List<string>();
-
-        // Database of products.
-        // Where we display our collection of products
-        private FlowLayoutPanel PanelWithProducts;
 
         /// <summary>
         /// When an item is clicked in PanelWithProducts,
@@ -38,7 +35,6 @@ namespace Butikv3._6
             CreateTypePanel();
             PopulateTypePanel(typeList);
 
-            CreateStorePanel();
             PopulateStorePanel(cartPanelRef.GetProductList());
         }
 
@@ -87,12 +83,12 @@ namespace Butikv3._6
             var productList = cartPanelRef.GetProductList();
             if (searchBox.Text == string.Empty)
             {
-                PanelWithProducts.Controls.Clear();
+                itemPanel.Controls.Clear();
                 PopulateStorePanel(productList);
             }
             else
             {
-                PanelWithProducts.Controls.Clear();
+                itemPanel.Controls.Clear();
                 PopulateStoreByFilter(productList, searchBox.Text);
             }
         }
@@ -103,13 +99,13 @@ namespace Butikv3._6
             {
                 if(searchBox.Text == "")
                 {
-                    PanelWithProducts.Controls.Clear();
+                    itemPanel.Controls.Clear();
                     PopulateStorePanel(productList);
                     e.SuppressKeyPress = true;
                 }
                 else
                 {
-                    PanelWithProducts.Controls.Clear();
+                    itemPanel.Controls.Clear();
                     PopulateStoreByFilter(productList, searchBox.Text);
                     e.SuppressKeyPress = true;
                 }
@@ -120,26 +116,12 @@ namespace Butikv3._6
             var productList = cartPanelRef.GetProductList();
             Button b = (Button)sender;
             searchButton.Focus();
-            PanelWithProducts.Controls.Clear();
+            itemPanel.Controls.Clear();
             PopulateStoreByFilter(productList, b.Tag.ToString());
         }
         #endregion
         private void CreateTypePanel()
         {
-            TableLayoutPanel leftPanel = new TableLayoutPanel
-            {
-                RowCount = 3,
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0),
-            };
-            leftPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-            this.SetRowSpan(leftPanel, 2);
-            this.Controls.Add(leftPanel, 0, 0);
-
             TableLayoutPanel searchPanel = new TableLayoutPanel
             {
                 ColumnCount = 2,
@@ -187,6 +169,7 @@ namespace Butikv3._6
             };
             leftPanel.Controls.Add(PanelWithTypes);
         }
+
         /// <summary>
         /// Method to populate typePanel with the difference types of products in
         /// (string)typeList.
@@ -268,29 +251,7 @@ namespace Butikv3._6
             }
         }
         #endregion
-        private void CreateStorePanel()
-        {
-            TableLayoutPanel MiddlePanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 0),
-            };
-            this.SetRowSpan(MiddlePanel, 2);
-            this.Controls.Add(MiddlePanel, 1, 0);
 
-            PanelWithProducts = new FlowLayoutPanel
-            {
-                FlowDirection = FlowDirection.LeftToRight,
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                BorderStyle = BorderStyle.Fixed3D,
-                Margin = new Padding(0, 4, 0, 0),
-            };
-            MiddlePanel.Controls.Add(PanelWithProducts);
-
-        }
         /// <summary>
         /// Where populate store with products.
         /// </summary>
@@ -299,7 +260,7 @@ namespace Butikv3._6
         {
             foreach (Product item in productList)
             {
-                TableLayoutPanel itemPanel = new TableLayoutPanel
+                TableLayoutPanel productPanel = new TableLayoutPanel
                 {
                     ColumnCount = 4,
                     RowCount = 1,
@@ -309,15 +270,15 @@ namespace Butikv3._6
                     Margin = new Padding(0),
                 };
                 #region itemPanel ColumnStyles
-                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
-                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-                itemPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
-                itemPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+                productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+                productPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
                 #endregion
-                PanelWithProducts.Controls.Add(itemPanel);
-                itemPanel.Click += ProductPanel_Click;
-                itemPanel.Tag = item;
+                itemPanel.Controls.Add(productPanel);
+                productPanel.Click += ProductPanel_Click;
+                productPanel.Tag = item;
 
                 PictureBox itemPictureBox = new PictureBox
                 {
@@ -326,7 +287,7 @@ namespace Butikv3._6
                     Dock = DockStyle.Top,
                     Image = Image.FromFile(item.imageLocation),
                 };
-                itemPanel.Controls.Add(itemPictureBox);
+                productPanel.Controls.Add(itemPictureBox);
                 itemPictureBox.Click += ProductPanel_Click;
                 itemPictureBox.Tag = item;
 
@@ -337,7 +298,7 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Left,
                     Font = new Font("Calibri", 10,FontStyle.Bold),
                 };
-                itemPanel.Controls.Add(itemNameLabel);
+                productPanel.Controls.Add(itemNameLabel);
                 itemNameLabel.Click += ProductPanel_Click;
                 itemNameLabel.Tag = item;
 
@@ -349,7 +310,7 @@ namespace Butikv3._6
                     Font = new Font("Calibri", 9, FontStyle.Bold),
 
                 };
-                itemPanel.Controls.Add(itemPriceLabel);
+                productPanel.Controls.Add(itemPriceLabel);
                 itemPriceLabel.Click += ProductPanel_Click;
                 itemPriceLabel.Tag = item;
 
@@ -364,7 +325,7 @@ namespace Butikv3._6
                     Width = 82,
                     Font = new Font("Calibri", 9, FontStyle.Bold),
                 };
-                itemPanel.Controls.Add(itemAddToCartButton);
+                productPanel.Controls.Add(itemAddToCartButton);
                 itemAddToCartButton.Click += ProductPanel_Click;
                 itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
