@@ -83,18 +83,7 @@ namespace Butikv3._6
                 }
             }
 
-            for (int i = 0; i < mainProductList.Count - 1; i++)
-            {
-                for (int k = 0; k < mainProductList.Count - 1; k++)
-                {
-                    if (mainProductList[k][0].totalPoints < mainProductList[k + 1][0].totalPoints)
-                    {
-                        var tmp = mainProductList[k + 1];
-                        mainProductList[k + 1] = mainProductList[k];
-                        mainProductList[k] = tmp;
-                    }
-                }
-            }
+            BubbleSort(mainProductList);
 
             // To set all the "stages" of our products back to false,
             // to prevent their interestPoints from being corrupted.
@@ -200,10 +189,8 @@ namespace Butikv3._6
             }
         }
 
-        // TODO, make storePanel display clicked product in homePanel.
         private void ProductPanel_Click(object sender, EventArgs e)
         {
-            TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
             TableLayoutPanel productPanelRef;
             Product productRef;
 
@@ -213,6 +200,8 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
+                storePanelRef.Focus();
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(PictureBox))
             {
@@ -221,6 +210,8 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
+                storePanelRef.Focus();
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
             else if (sender.GetType() == typeof(Label))
             {
@@ -229,6 +220,8 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 this.Hide();
                 storePanelRef.Show();
+                storePanelRef.Focus();
+                storePanelRef.OnClickedHomePanelProduct(productPanelRef, productRef);
             }
         }
 
@@ -237,6 +230,22 @@ namespace Butikv3._6
             int sum = 0;
             sum = list.Select(x => x.interestPoints).Sum();
             return sum;
+        }
+
+        public void BubbleSort(List<List<Product>> mainProductList)
+        {
+            for (int i = 0; i < mainProductList.Count - 1; i++)
+            {
+                for (int k = 0; k < mainProductList.Count - 1; k++)
+                {
+                    if (mainProductList[k][0].totalPoints < mainProductList[k + 1][0].totalPoints)
+                    {
+                        var tmp = mainProductList[k + 1];
+                        mainProductList[k + 1] = mainProductList[k];
+                        mainProductList[k] = tmp;
+                    }
+                }
+            }
         }
     }
 }
