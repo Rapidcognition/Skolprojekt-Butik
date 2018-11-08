@@ -52,15 +52,28 @@ namespace Butikv3._6
             // \x20 is hexadecimal for space.
             // So any trace of aforementioned will trigger the first condition.
             var rgxstring = new Regex(@"[A-Z a-z \p{L} \x20]");
-
-            if(rgxstring.IsMatch(rgxtext))
+            if(text == "a-z" || text == "A-Z")
+            {
+                var tmp = productList.OrderBy(x => x.name).ToList();
+                PopulateStorePanel(tmp);
+            }
+            if(text == "0-9")
+            {
+                var tmp = productList.OrderBy(x => x.price).ToList();
+                PopulateStorePanel(tmp);
+            }
+            else if(text == "9-0")
+            {
+                var tmp = productList.OrderByDescending(x => x.price).ToList();
+                PopulateStorePanel(tmp);
+            }
+            else if(rgxstring.IsMatch(rgxtext))
             {
                 var tmp = productList.
                     Where(p => Regex.IsMatch(p.name, rgxtext, RegexOptions.IgnoreCase)
                     || Regex.IsMatch(rgxtext, p.type, RegexOptions.IgnoreCase)).
                     OrderByDescending(p => Regex.IsMatch(rgxtext, p.name, RegexOptions.IgnoreCase) 
                     || Regex.IsMatch(p.type, rgxtext, RegexOptions.IgnoreCase)).ToList();
-
 
                 tmp = tmp.OrderBy(x => x.name).ToList();
                 PopulateStorePanel(tmp);
@@ -97,28 +110,25 @@ namespace Butikv3._6
         }
         private void SearchBox_Enter(object sender, KeyEventArgs e)
         {
-            if(searchBox.Text == string.Empty && GetItemPanelCount() != cartPanelRef.GetProductList().Count)
+            var productList = cartPanelRef.GetProductList();
+            if (e.KeyCode == Keys.Enter)
             {
-                var productList = cartPanelRef.GetProductList();
-                if (e.KeyCode == Keys.Enter)
+                if(searchBox.Text == string.Empty && GetItemPanelCount() == cartPanelRef.GetProductList().Count)
                 {
-                    if(searchBox.Text == "")
-                    {
-                        itemPanel.Controls.Clear();
-                        PopulateStorePanel(productList);
-                        e.SuppressKeyPress = true;
-                    }
-                    else
-                    {
-                        itemPanel.Controls.Clear();
-                        PopulateStoreByFilter(productList, searchBox.Text);
-                        e.SuppressKeyPress = true;
-                    }
+                    e.SuppressKeyPress = true;
                 }
-            }
-            else
-            {
-                e.SuppressKeyPress = true;
+                else if(searchBox.Text == string.Empty && GetItemPanelCount() != cartPanelRef.GetProductList().Count)
+                {
+                    itemPanel.Controls.Clear();
+                    PopulateStorePanel(productList);
+                    e.SuppressKeyPress = true;
+                }
+                else
+                {
+                    itemPanel.Controls.Clear();
+                    PopulateStoreByFilter(productList, searchBox.Text);
+                    e.SuppressKeyPress = true;
+                }
             }
         }
         private void TypeButton_Click(object sender, EventArgs e)
