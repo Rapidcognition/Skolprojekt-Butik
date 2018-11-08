@@ -47,6 +47,7 @@ namespace Butikv3._6
             #region Product Panel
             itemPanel = new FlowLayoutPanel
             {
+                Name = "itemPanel",
                 FlowDirection = FlowDirection.LeftToRight,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
