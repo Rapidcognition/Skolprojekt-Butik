@@ -192,6 +192,8 @@ namespace Butikv3._6
                     codeActive = true;
                     sumAfterDis.Font = new Font("Arial", 9, FontStyle.Bold);
                     sumAfterDis.Text = "'Påsk-event'\naktiverat\n#cringe";
+                    (descriptionPanel.Controls["descriptionPicture"] as PictureBox).Image = Image.FromFile(@"gimmeYourMoney.gif");
+                    (descriptionPanel.Controls["descriptionProductName"] as Label).Text = "Everything is free!";
                     break;
                 }
                 if (txtbcode.Text == item)
@@ -456,7 +458,6 @@ namespace Butikv3._6
             TableLayoutPanel descriptionPanelRef = (TableLayoutPanel)this.Controls["descriptionPanel"];
             TableLayoutPanel productPanelRef;
             Product productRef;
-
             if (sender.GetType() == typeof(TableLayoutPanel))
             {
                 productPanelRef = (TableLayoutPanel)sender;
