@@ -87,7 +87,8 @@ namespace Butikv3._6
             mainPanel.Controls.Add(cart, 0, 1);
             mainPanel.Controls.Add(home, 0, 1);
             cart.Hide();
-            store.Hide(); 
+            store.Hide();
+            home.Select();
         }
 
         private void HeaderPicture_Click(object sender, EventArgs e)
