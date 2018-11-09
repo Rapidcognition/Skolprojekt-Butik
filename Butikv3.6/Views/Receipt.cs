@@ -13,10 +13,10 @@ namespace Butikv3._6
     {
         private TableLayoutPanel panelProductsPrices;
         private TableLayoutPanel panelTotlpINfo;
-        private bool CashIsKing;
+        private bool cashIsKing;
         public Receipt(List<Product> ppp, double d, bool refCashIsKing)
         {
-            CashIsKing = refCashIsKing;
+            cashIsKing = refCashIsKing;
 
             this.Height = 500;
             this.MinimumSize = new Size(350, 500);
@@ -111,7 +111,7 @@ namespace Butikv3._6
                 itemPanel.Controls.Add(labelProductTotPrice);
             }
 
-            if(CashIsKing == false)
+            if(cashIsKing == false)
             {
                 if (d != 0)
                 {

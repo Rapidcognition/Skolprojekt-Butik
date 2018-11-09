@@ -190,7 +190,8 @@ namespace Butikv3._6
                     CashIsKing = true;
                     txtbcode.BackColor = Color.LightGreen;
                     codeActive = true;
-                    sumAfterDis.Text = "Kostnad efter rabatt: " + GetSumOfProductsAfterDis() + " kr";
+                    sumAfterDis.Font = new Font("Arial", 9, FontStyle.Bold);
+                    sumAfterDis.Text = "'Påsk-event'\naktiverat\n#cringe";
                     break;
                 }
                 if (txtbcode.Text == item)
@@ -213,6 +214,10 @@ namespace Butikv3._6
 
         private void CheckoutButton_Click(object sender, EventArgs e)
         {
+            if(cartItems.Count == 0)
+            {
+                return;
+            }
             List<string> lines = new List<string>();
             
             foreach (Product product in productList)
