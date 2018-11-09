@@ -17,6 +17,7 @@ namespace Butikv3._6
         public Receipt(List<Product> ppp, double d, bool refCashIsKing)
         {
             CashIsKing = refCashIsKing;
+
             this.Height = 500;
             this.MinimumSize = new Size(350, 500);
             this.Dock = DockStyle.Fill;
@@ -177,7 +178,6 @@ namespace Butikv3._6
                 };
                 panelTotlpINfo.SetColumnSpan(p, 2);
                 panelTotlpINfo.Controls.Add(p);
-
             }
         }
     }
