@@ -13,8 +13,11 @@ namespace Butikv3._6
     {
         private TableLayoutPanel panelProductsPrices;
         private TableLayoutPanel panelTotlpINfo;
-        public Receipt(List<Product> ppp, double d)
+        private bool CashIsKing;
+        public Receipt(List<Product> ppp, double d, bool refCashIsKing)
         {
+            CashIsKing = refCashIsKing;
+
             this.Height = 500;
             this.MinimumSize = new Size(350, 500);
             this.Dock = DockStyle.Fill;
@@ -108,51 +111,74 @@ namespace Butikv3._6
                 itemPanel.Controls.Add(labelProductTotPrice);
             }
 
-            if (d != 0)
+            if(CashIsKing == false)
             {
-                Label labelMoms = new Label
+                if (d != 0)
                 {
-                    Text = "Moms 25%: " + d * 0.25 +
-                    "kr",
-                    TextAlign = ContentAlignment.MiddleLeft,
+                    Label labelMoms = new Label
+                    {
+                        Text = "Moms 25%: " + d * 0.25 +
+                        "kr",
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Font = new Font("Arial", 9),
+                        Dock = DockStyle.Fill,
+                    };
+                    panelTotlpINfo.Controls.Add(labelMoms);
+                    Label labelSum = new Label
+                    {
+                        Text = "Antal produkter: " + amount + "st",
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Font = new Font("Arial", 9),
+                        Dock = DockStyle.Fill,
+                    };
+                    panelTotlpINfo.Controls.Add(labelSum);
+                }
+
+                Label labelTotalSum = new Label
+                {
+                    Text = "Totala kostnaden är: " + d + "kr",
+                    TextAlign = ContentAlignment.MiddleCenter,
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Height = 40,
+                    //Margin = new Padding(0, 0, 0, 0),
                 };
-                panelTotlpINfo.Controls.Add(labelMoms);
-                Label labelSum = new Label
+                panelTotlpINfo.SetColumnSpan(labelTotalSum, 3);
+                panelTotlpINfo.Controls.Add(labelTotalSum);
+
+                Label labelInfo = new Label
                 {
-                    Text = "Antal produkter: " + amount + "st",
-                    TextAlign = ContentAlignment.MiddleLeft,
+                    Text = "Behåll kvittot, 30 dagar öppet köp.",
+                    TextAlign = ContentAlignment.MiddleCenter,
                     Font = new Font("Arial", 9),
                     Dock = DockStyle.Fill,
+                    // Margin = new Padding(0, 0, 0, 0),
                 };
-                panelTotlpINfo.Controls.Add(labelSum);
+                panelTotlpINfo.SetColumnSpan(labelInfo, 3);
+                panelTotlpINfo.Controls.Add(labelInfo);
             }
-
-            Label labelTotalSum = new Label
+            else
             {
-                Text = "Totala kostnaden är: " + d + "kr",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", 9),
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.FixedSingle,
-                Height = 40,
-                //Margin = new Padding(0, 0, 0, 0),
-            };
-            panelTotlpINfo.SetColumnSpan(labelTotalSum, 3);
-            panelTotlpINfo.Controls.Add(labelTotalSum);
+                Label free = new Label
+                {
+                    Text = "Everything is free!",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Arial", 12, FontStyle.Bold),
+                    Dock = DockStyle.Fill,
+                };
+                panelTotlpINfo.SetColumnSpan(free, 2);
+                panelTotlpINfo.Controls.Add(free);
 
-
-            Label labelInfo = new Label
-            {
-                Text = "Behåll kvittot, 30 dagar öppet köp.",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", 9),
-                Dock = DockStyle.Fill,
-                // Margin = new Padding(0, 0, 0, 0),
-            };
-            panelTotlpINfo.SetColumnSpan(labelInfo, 3);
-            panelTotlpINfo.Controls.Add(labelInfo);
+                PictureBox p = new PictureBox
+                {
+                    ImageLocation = @"gimmeYourMoney.gif",
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Dock = DockStyle.Fill,
+                };
+                panelTotlpINfo.SetColumnSpan(p, 2);
+                panelTotlpINfo.Controls.Add(p);
+            }
         }
     }
 }

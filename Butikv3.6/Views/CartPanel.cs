@@ -18,6 +18,7 @@ namespace Butikv3._6
         private bool codeActive = false;
         private const string SaveFolder = "saveFolder";
         private const string TempSaveFile = "saveFile.csv";
+        private bool CashIsKing = false;
 
         private List<Product> cartItems = new List<Product>();
         private List<Product> productList = new List<Product>();
@@ -184,6 +185,14 @@ namespace Butikv3._6
             List<string> DisCodList = File.ReadAllLines(@"Rabattkoder.csv").ToList();
             foreach (string item in DisCodList)
             {
+                if(txtbcode.Text == "$$$")
+                {
+                    CashIsKing = true;
+                    txtbcode.BackColor = Color.LightGreen;
+                    codeActive = true;
+                    sumAfterDis.Text = "Kostnad efter rabatt: " + GetSumOfProductsAfterDis() + " kr";
+                    break;
+                }
                 if (txtbcode.Text == item)
                 {
                     DisCodList.Remove(item);
@@ -217,12 +226,7 @@ namespace Butikv3._6
                 lines.Add(product.ToDatabaseCSV());
             }
 
-            foreach (Product product in productList)
-            {
-                Console.WriteLine($"{product.name}: {product.stage1}, {product.stage2}, {product.stage3}");
-            }
-
-            receiptForm = new Receipt(cartItems ,Sum);
+            receiptForm = new Receipt(cartItems ,Sum,CashIsKing);
             receiptForm.Show();
             
             try
