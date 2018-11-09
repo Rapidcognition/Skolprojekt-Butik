@@ -17,9 +17,9 @@ namespace Butikv3._6
 
         public ViewPanel()
         {
-            this.ColumnCount = 3;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
+            this.ColumnCount = 3;
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             this.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
@@ -28,14 +28,10 @@ namespace Butikv3._6
             leftPanel = new TableLayoutPanel
             {
                 Name = "leftMenuPanel",
-                RowCount = 3,
                 Dock = DockStyle.Fill,
                 BackColor = Color.Transparent,
                 Margin = new Padding(0),
             };
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-            leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
             this.Controls.Add(leftPanel, 0, 0);
             #endregion
 

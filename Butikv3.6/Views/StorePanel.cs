@@ -33,6 +33,11 @@ namespace Butikv3._6
         {
             cartPanelRef = reference;
 
+            base.leftPanel.RowCount = 3;
+            base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+            base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+            base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+
             CreateTypeList();
             CreateTypePanel();
             PopulateTypePanel(typeList);

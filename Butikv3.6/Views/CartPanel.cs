@@ -27,7 +27,6 @@ namespace Butikv3._6
             QueryFromCSVToList();
 
             #region left menu
-            base.leftPanel.RowStyles.Clear();
             base.leftPanel.RowCount = 2;
             base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
             base.leftPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30));
