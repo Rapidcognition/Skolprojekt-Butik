@@ -19,6 +19,7 @@ namespace Butikv3._6
         {
             this.MinimumSize = new Size(800, 500);
             this.Font = new Font("Calibri", 12);
+            this.FormClosed += MyForm_IsClosed;
 
             TableLayoutPanel mainPanel = new TableLayoutPanel
             {
@@ -89,6 +90,25 @@ namespace Butikv3._6
             cart.Hide();
             store.Hide();
             home.Select();
+        }
+
+        private void MyForm_IsClosed(object sender, EventArgs e)
+        {
+            List<string> lines = new List<string>();
+            foreach (Product product in cart.GetProductList())
+            {
+                product.CalculateInterestPoints();
+                lines.Add(product.ToDatabaseCSV());
+            }
+            try
+            {
+                File.WriteAllLines("TextFile1.csv", lines);
+            }
+            catch
+            {
+                // If the program decides to crash, or something.
+                File.WriteAllLines("TextFile1.csv", lines);
+            }
         }
 
         private void HeaderPicture_Click(object sender, EventArgs e)

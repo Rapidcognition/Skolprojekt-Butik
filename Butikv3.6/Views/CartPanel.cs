@@ -218,11 +218,6 @@ namespace Butikv3._6
                 lines.Add(product.ToDatabaseCSV());
             }
 
-            foreach (Product product in productList)
-            {
-                Console.WriteLine($"{product.name}: {product.stage1}, {product.stage2}, {product.stage3}");
-            }
-
             receiptForm = new Receipt(cartItems ,Sum);
             receiptForm.Show();
             
