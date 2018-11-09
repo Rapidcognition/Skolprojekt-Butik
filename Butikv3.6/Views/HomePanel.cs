@@ -52,17 +52,15 @@ namespace Butikv3._6
         /// </summary>
         public void PopulateHomePanelList()
         {
-            List<Product> products = cartPanelRef.GetProductList().
-                OrderByDescending(x => x.interestPoints).ToList();
             int outerCounter = 0;
-            var types = products.Select(x => x.type).Distinct().ToList();
+            var types = cartPanelRef.GetProductList().Select(x => x.type).Distinct().ToList();
 
-            foreach(Product p in products)
+            foreach(Product p in cartPanelRef.GetProductList().OrderByDescending(x => x.interestPoints).ToList())
             {
                 Product tp = new Product();
                 List<Product> popularItems = new List<Product>();
                 int innerCounter = 0;
-                foreach (Product item in products)
+                foreach (Product item in cartPanelRef.GetProductList())
                 {
                     if (item.type == p.type && item.stage1 == false
                         && innerCounter < 3 && item.stage2 == false)
@@ -93,7 +91,7 @@ namespace Butikv3._6
 
             // To set all the "stages" of our products back to false,
             // to prevent their interestPoints from being corrupted.
-            foreach (Product item in products)
+            foreach (Product item in cartPanelRef.GetProductList())
             {
                 item.stage1 = false;
                 item.stage2 = false;
