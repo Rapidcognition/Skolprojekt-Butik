@@ -246,13 +246,13 @@ namespace Butikv3._6
 
             if (cartItems.Count == 0)
             {
-                MessageBox.Show("Cannot save an empty cart.", "༼つಠ益ಠ༽つ", MessageBoxButtons.OK);
+                MessageBox.Show("Kan inte spara en tom varukorg!", "༼つಠ益ಠ༽つ", MessageBoxButtons.OK);
             }
             else
             {
                 SaveFileDialog fileDialog = new SaveFileDialog();
                 fileDialog.Filter = "Csv file|*.csv";
-                fileDialog.Title = "Save shopping cart";
+                fileDialog.Title = "Spara varukorg.";
                 fileDialog.InitialDirectory = SaveFolder;
 
                 DialogResult result = fileDialog.ShowDialog();
@@ -260,7 +260,7 @@ namespace Butikv3._6
 
                 if (result == DialogResult.Cancel)
                 {
-                    MessageBox.Show("Shopping cart was not saved.", "☉ ‿ ⚆", MessageBoxButtons.OK);
+                    MessageBox.Show("Varukorgen blev inte sparad.", "☉ ‿ ⚆", MessageBoxButtons.OK);
                 }
                 else if (result == DialogResult.OK)
                 {
@@ -291,7 +291,7 @@ namespace Butikv3._6
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.Cancel)
             {
-                MessageBox.Show("No save file selected.", @"¯\_(ツ)_/¯", MessageBoxButtons.OK);
+                MessageBox.Show("Ingen fil vald.", @"¯\_(ツ)_/¯", MessageBoxButtons.OK);
             }
             else if (result == DialogResult.OK)
             {
@@ -455,11 +455,6 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
-
-                Console.WriteLine(productRef.stage1);
-                Console.WriteLine(productRef.stage2);
-                Console.WriteLine(productRef.stage3);
-
             }
             else if(sender.GetType() == typeof(PictureBox))
             {
@@ -468,10 +463,6 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
-
-                Console.WriteLine(productRef.stage1);
-                Console.WriteLine(productRef.stage2);
-                Console.WriteLine(productRef.stage3);
             }
             else if(sender.GetType() == typeof(Label))
             {
@@ -480,17 +471,10 @@ namespace Butikv3._6
                 productRef = (Product)productPanelRef.Tag;
                 UpdateDescriptionPanel(descriptionPanelRef, productRef);
                 UpdateSelectedProduct(productPanelRef);
-
-                Console.WriteLine(productRef.stage1);
-                Console.WriteLine(productRef.stage2);
-                Console.WriteLine(productRef.stage3);
             }
             
         }
 
-        /// <summary>
-        /// Updates sum and total number of products in cart.
-        /// </summary>
         private void UpdateSummaryPanel()
         {
             if(codeActive)
@@ -506,9 +490,6 @@ namespace Butikv3._6
 
         }
 
-        /// <summary>
-        /// Returns a string representing the total number of products in cart.
-        /// </summary>
         private string GetNrOfProducts()
         {
             int nrOfProducts = 0;
@@ -516,9 +497,6 @@ namespace Butikv3._6
             return nrOfProducts.ToString();
         }
 
-        /// <summary>
-        /// Returns a string representing the sum of all products in cart.
-        /// </summary>
         private double GetSumOfProducts()
         {
             Sum = cartItems.Select(x => x.price * x.nrOfProducts).Sum();
