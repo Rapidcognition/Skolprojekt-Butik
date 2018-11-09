@@ -284,7 +284,7 @@ namespace Butikv3._6
 
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = "Csv file|*.csv";
-            fileDialog.Title = "Read from save file";
+            fileDialog.Title = "Hämta sparad varukorg.";
             fileDialog.InitialDirectory = SaveFolder;
 
             DialogResult result = fileDialog.ShowDialog();
