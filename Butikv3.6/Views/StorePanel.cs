@@ -227,12 +227,9 @@ namespace Butikv3._6
         {
             Button b = (Button)sender;
             Product productRef = (Product)b.Tag;
-            if(preventAddToCart == false)
-            {
-                cartPanelRef.AddToCart((Product)b.Tag);
-                productPanelRef = (TableLayoutPanel)b.Parent;
-                productRef.stage2 = true;
-            }
+            cartPanelRef.AddToCart((Product)b.Tag);
+            productPanelRef = (TableLayoutPanel)b.Parent;
+            productRef.stage2 = true;
             productRef.stage1 = true;
         }
         private void ProductPanel_Click(object sender, EventArgs e)
@@ -354,7 +351,6 @@ namespace Butikv3._6
                 productPanel.SetRowSpan(itemAddToCartButton, 2);
                 productPanel.Controls.Add(itemAddToCartButton);
                 itemAddToCartButton.Click += ProductPanel_Click;
-                itemAddToCartButton.Click += AddToCartButton_Click;
                 itemAddToCartButton.Tag = item;
 
                 if(preventAddToCart == true)
@@ -362,6 +358,7 @@ namespace Butikv3._6
                     itemAddToCartButton.PerformClick();
                     preventAddToCart = false;
                 }
+                itemAddToCartButton.Click += AddToCartButton_Click;
             }
         }
 
