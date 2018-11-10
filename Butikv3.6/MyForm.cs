@@ -124,11 +124,6 @@ namespace Butikv3._6
         {
             if((sender as Button).Name == "Store")
             {
-                if(store.GetItemPanelCount() != cart.GetProductList().Count)
-                {
-                    store.ClearItemPanel();
-                    store.PopulateStorePanel(cart.GetProductList());
-                }
                 cart.Hide();
                 home.Hide();
                 store.Show();
