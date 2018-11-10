@@ -10,13 +10,13 @@ namespace Butikv3._6
 {
     class HomePanel : TableLayoutPanel
     {
-        private CartPanel cartPanelRef;
         private List<List<Product>> mainProductList = new List<List<Product>>();
+        private CartPanel cartPanelRef;
         private StorePanel storePanelRef;
 
-        public HomePanel(CartPanel reference, StorePanel storeRef)
+        public HomePanel(CartPanel cartRef, StorePanel storeRef)
         {
-            cartPanelRef = reference;
+            cartPanelRef = cartRef;
             storePanelRef = storeRef;
             
             // Create this.tablelayoutpanel with three rows and three columns.
@@ -52,9 +52,6 @@ namespace Butikv3._6
         /// </summary>
         public void PopulateHomePanelList()
         {
-            int outerCounter = 0;
-            var types = cartPanelRef.GetProductList().Select(x => x.type).Distinct().ToList();
-
             foreach(Product p in cartPanelRef.GetProductList().OrderByDescending(x => x.interestPoints).ToList())
             {
                 Product tp = new Product();
@@ -75,14 +72,13 @@ namespace Butikv3._6
                 }
                 if (popularItems.Count == 3)
                 {
-                    mainProductList.Add(popularItems);
                     int foo = CalculateTotalInterestPoints(popularItems);
                     popularItems[0].totalPoints = foo;
-                    outerCounter++;
+
+                    mainProductList.Add(popularItems);
                 }
                 else
                 {
-                    outerCounter++;
                     p.stage2 = true;
                 }
             }

@@ -370,7 +370,7 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Top,
                     Height = 60,
                     Width = 300,
-                    Margin = new Padding(0),
+                    Margin = new Padding(0, 0, 15, 5),
                 };
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
                 productPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35));
@@ -418,6 +418,7 @@ namespace Butikv3._6
                     Anchor = AnchorStyles.Left,
                     Value = product.nrOfProducts,
                     Font = new Font("Calibri", 9, FontStyle.Bold),
+                    Maximum = 99,
                 };
                 productCounter.ValueChanged += ProductCounter_ValueChanged;
                 productPanel.Controls.Add(productCounter);

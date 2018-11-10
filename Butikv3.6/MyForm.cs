@@ -90,6 +90,7 @@ namespace Butikv3._6
             cart.Hide();
             store.Hide();
             home.Select();
+            store.PopulateStorePanel(cart.GetProductList());
         }
 
         private void MyForm_IsClosed(object sender, EventArgs e)
@@ -123,15 +124,15 @@ namespace Butikv3._6
         {
             if((sender as Button).Name == "Store")
             {
-                cart.Hide();
-                home.Hide();
-                store.Show();
-                ActiveControl = null;
                 if(store.GetItemPanelCount() != cart.GetProductList().Count)
                 {
                     store.ClearItemPanel();
                     store.PopulateStorePanel(cart.GetProductList());
                 }
+                cart.Hide();
+                home.Hide();
+                store.Show();
+                ActiveControl = null;
             }
             else if((sender as Button).Name == "Cart")
             {
