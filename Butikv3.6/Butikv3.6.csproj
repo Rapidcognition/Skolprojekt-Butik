@@ -73,7 +73,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="TextFile1.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Rabattkoder.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

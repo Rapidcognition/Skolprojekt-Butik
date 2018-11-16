@@ -98,7 +98,6 @@ namespace Butikv3._6
             List<string> lines = new List<string>();
             foreach (Product product in cart.GetProductList())
             {
-                product.CalculateInterestPoints();
                 lines.Add(product.ToDatabaseCSV());
             }
             try
